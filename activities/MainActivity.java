@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.gmail.eski787.fightyboat.Game;
-import com.gmail.eski787.fightyboat.GameSettings;
-import com.gmail.eski787.fightyboat.Player;
+import com.gmail.eski787.fightyboat.game.Game;
+import com.gmail.eski787.fightyboat.game.GameSettings;
+import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,9 +29,8 @@ public class MainActivity extends AppCompatActivity {
         Game game = new Game(players, settings);
 
         Intent new_game = new Intent(this, ShipPlacementActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("game", game);
+        new_game.putExtra("game", game);
 
-        startActivity(new_game, bundle);
+        startActivity(new_game);
     }
 }

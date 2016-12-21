@@ -1,14 +1,16 @@
-package com.gmail.eski787.fightyboat;
+package com.gmail.eski787.fightyboat.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Erik on 12/13/2016.
  */
 
 public class Game implements Parcelable {
-    private final Player[] players;
+    public final Player[] players;
     private final GameSettings settings;
     private final Sea[] seas;
 

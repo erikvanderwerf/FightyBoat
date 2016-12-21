@@ -1,4 +1,4 @@
-package com.gmail.eski787.fightyboat;
+package com.gmail.eski787.fightyboat.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;

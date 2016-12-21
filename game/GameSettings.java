@@ -1,9 +1,8 @@
-package com.gmail.eski787.fightyboat;
+package com.gmail.eski787.fightyboat.game;
 
 import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Pair;
 
 /**
  * Created by Erik on 12/13/2016.
