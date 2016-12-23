@@ -2,7 +2,6 @@ package com.gmail.eski787.fightyboat.fragments;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gmail.eski787.fightyboat.R;
-import com.gmail.eski787.fightyboat.databinding.FragmentPlayerLockBinding;
+import com.gmail.eski787.fightyboat.databinding.FragmentPlayerUnlockButtonBinding;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.models.PlayerModel;
 
@@ -24,7 +23,7 @@ import com.gmail.eski787.fightyboat.models.PlayerModel;
  * create an instance of this fragment.
  */
 public class PlayerLockFragment extends Fragment {
-    public static final String TAG = PlayerLockFragment.class.getName();
+    public static final String TAG = PlayerLockFragment.class.getSimpleName();
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PLAYER = "arg_player";
 
@@ -57,16 +56,15 @@ public class PlayerLockFragment extends Fragment {
         if (getArguments() != null) {
             mPlayer = getArguments().getParcelable(ARG_PLAYER);
         }
+    }
 
-        Fragment parent = getParentFragment();
-        Log.d(TAG, parent.toString());
-        if (parent instanceof PlayerLockInteraction)
-            mListener = (PlayerLockInteraction) getParentFragment();
-        else {
-            throw new RuntimeException("Parent fragment must implement PlayerLockInteraction");
-        }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        FragmentPlayerUnlockButtonBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_player_unlock_button, container, false);
+        View view = binding.getRoot();
 
-        FragmentPlayerLockBinding binding = DataBindingUtil.getBinding(getView());
         binding.setUser(new PlayerModel(mPlayer));
         binding.buttonUnlock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,18 +72,19 @@ public class PlayerLockFragment extends Fragment {
                 mListener.onUnlockAttempt(true);
             }
         });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_player_lock, container, false);
+        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof PlayerLockInteraction)
+            mListener = (PlayerLockInteraction) context;
+        else {
+            throw new RuntimeException(context.toString()
+                    + " must implement PlayerLockInteraction");
+        }
+        Log.d(TAG, "onAttach: " + mListener.toString());
     }
 
     @Override

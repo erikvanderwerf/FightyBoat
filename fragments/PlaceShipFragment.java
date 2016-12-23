@@ -4,10 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Player;
@@ -15,16 +15,18 @@ import com.gmail.eski787.fightyboat.game.Player;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PlayerAdvancementFragment.OnFragmentInteractionListener} interface
+ * {@link PlaceShipInteraction} interface
  * to handle interaction events.
- * Use the {@link PlayerAdvancementFragment#newInstance} factory method to
+ * Use the {@link PlaceShipFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlayerAdvancementFragment extends Fragment implements PlayerLockFragment.PlayerLockInteraction {
-    public static String TAG = PlayerAdvancementFragment.class.getSimpleName();
-    private OnFragmentInteractionListener mListener;
+public class PlaceShipFragment extends Fragment {
+    private static final String ARG_PLAYER = "arg_player";
 
-    public PlayerAdvancementFragment() {
+    private PlaceShipInteraction mListener;
+    private Player mPlayer;
+
+    public PlaceShipFragment() {
         // Required empty public constructor
     }
 
@@ -32,48 +34,48 @@ public class PlayerAdvancementFragment extends Fragment implements PlayerLockFra
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment PlayerAdvancementFragment.
+     * @return A new instance of fragment PlaceShipFragment.
+     * @param player
      */
-    public static PlayerAdvancementFragment newInstance() {
-        PlayerAdvancementFragment fragment = new PlayerAdvancementFragment();
+    public static PlaceShipFragment newInstance(Player player) {
+        PlaceShipFragment fragment = new PlaceShipFragment();
         Bundle args = new Bundle();
+        args.putParcelable(ARG_PLAYER, player);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public void advanceTo(Player player, Fragment fragment) {
-        Log.d(TAG, player.toString());
-        //Log.d(TAG, fragment.toString());
-
-        PlayerLockFragment lockFragment = PlayerLockFragment.newInstance(player);
-        Log.d(TAG, lockFragment.toString());
-
-        getChildFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_player_advancement, lockFragment)
-                .commit();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mPlayer = getArguments().getParcelable(ARG_PLAYER);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_player_advancement, container, false);
+        View view = inflater.inflate(R.layout.fragment_place_ship, container, false);
+        Button button = (Button) view.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onComplete();
+            }
+        });
+        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof PlaceShipInteraction) {
+            mListener = (PlaceShipInteraction) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement PlaceShipInteraction");
         }
     }
 
@@ -81,11 +83,6 @@ public class PlayerAdvancementFragment extends Fragment implements PlayerLockFra
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onUnlockAttempt(boolean success) {
-
     }
 
     /**
@@ -98,7 +95,7 @@ public class PlayerAdvancementFragment extends Fragment implements PlayerLockFra
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction();
+    public interface PlaceShipInteraction {
+        void onComplete();
     }
 }
