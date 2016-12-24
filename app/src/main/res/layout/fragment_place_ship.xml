@@ -1,14 +1,22 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gmail.eski787.fightyboat.fragments.PlaceShipFragment">
+    android:orientation="vertical"
+    tools:context="com.gmail.eski787.fightyboat.fragments.PlaceShipFragment"
+    android:weightSum="1">
 
     <!-- TODO: Update blank fragment layout -->
+    <com.gmail.eski787.fightyboat.view.SeaView
+        android:id="@+id/seaview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.81"
+        />
 
     <Button
         android:text="Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button" />
-</FrameLayout>
+</LinearLayout>

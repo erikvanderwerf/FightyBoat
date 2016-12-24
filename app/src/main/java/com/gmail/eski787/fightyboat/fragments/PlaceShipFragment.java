@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.widget.Button;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Player;
+import com.gmail.eski787.fightyboat.view.SeaView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +25,7 @@ public class PlaceShipFragment extends Fragment {
 
     private PlaceShipInteraction mListener;
     private Player mPlayer;
+    private SeaView mSeaView;
 
     public PlaceShipFragment() {
         // Required empty public constructor
@@ -62,9 +63,13 @@ public class PlaceShipFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onComplete();
+                mListener.onComplete(mPlayer);
             }
         });
+
+        mSeaView = (SeaView) view.findViewById(R.id.seaview);
+        mSeaView.setSea(mPlayer.getSea());
+
         return view;
     }
 
@@ -96,6 +101,6 @@ public class PlaceShipFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface PlaceShipInteraction {
-        void onComplete();
+        void onComplete(Player player);
     }
 }

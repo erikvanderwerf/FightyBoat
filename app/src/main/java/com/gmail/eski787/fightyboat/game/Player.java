@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class Player implements Parcelable {
     public final String name;
+    private Sea sea;
 
     public Player(String name) {
         this.name = name;
@@ -38,5 +39,9 @@ public class Player implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+    }
+
+    public Sea getSea() {
+        return sea;
     }
 }

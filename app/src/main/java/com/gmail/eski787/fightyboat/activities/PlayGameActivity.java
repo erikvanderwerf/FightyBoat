@@ -21,7 +21,7 @@ public class PlayGameActivity extends AppCompatActivity {
 
         // Get extras
         Intent intent = getIntent();
-        mGame = intent.getParcelableExtra("game");
+        mGame = intent.getParcelableExtra(IntentConstant.GAME);
 
         mPlayers = Iterables.cycle(mGame.players);
     }

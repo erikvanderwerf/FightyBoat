@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +15,8 @@ import com.gmail.eski787.fightyboat.game.Player;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class ShipPlacementActivity extends AppCompatActivity implements PlayerLockFragment.PlayerLockInteraction, PlaceShipFragment.PlaceShipInteraction {
-    public final String TAG = ShipPlacementActivity.class.getName();
+public class PlaceShipActivity extends AppCompatActivity implements PlayerLockFragment.PlayerLockInteraction, PlaceShipFragment.PlaceShipInteraction {
+    public final String TAG = PlaceShipActivity.class.getSimpleName();
     private Game mGame;
     private Iterator<Player> mPlayerIterator;
     private Fragment mFragment;
@@ -30,7 +29,7 @@ public class ShipPlacementActivity extends AppCompatActivity implements PlayerLo
 
         // Get game
         Intent intent = getIntent();
-        mGame = intent.getParcelableExtra("game");
+        mGame = intent.getParcelableExtra(IntentConstant.GAME);
 
         // Get player iterable
         mPlayerIterator = Arrays.asList(mGame.players).iterator();
@@ -42,7 +41,7 @@ public class ShipPlacementActivity extends AppCompatActivity implements PlayerLo
         if (!mPlayerIterator.hasNext()) {
             // Done placing ships
             Intent intent = new Intent(this, PlayGameActivity.class);
-            intent.putExtra("game", mGame);
+            intent.putExtra(IntentConstant.GAME, mGame);
             startActivity(intent);
             return;
         }
@@ -69,7 +68,7 @@ public class ShipPlacementActivity extends AppCompatActivity implements PlayerLo
     }
 
     @Override
-    public void onComplete() {
+    public void onComplete(Player player) {
         advanceAndLockPlayer();
     }
 }

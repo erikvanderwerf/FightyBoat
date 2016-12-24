@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         Game game = new Game(players, settings);
 
-        Intent new_game = new Intent(this, ShipPlacementActivity.class);
-        new_game.putExtra("game", game);
+        Intent new_game = new Intent(this, PlaceShipActivity.class);
+        new_game.putExtra(IntentConstant.GAME, game);
 
         startActivity(new_game);
     }
