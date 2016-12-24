@@ -59,7 +59,7 @@ public class PlaceShipFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_place_ship, container, false);
-        Button button = (Button) view.findViewById(R.id.button);
+        Button button = (Button) view.findViewById(R.id.b_place_ship_continue);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
