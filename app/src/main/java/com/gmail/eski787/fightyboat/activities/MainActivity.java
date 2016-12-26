@@ -9,6 +9,7 @@ import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.GameSettings;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.R;
+import com.gmail.eski787.fightyboat.game.Sea;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewGame(View view) {
         Player[] players = new Player[2];
-        players[0] = new Player("Alice");
-        players[1] = new Player("Bob");
+        players[0] = new Player("Alice", new Sea(10, 10));
+        players[1] = new Player("Bob", new Sea(10, 10));
 
         GameSettings settings = new GameSettings();
         settings.seaSize.set(10, 10);

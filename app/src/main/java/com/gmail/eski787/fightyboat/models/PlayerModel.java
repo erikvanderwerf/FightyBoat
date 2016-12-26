@@ -13,6 +13,6 @@ public class PlayerModel {
     }
 
     public String getName() {
-        return player.name;
+        return player.getName();
     }
 }

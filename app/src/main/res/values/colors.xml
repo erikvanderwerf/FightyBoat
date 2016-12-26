@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="steelGray">#708090</color>
+    <color name="seaBlue">#00BFFF</color>
+    <color name="tileNone">#DCDCDC</color>
+    <color name="tileHit">#FF0000</color>
+    <color name="tileMiss">#FFFFFF</color>
 </resources>

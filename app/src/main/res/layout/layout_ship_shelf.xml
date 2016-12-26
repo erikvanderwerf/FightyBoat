@@ -5,30 +5,30 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:id="@+id/ship_shelf_2"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageView"
         android:layout_weight="1" />
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:id="@+id/ship_shelf_3"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageView2"
         android:layout_weight="1" />
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:id="@+id/ship_shelf_4"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageView3"
         android:layout_weight="1" />
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:id="@+id/ship_shelf_5"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageView4"
         android:layout_weight="1" />
 </LinearLayout>

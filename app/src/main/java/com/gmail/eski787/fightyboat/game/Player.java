@@ -8,15 +8,17 @@ import android.os.Parcelable;
  */
 
 public class Player implements Parcelable {
-    public final String name;
-    private Sea sea;
+    private String mName;
+    private Sea mSea;
 
-    public Player(String name) {
-        this.name = name;
+    public Player(String name, Sea sea) {
+        this.mName = name;
+        mSea = sea;
     }
 
     protected Player(Parcel in) {
-        name = in.readString();
+        mName = in.readString();
+        mSea = in.readParcelable(Sea.class.getClassLoader());
     }
 
     public static final Creator<Player> CREATOR = new Creator<Player>() {
@@ -31,6 +33,14 @@ public class Player implements Parcelable {
         }
     };
 
+    public String getName() {
+        return mName;
+    }
+
+    public Sea getSea() {
+        return mSea;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -38,10 +48,7 @@ public class Player implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-    }
-
-    public Sea getSea() {
-        return sea;
+        dest.writeString(mName);
+        dest.writeParcelable(mSea, flags);
     }
 }
