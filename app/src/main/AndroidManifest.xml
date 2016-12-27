@@ -17,7 +17,7 @@
         </activity>
         <activity android:name=".activities.ChoosePlayersActivity" />
         <activity android:name=".activities.PlaceShipActivity" />
-        <activity android:name=".activities.PlayGameActivity"></activity>
+        <activity android:name=".activities.PlayGameActivity" />
     </application>
 
 </manifest>

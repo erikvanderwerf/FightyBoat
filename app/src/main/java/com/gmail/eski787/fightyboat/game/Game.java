@@ -3,21 +3,17 @@ package com.gmail.eski787.fightyboat.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Created by Erik on 12/13/2016.
  */
 
 public class Game implements Parcelable {
-    public final Player[] players;
+    private final Player[] players;
     private final GameSettings settings;
 
     public Game(Player[] players, GameSettings settings) {
         this.players = players;
         this.settings = settings;
-
-        int numPlayers = getNumberOfPlayers();
     }
 
     protected Game(Parcel in) {

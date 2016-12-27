@@ -12,44 +12,51 @@ import java.util.Arrays;
  */
 public class Sea implements Parcelable {
     private static final String TAG = Sea.class.getSimpleName();
-    @Nullable private Status[][] ocean;
+    private static final int NUMBER_OF_SHIPS = 5;
+    @Nullable private Status[][] mOcean;
+    @Nullable private Ship[] mShips;
 
     public Sea(int columns, int rows) {
-        ocean = new Status[columns][rows];
+        mOcean = new Status[columns][rows];
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
-                ocean[x][y] = Status.NONE;
+                mOcean[x][y] = Status.NONE;
             }
         }
+
+        mShips = new Ship[NUMBER_OF_SHIPS];
     }
 
     protected Sea(Parcel in) {
-        Log.d(TAG, "Unpackaging Sea");
-
         int len = in.readInt();
-        Status s = (Status) in.readSerializable();
 
-        Log.d(TAG, String.format("Length: %d", len));
-        Log.d(TAG, String.format("Initial: %s", s));
-
-        ocean = new Status[len][];
-        for (int i = 0; i < len; i++) {
-            Object[] objects = in.readArray(Status.class.getClassLoader());
-            ocean[i] = Arrays.copyOf(objects, objects.length, Status[].class);
+        if (len != -1) {
+            mOcean = new Status[len][];
+            for (int i = 0; i < len; i++) {
+                Object[] objects = in.readArray(Status.class.getClassLoader());
+                mOcean[i] = Arrays.copyOf(objects, objects.length, Status[].class);
+            }
+        } else {
+            // No ocean?
         }
+
+        mShips = (Ship[]) in.readArray(Ship.class.getClassLoader());
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        // Write array-of-array length
-        // Write single arrays
-        Log.d(TAG, String.format("Writing Length %d, Tile %s", ocean.length, ocean[0][0]));
-
-        dest.writeInt(ocean.length);
-        dest.writeSerializable(ocean[0][0]);
-        for (Status[] statuses : ocean) {
-            dest.writeArray(statuses);
+        if (mOcean != null) {
+            // Write array-of-array length
+            // Write single arrays
+            dest.writeInt(mOcean.length);
+            for (Status[] statuses : mOcean) {
+                dest.writeArray(statuses);
+            }
+        } else {
+            dest.writeInt(-1);
         }
+
+        dest.writeArray(mShips);
     }
 
     @Override
@@ -70,12 +77,14 @@ public class Sea implements Parcelable {
     };
 
     public void set(int x, int y, Status status) {
-        ocean[x][y] = status;
+        if (mOcean != null) {
+            mOcean[x][y] = status;
+        }
     }
 
     public int getNumberOfRows() {
-        if (ocean != null) {
-            return ocean[0].length;
+        if (mOcean != null) {
+            return mOcean[0].length;
         } else {
             Log.d(TAG, "getNumberOfRows Ocean is null");
             return -1;
@@ -83,11 +92,19 @@ public class Sea implements Parcelable {
     }
 
     public int getNumberOfColumns() {
-        return ocean.length;
+        if (mOcean != null) {
+            return mOcean.length;
+        } else {
+            return -1;
+        }
     }
 
     public Status getStatus(int x, int y) {
-        return ocean[x][y];
+        if (mOcean != null) {
+            return mOcean[x][y];
+        } else {
+            return null;
+        }
     }
 
     public enum Status {

@@ -1,4 +1,4 @@
-package com.gmail.eski787.fightyboat.view;
+package com.gmail.eski787.fightyboat.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,8 +13,6 @@ import android.view.View;
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Sea;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.EnumMap;
 
 /**
@@ -26,9 +24,7 @@ public class SeaView extends View {
     @Nullable private Sea mSea;
     private int mScreenHeight;
     private int mScreenWidth;
-    private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<Sea.Status, Paint>(Sea.Status.class);
-    //private int mTileHeight;
-    //private int mTileWidth;
+    private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<>(Sea.Status.class);
 
     private void initializePaintMap() {
         Paint none = new Paint(), hit = new Paint(), miss = new Paint();
@@ -78,12 +74,13 @@ public class SeaView extends View {
 
         for (int row = 0; row < mSea.getNumberOfRows(); row++) {
             for (int col = 0; col < mSea.getNumberOfColumns(); col++) {
-                int startX = col * width;
-                int startY = row * height;
-
-                Paint paint = mPaintMap.get(mSea.getStatus(col, row));
-
-                drawTile(canvas, startX, startY, width, height, paint);
+                Sea.Status status = mSea.getStatus(col, row);
+                if (status != Sea.Status.NONE) {
+                    int startX = col * width;
+                    int startY = row * height;
+                    Paint paint = mPaintMap.get(status);
+                    drawTile(canvas, startX, startY, width, height, paint);
+                }
             }
         }
     }

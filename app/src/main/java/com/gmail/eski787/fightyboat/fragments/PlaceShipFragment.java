@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Player;
-import com.gmail.eski787.fightyboat.view.SeaView;
+import com.gmail.eski787.fightyboat.views.SeaView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +36,7 @@ public class PlaceShipFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @return A new instance of fragment PlaceShipFragment.
-     * @param player
+     * @param player Player to place ships for.
      */
     public static PlaceShipFragment newInstance(Player player) {
         PlaceShipFragment fragment = new PlaceShipFragment();
