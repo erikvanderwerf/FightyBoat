@@ -32,7 +32,7 @@ public class PlaceShipActivity extends AppCompatActivity implements PlayerLockFr
         mGame = intent.getParcelableExtra(IntentConstant.GAME);
 
         // Get player iterable
-        mPlayerIterator = Arrays.asList(mGame.players).iterator();
+        mPlayerIterator = Arrays.asList(mGame.getPlayers()).iterator();
 
         advanceAndLockPlayer();
     }

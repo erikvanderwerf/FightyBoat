@@ -47,4 +47,8 @@ public class Game implements Parcelable {
         dest.writeTypedArray(players, flags);
         dest.writeParcelable(settings, flags);
     }
+
+    public Player[] getPlayers() {
+        return players;
+    }
 }
