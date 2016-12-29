@@ -5,22 +5,10 @@ import android.os.Parcelable;
 
 /**
  * Created by Erik on 12/13/2016.
+ *
  */
 
 public class Player implements Parcelable {
-    private String mName;
-    private Sea mSea;
-
-    public Player(String name, Sea sea) {
-        this.mName = name;
-        mSea = sea;
-    }
-
-    protected Player(Parcel in) {
-        mName = in.readString();
-        mSea = in.readParcelable(Sea.class.getClassLoader());
-    }
-
     public static final Creator<Player> CREATOR = new Creator<Player>() {
         @Override
         public Player createFromParcel(Parcel in) {
@@ -32,6 +20,18 @@ public class Player implements Parcelable {
             return new Player[size];
         }
     };
+    private String mName;
+    private Sea mSea;
+
+    public Player(String name, Sea sea) {
+        this.mName = name;
+        mSea = sea;
+    }
+
+    private Player(Parcel in) {
+        mName = in.readString();
+        mSea = in.readParcelable(Sea.class.getClassLoader());
+    }
 
     public String getName() {
         return mName;

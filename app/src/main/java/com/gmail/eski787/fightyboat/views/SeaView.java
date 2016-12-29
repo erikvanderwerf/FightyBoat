@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.util.Pair;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -12,31 +13,24 @@ import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Sea;
+import com.gmail.eski787.fightyboat.game.Ship;
 
 import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * Created by Erik on 12/23/2016.
+ * Methods for displaying a Sea object.
  */
 
 public class SeaView extends View {
     private static final String TAG = SeaView.class.getSimpleName();
-    @Nullable private Sea mSea;
+    private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<>(Sea.Status.class);
+    @Nullable
+    private Sea mSea;
     private int mScreenHeight;
     private int mScreenWidth;
-    private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<>(Sea.Status.class);
-
-    private void initializePaintMap() {
-        Paint none = new Paint(), hit = new Paint(), miss = new Paint();
-
-        none.setColor(ResourcesCompat.getColor(getResources(), R.color.tileNone, null));
-        hit.setColor(ResourcesCompat.getColor(getResources(), R.color.tileHit, null));
-        miss.setColor(ResourcesCompat.getColor(getResources(), R.color.tileMiss, null));
-
-        mPaintMap.put(Sea.Status.NONE, none);
-        mPaintMap.put(Sea.Status.HIT, hit);
-        mPaintMap.put(Sea.Status.MISS, miss);
-    }
+    private SeaTile[][] mTiles;
 
     public SeaView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -53,6 +47,18 @@ public class SeaView extends View {
         initializePaintMap();
     }
 
+    private void initializePaintMap() {
+        Paint none = new Paint(), hit = new Paint(), miss = new Paint();
+
+        none.setColor(ResourcesCompat.getColor(getResources(), R.color.tileNone, null));
+        hit.setColor(ResourcesCompat.getColor(getResources(), R.color.tileHit, null));
+        miss.setColor(ResourcesCompat.getColor(getResources(), R.color.tileMiss, null));
+
+        mPaintMap.put(Sea.Status.NONE, none);
+        mPaintMap.put(Sea.Status.HIT, hit);
+        mPaintMap.put(Sea.Status.MISS, miss);
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -64,23 +70,23 @@ public class SeaView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        final int height = getTileHeight();
-        final int width = getTileWidth();
-
         if (mSea == null) {
             Log.d(TAG, "mSea is null.");
             return;
         }
 
-        for (int row = 0; row < mSea.getNumberOfRows(); row++) {
-            for (int col = 0; col < mSea.getNumberOfColumns(); col++) {
-                Sea.Status status = mSea.getStatus(col, row);
-                if (status != Sea.Status.NONE) {
-                    int startX = col * width;
-                    int startY = row * height;
-                    Paint paint = mPaintMap.get(status);
-                    drawTile(canvas, startX, startY, width, height, paint);
-                }
+        final int height = getTileHeight();
+        final int width = getTileWidth();
+
+        // For each tile
+        for (int row = 0; row < mTiles.length; row++) {
+            for (int col = 0; col < mTiles[row].length; col++) {
+                int startX = col * width;
+                int startY = row * height;
+                int endX = startX + width;
+                int endY = startY + height;
+
+                mTiles[row][col].draw(canvas, mPaintMap, startX, startY, endX, endY);
             }
         }
     }
@@ -115,30 +121,185 @@ public class SeaView extends View {
             Sea.Status current = mSea.getStatus(tx, ty);
             Sea.Status advance = null;
             switch (current) {
-                case NONE: advance = Sea.Status.HIT; break;
-                case HIT: advance = Sea.Status.MISS; break;
-                case MISS: advance = Sea.Status.NONE; break;
+                case NONE:
+                    advance = Sea.Status.HIT;
+                    break;
+                case HIT:
+                    advance = Sea.Status.MISS;
+                    break;
+                case MISS:
+                    advance = Sea.Status.NONE;
+                    break;
             }
 
             mSea.set(tx, ty, advance);
         } else {
             Log.d(TAG, "Sea is null");
         }
+        regenerateSeaTiles();
         invalidate();
         return b;
     }
 
     public void setSea(Sea sea) {
         mSea = sea;
+        regenerateSeaTiles();
         invalidate();
     }
 
-    private static void drawTile(Canvas canvas, int startX, int startY, int width, int height, Paint paint) {
-        int minDimension = Math.min(width, height);
+    private void regenerateSeaTiles() {
+        assert mSea != null;
 
-        int midX = startX + (width / 2);
-        int midY = startY + (height / 2);
+        int rows = mSea.getNumberOfRows();
+        int cols = mSea.getNumberOfColumns();
 
-        canvas.drawCircle(midX, midY, minDimension / 3, paint);
+        mTiles = new SeaTile[rows][cols];
+        // Assignment and Status
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                SeaTile tile = new SeaTile();
+                tile.status = mSea.getStatus(x, y);
+                mTiles[y][x] = tile;
+            }
+        }
+        // Ships
+        for (Ship ship : mSea.getShips()) {
+            int length = ship.getLength();
+            int x = ship.getOrigin().x;
+            int y = ship.getOrigin().y;
+            Ship.Orientation orientation = ship.getOrientation();
+            for (int i = 0; i < length; i++) {
+                SeaTile tile = mTiles[y][x];
+
+                tile.status = mSea.getStatus(x, y);
+                tile.orientation = orientation;
+                if (i == 0) {
+                    CapDirection direction = orientation == Ship.Orientation.HORIZONTAL ? CapDirection.RIGHT : CapDirection.DOWN;
+                    tile.cap = new Pair<>(direction, ship.getStartCap());
+                } else if (i == (length - 1)) {
+                    CapDirection direction = orientation == Ship.Orientation.HORIZONTAL ? CapDirection.LEFT : CapDirection.UP;
+                    tile.cap = new Pair<>(direction, ship.getEndCap());
+                }
+
+                // Increment x or y
+                if (orientation == Ship.Orientation.HORIZONTAL) {
+                    x++;
+                } else {
+                    y++;
+                }
+            }
+        }
+    }
+
+    private enum CapDirection {
+        LEFT, RIGHT, UP, DOWN
+    }
+
+    private class SeaTile {
+        static final float SHIP_RADIUS = 0.47f;
+        static final float PEG_RADIUS = 0.3f;
+        Sea.Status status;
+        @Nullable
+        Pair<CapDirection, Ship.CapType> cap;
+        @Nullable
+        Ship.Orientation orientation;
+
+        void draw(Canvas canvas, Map<Sea.Status, Paint> paintMap,
+                  int startX, int startY, int endX, int endY) {
+            final int width = endX - startX;
+            final int height = endY - startY;
+
+            // Ship
+            Paint paint = new Paint();
+            paint.setColor(ResourcesCompat.getColor(getResources(), R.color.steelGray, null));
+            if (cap != null) {
+                drawCap(canvas, paint, startX, startY, endX, endY);
+            } else if (orientation != null) {
+                drawHull(canvas, paint, startX, startY, endX, endY);
+            }
+
+            // Peg
+            if (status != Sea.Status.NONE) {
+                final Paint paint_peg = paintMap.get(status);
+                final int midX = startX + (width / 2);
+                final int midY = startY + (height / 2);
+                final int minDimension = Math.min(width, height);
+                final float radius = minDimension * PEG_RADIUS;
+
+                canvas.drawCircle(midX, midY, radius, paint_peg);
+            }
+        }
+
+        private void drawCap(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
+            assert cap != null;
+
+            final int width = endX - startX;
+            final int height = endY - startY;
+
+            final int midX = startX + (width / 2);
+            final int midY = startY + (height / 2);
+            final int minDimension = Math.min(width, height);
+            final float radius = minDimension * SHIP_RADIUS;
+
+            float minX = 0, maxX = 0, minY = 0, maxY = 0;
+
+            switch (cap.first) {
+                case UP:
+                    maxX = midX + radius;
+                    minX = midX - radius;
+                    maxY = midY;
+                    minY = startY;
+                    break;
+                case DOWN:
+                    maxX = midX + radius;
+                    minX = midX - radius;
+                    maxY = endY;
+                    minY = midY;
+                    break;
+                case LEFT:
+                    maxX = midX;
+                    minX = startX;
+                    maxY = midY + radius;
+                    minY = midY - radius;
+                    break;
+                case RIGHT:
+                    maxX = endX;
+                    minX = midX;
+                    maxY = midY + radius;
+                    minY = midY - radius;
+                    break;
+            }
+
+            canvas.drawCircle(midX, midY, radius, paint);
+            canvas.drawRect(minX, minY, maxX, maxY, paint);
+        }
+
+        private void drawHull(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
+            assert orientation != null;
+
+            final int width = endX - startX;
+            final int height = endY - startY;
+
+            final int midX = startX + (width / 2);
+            final int midY = startY + (height / 2);
+
+            float minX = 0, maxX = 0, minY = 0, maxY = 0;
+
+            switch (orientation) {
+                case VERTICAL:
+                    maxX = midX + (width * SHIP_RADIUS);
+                    minX = midX - (width * SHIP_RADIUS);
+                    maxY = endY;
+                    minY = startY;
+                    break;
+                case HORIZONTAL:
+                    maxX = endX;
+                    minX = startX;
+                    maxY = midY + (width * SHIP_RADIUS);
+                    minY = midY - (width * SHIP_RADIUS);
+                    break;
+            }
+            canvas.drawRect(minX, minY, maxX, maxY, paint);
+        }
     }
 }

@@ -5,16 +5,31 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Erik on 12/13/2016.
+ * Holds information for a Player's ships and hits taken
  */
 public class Sea implements Parcelable {
+    public static final Creator<Sea> CREATOR = new Creator<Sea>() {
+        @Override
+        public Sea createFromParcel(Parcel in) {
+            return new Sea(in);
+        }
+
+        @Override
+        public Sea[] newArray(int size) {
+            return new Sea[size];
+        }
+    };
     private static final String TAG = Sea.class.getSimpleName();
     private static final int NUMBER_OF_SHIPS = 5;
     @Nullable private Status[][] mOcean;
-    @Nullable private Ship[] mShips;
+    @Nullable
+    private List<Ship> mShips;
 
     public Sea(int columns, int rows) {
         mOcean = new Status[columns][rows];
@@ -24,10 +39,10 @@ public class Sea implements Parcelable {
             }
         }
 
-        mShips = new Ship[NUMBER_OF_SHIPS];
+        mShips = new ArrayList<>(NUMBER_OF_SHIPS);
     }
 
-    protected Sea(Parcel in) {
+    private Sea(Parcel in) {
         int len = in.readInt();
 
         if (len != -1) {
@@ -40,7 +55,10 @@ public class Sea implements Parcelable {
             // No ocean?
         }
 
-        mShips = (Ship[]) in.readArray(Ship.class.getClassLoader());
+        Object[] objects = in.readArray(Ship.class.getClassLoader());
+        Ship[] ships = Arrays.copyOf(objects, objects.length, Ship[].class);
+        mShips = Arrays.asList(ships);
+        //mShips = new ArrayList<Ship>(objects);
     }
 
     @Override
@@ -56,25 +74,17 @@ public class Sea implements Parcelable {
             dest.writeInt(-1);
         }
 
-        dest.writeArray(mShips);
+        Object[] array = null;
+        if (mShips != null) {
+            array = mShips.toArray();
+        }
+        dest.writeArray(array);
     }
 
     @Override
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<Sea> CREATOR = new Creator<Sea>() {
-        @Override
-        public Sea createFromParcel(Parcel in) {
-            return new Sea(in);
-        }
-
-        @Override
-        public Sea[] newArray(int size) {
-            return new Sea[size];
-        }
-    };
 
     public void set(int x, int y, Status status) {
         if (mOcean != null) {
@@ -105,6 +115,10 @@ public class Sea implements Parcelable {
         } else {
             return null;
         }
+    }
+
+    public List<Ship> getShips() {
+        return mShips;
     }
 
     public enum Status {
