@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
@@ -18,8 +17,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * Base class for displaying a {@link Sea}.
  * Created by Erik on 12/23/2016.
- * Methods for displaying a Sea object.
  */
 
 public class SeaView extends View {
@@ -28,10 +27,8 @@ public class SeaView extends View {
     private static final String TAG = SeaView.class.getSimpleName();
     private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<>(Sea.Status.class);
     @Nullable
-    private Sea mSea;
-    private int mScreenHeight;
-    private int mScreenWidth;
-    private SeaTile[][] mTiles;
+    protected Sea mSea;
+    protected SeaTile[][] mTiles;
 
     public SeaView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -48,7 +45,7 @@ public class SeaView extends View {
         initializePaintMap();
     }
 
-    private void initializePaintMap() {
+    protected void initializePaintMap() {
         Paint none = new Paint(), hit = new Paint(), miss = new Paint();
 
         none.setColor(ResourcesCompat.getColor(getResources(), R.color.tileNone, null));
@@ -58,14 +55,6 @@ public class SeaView extends View {
         mPaintMap.put(Sea.Status.NONE, none);
         mPaintMap.put(Sea.Status.HIT, hit);
         mPaintMap.put(Sea.Status.MISS, miss);
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        //final int size = Math.min(w, h);
-        mScreenHeight = h; //size;
-        mScreenWidth = w; //size;
     }
 
     @Override
@@ -94,22 +83,23 @@ public class SeaView extends View {
         }
     }
 
-    private int getTileWidth() {
+    protected int getTileWidth() {
         if (mSea != null) {
-            return mScreenWidth / mSea.getNumberOfColumns();
+            return getWidth() / mSea.getNumberOfColumns();
         } else {
             return 0;
         }
     }
 
-    private int getTileHeight() {
+    protected int getTileHeight() {
         if (mSea != null) {
-            return mScreenHeight / mSea.getNumberOfRows();
+            return getHeight() / mSea.getNumberOfRows();
         } else {
             return 0;
         }
     }
 
+    /*
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean b = super.onTouchEvent(event);
@@ -143,6 +133,7 @@ public class SeaView extends View {
         invalidate();
         return b;
     }
+    //*/
 
     public void setSea(Sea sea) {
         mSea = sea;
@@ -194,8 +185,6 @@ public class SeaView extends View {
             }
         }
     }
-
-
 
     private class SeaTile {
         Sea.Status status;

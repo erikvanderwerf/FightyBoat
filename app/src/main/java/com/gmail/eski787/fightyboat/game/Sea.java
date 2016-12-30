@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Erik on 12/13/2016.
  * Holds information for a Player's ships and hits taken
+ * Created by Erik on 12/13/2016.
  */
 public class Sea implements Parcelable {
     public static final Creator<Sea> CREATOR = new Creator<Sea>() {
@@ -27,7 +27,8 @@ public class Sea implements Parcelable {
     };
     private static final String TAG = Sea.class.getSimpleName();
     private static final int NUMBER_OF_SHIPS = 5;
-    @Nullable private Status[][] mOcean;
+    @Nullable
+    private Status[][] mOcean;
     @Nullable
     private List<Ship> mShips;
 
