@@ -5,30 +5,30 @@
     android:orientation="vertical"
     tools:context="com.gmail.eski787.fightyboat.fragments.PlaceShipFragment">
 
-    <com.gmail.eski787.fightyboat.views.SeaView
-        android:id="@+id/seaview"
-        android:layout_height="0dp"
+    <com.gmail.eski787.fightyboat.views.PlaceShipSeaView
+        android:id="@+id/placeShipSeaView"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/seaBlue"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/steelGray">
+        android:background="@color/steelGray"
+        android:orientation="horizontal">
 
         <include
             android:id="@+id/include"
             layout="@layout/layout_ship_shelf"
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <Button
             android:id="@+id/b_place_ship_continue"
-            android:text="@string/finish"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
+            android:text="@string/finish" />
     </LinearLayout>
 </LinearLayout>

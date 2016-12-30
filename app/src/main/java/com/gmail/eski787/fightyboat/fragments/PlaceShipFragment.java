@@ -67,7 +67,7 @@ public class PlaceShipFragment extends Fragment {
             }
         });
 
-        mSeaView = (SeaView) view.findViewById(R.id.seaview);
+        mSeaView = (SeaView) view.findViewById(R.id.placeShipSeaView);
         mSeaView.setSea(mPlayer.getSea());
 
         return view;

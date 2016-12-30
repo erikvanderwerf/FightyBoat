@@ -99,49 +99,13 @@ public class SeaView extends View {
         }
     }
 
-    /*
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        boolean b = super.onTouchEvent(event);
-
-        if (mSea != null) {
-            float x = event.getX();
-            float y = event.getY();
-
-            int tx = ((int) x) / getTileWidth();
-            int ty = ((int) y) / getTileHeight();
-
-            Sea.Status current = mSea.getStatus(tx, ty);
-            Sea.Status advance = null;
-            switch (current) {
-                case NONE:
-                    advance = Sea.Status.HIT;
-                    break;
-                case HIT:
-                    advance = Sea.Status.MISS;
-                    break;
-                case MISS:
-                    advance = Sea.Status.NONE;
-                    break;
-            }
-
-            mSea.set(tx, ty, advance);
-        } else {
-            Log.d(TAG, "Sea is null");
-        }
-        regenerateSeaTiles();
-        invalidate();
-        return b;
-    }
-    //*/
-
     public void setSea(Sea sea) {
         mSea = sea;
         regenerateSeaTiles();
         invalidate();
     }
 
-    private void regenerateSeaTiles() {
+    protected void regenerateSeaTiles() {
         assert mSea != null;
 
         int rows = mSea.getNumberOfRows();
