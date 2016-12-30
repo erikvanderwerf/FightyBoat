@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.util.Pair;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,6 +23,8 @@ import java.util.Map;
  */
 
 public class SeaView extends View {
+    static final float SHIP_RADIUS = 0.47f;
+    static final float PEG_RADIUS = 0.3f;
     private static final String TAG = SeaView.class.getSimpleName();
     private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<>(Sea.Status.class);
     @Nullable
@@ -62,15 +63,17 @@ public class SeaView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mScreenHeight = h;
-        mScreenWidth = w;
+        //final int size = Math.min(w, h);
+        mScreenHeight = h; //size;
+        mScreenWidth = w; //size;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        final boolean EDIT = isInEditMode();
 
-        if (mSea == null) {
+        if (mSea == null || EDIT) {
             Log.d(TAG, "mSea is null.");
             return;
         }
@@ -173,12 +176,13 @@ public class SeaView extends View {
 
                 tile.status = mSea.getStatus(x, y);
                 tile.orientation = orientation;
+                ShipCap.CapDirection direction;
                 if (i == 0) {
-                    CapDirection direction = orientation == Ship.Orientation.HORIZONTAL ? CapDirection.RIGHT : CapDirection.DOWN;
-                    tile.cap = new Pair<>(direction, ship.getStartCap());
+                    direction = orientation == Ship.Orientation.HORIZONTAL ? ShipCap.CapDirection.RIGHT : ShipCap.CapDirection.DOWN;
+                    tile.cap = ShipCap.getCap(ship.getStartCap(), direction);
                 } else if (i == (length - 1)) {
-                    CapDirection direction = orientation == Ship.Orientation.HORIZONTAL ? CapDirection.LEFT : CapDirection.UP;
-                    tile.cap = new Pair<>(direction, ship.getEndCap());
+                    direction = orientation == Ship.Orientation.HORIZONTAL ? ShipCap.CapDirection.LEFT : ShipCap.CapDirection.UP;
+                    tile.cap = ShipCap.getCap(ship.getEndCap(), direction);
                 }
 
                 // Increment x or y
@@ -191,16 +195,12 @@ public class SeaView extends View {
         }
     }
 
-    private enum CapDirection {
-        LEFT, RIGHT, UP, DOWN
-    }
+
 
     private class SeaTile {
-        static final float SHIP_RADIUS = 0.47f;
-        static final float PEG_RADIUS = 0.3f;
         Sea.Status status;
         @Nullable
-        Pair<CapDirection, Ship.CapType> cap;
+        ShipCap cap;
         @Nullable
         Ship.Orientation orientation;
 
@@ -213,7 +213,7 @@ public class SeaView extends View {
             Paint paint = new Paint();
             paint.setColor(ResourcesCompat.getColor(getResources(), R.color.steelGray, null));
             if (cap != null) {
-                drawCap(canvas, paint, startX, startY, endX, endY);
+                cap.drawCap(canvas, paint, startX, startY, endX, endY);
             } else if (orientation != null) {
                 drawHull(canvas, paint, startX, startY, endX, endY);
             }
@@ -228,50 +228,6 @@ public class SeaView extends View {
 
                 canvas.drawCircle(midX, midY, radius, paint_peg);
             }
-        }
-
-        private void drawCap(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
-            assert cap != null;
-
-            final int width = endX - startX;
-            final int height = endY - startY;
-
-            final int midX = startX + (width / 2);
-            final int midY = startY + (height / 2);
-            final int minDimension = Math.min(width, height);
-            final float radius = minDimension * SHIP_RADIUS;
-
-            float minX = 0, maxX = 0, minY = 0, maxY = 0;
-
-            switch (cap.first) {
-                case UP:
-                    maxX = midX + radius;
-                    minX = midX - radius;
-                    maxY = midY;
-                    minY = startY;
-                    break;
-                case DOWN:
-                    maxX = midX + radius;
-                    minX = midX - radius;
-                    maxY = endY;
-                    minY = midY;
-                    break;
-                case LEFT:
-                    maxX = midX;
-                    minX = startX;
-                    maxY = midY + radius;
-                    minY = midY - radius;
-                    break;
-                case RIGHT:
-                    maxX = endX;
-                    minX = midX;
-                    maxY = midY + radius;
-                    minY = midY - radius;
-                    break;
-            }
-
-            canvas.drawCircle(midX, midY, radius, paint);
-            canvas.drawRect(minX, minY, maxX, maxY, paint);
         }
 
         private void drawHull(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
