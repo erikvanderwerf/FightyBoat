@@ -1,0 +1,11 @@
+package com.gmail.eski787.fightyboat.presenters;
+
+import android.graphics.Canvas;
+import android.graphics.Point;
+
+/**
+ * Created by Erik on 12/30/2016.
+ */
+public interface Presenter {
+    void draw(Canvas canvas, Point start, Point end);
+}

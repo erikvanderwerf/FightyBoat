@@ -1,4 +1,4 @@
-package com.gmail.eski787.fightyboat.views;
+package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -22,7 +22,7 @@ public abstract class ShipCap {
      * @param direction The direction for the cap to open.
      * @return An instance of a {@link ShipCap} with specified parameters.
      */
-    static ShipCap getCap(CapType type, CapDirection direction) {
+    public static ShipCap getCap(CapType type, CapDirection direction) {
         ShipCap cap = null;
 
         switch (type) {
@@ -51,7 +51,7 @@ public abstract class ShipCap {
     /**
      * Determines which tile edge the {@link com.gmail.eski787.fightyboat.game.Ship} continues on to.
      */
-    enum CapDirection {
+    public enum CapDirection {
         LEFT, RIGHT, UP, DOWN
     }
 

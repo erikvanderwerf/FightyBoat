@@ -54,7 +54,6 @@ public class PlaceShipSeaView extends SeaView {
                     advance = Sea.Status.NONE;
                     break;
             }
-
             mSea.set(tx, ty, advance);
         } else {
             Log.d(TAG, "Sea is null");

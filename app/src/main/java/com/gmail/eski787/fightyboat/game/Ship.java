@@ -4,7 +4,7 @@ import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gmail.eski787.fightyboat.views.ShipCap;
+import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
 /**
  * Created by Erik on 12/26/2016.

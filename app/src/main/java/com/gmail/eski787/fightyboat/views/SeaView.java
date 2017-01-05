@@ -12,6 +12,7 @@ import android.view.View;
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
+import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 
 public class SeaView extends View {
-    static final float SHIP_RADIUS = 0.47f;
+    public static final float SHIP_RADIUS = 0.47f;
     static final float PEG_RADIUS = 0.3f;
     private static final String TAG = SeaView.class.getSimpleName();
     private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<>(Sea.Status.class);
