@@ -26,6 +26,7 @@ public class Sea implements Parcelable {
         }
     };
     private static final String TAG = Sea.class.getSimpleName();
+    @Deprecated
     private static final int NUMBER_OF_SHIPS = 5;
     @Nullable
     private Status[][] mOcean;

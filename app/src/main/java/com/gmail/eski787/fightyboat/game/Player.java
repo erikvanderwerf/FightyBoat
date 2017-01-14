@@ -3,6 +3,9 @@ package com.gmail.eski787.fightyboat.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.gmail.eski787.fightyboat.fragments.ButtonLockFragment;
+import com.gmail.eski787.fightyboat.fragments.LockFragment;
+
 /**
  * Created by Erik on 12/13/2016.
  *
@@ -22,6 +25,8 @@ public class Player implements Parcelable {
     };
     private String mName;
     private Sea mSea;
+    private Radar mRadar;
+    private Class<? extends LockFragment> mLockClass = ButtonLockFragment.class;
 
     public Player(String name, Sea sea) {
         this.mName = name;
@@ -31,6 +36,10 @@ public class Player implements Parcelable {
     private Player(Parcel in) {
         mName = in.readString();
         mSea = in.readParcelable(Sea.class.getClassLoader());
+    }
+
+    public Class<? extends LockFragment> getLockClass() {
+        return mLockClass;
     }
 
     public String getName() {

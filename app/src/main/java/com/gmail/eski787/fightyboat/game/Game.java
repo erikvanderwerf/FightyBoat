@@ -8,19 +8,6 @@ import android.os.Parcelable;
  */
 
 public class Game implements Parcelable {
-    private final Player[] players;
-    private final GameSettings settings;
-
-    public Game(Player[] players, GameSettings settings) {
-        this.players = players;
-        this.settings = settings;
-    }
-
-    protected Game(Parcel in) {
-        players = in.createTypedArray(Player.CREATOR);
-        settings = in.readParcelable(getClass().getClassLoader());
-    }
-
     public static final Creator<Game> CREATOR = new Creator<Game>() {
         @Override
         public Game createFromParcel(Parcel in) {
@@ -32,6 +19,18 @@ public class Game implements Parcelable {
             return new Game[size];
         }
     };
+    private final Player[] players;
+    private final GameSettings settings;
+
+    public Game(Player[] players, GameSettings settings) {
+        this.players = players;
+        this.settings = settings;
+    }
+
+    private Game(Parcel in) {
+        players = in.createTypedArray(Player.CREATOR);
+        settings = in.readParcelable(getClass().getClassLoader());
+    }
 
     public int getNumberOfPlayers() {
         return players.length;

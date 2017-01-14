@@ -20,11 +20,8 @@ import com.gmail.eski787.fightyboat.views.SeaView;
  * Use the {@link PlaceShipFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlaceShipFragment extends Fragment {
-    private static final String ARG_PLAYER = "arg_player";
-
+public class PlaceShipFragment extends PlayerFragment {
     private PlaceShipInteraction mListener;
-    private Player mPlayer;
     private SeaView mSeaView;
 
     public PlaceShipFragment() {
@@ -44,14 +41,6 @@ public class PlaceShipFragment extends Fragment {
         args.putParcelable(ARG_PLAYER, player);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPlayer = getArguments().getParcelable(ARG_PLAYER);
-        }
     }
 
     @Override
