@@ -32,6 +32,7 @@ public class PlaceShipSeaView extends SeaView {
     public boolean onTouchEvent(MotionEvent event) {
         // TODO: Selection of ship highlights, brings up option menu.
         // TODO: Option menu allows for rotation and deletion of ship.
+        // TODO: Get rid of all of this
         boolean b = super.onTouchEvent(event);
 
         if (mSea != null) {
@@ -41,17 +42,17 @@ public class PlaceShipSeaView extends SeaView {
             int tx = ((int) x) / getTileWidth();
             int ty = ((int) y) / getTileHeight();
 
-            Sea.Status current = mSea.getStatus(tx, ty);
-            Sea.Status advance = null;
+            Sea.SeaStatus current = mSea.getStatus(tx, ty);
+            Sea.SeaStatus advance = null;
             switch (current) {
                 case NONE:
-                    advance = Sea.Status.HIT;
+                    advance = Sea.SeaStatus.HIT;
                     break;
                 case HIT:
-                    advance = Sea.Status.MISS;
+                    advance = Sea.SeaStatus.MISS;
                     break;
                 case MISS:
-                    advance = Sea.Status.NONE;
+                    advance = Sea.SeaStatus.NONE;
                     break;
             }
             mSea.set(tx, ty, advance);

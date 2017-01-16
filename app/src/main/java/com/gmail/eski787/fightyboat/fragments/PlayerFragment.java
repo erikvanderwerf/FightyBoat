@@ -7,7 +7,8 @@ import android.support.v4.app.Fragment;
 import com.gmail.eski787.fightyboat.game.Player;
 
 /**
- * Created by Erik on 1/14/2017.
+ * Any Fragment which uses a Player instance should extend this, and use
+ * onAttachPlayer to assign the Player.
  */
 
 public abstract class PlayerFragment extends Fragment {

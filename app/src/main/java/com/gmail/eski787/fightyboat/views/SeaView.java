@@ -3,11 +3,11 @@ package com.gmail.eski787.fightyboat.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Sea;
@@ -22,11 +22,11 @@ import java.util.Map;
  * Created by Erik on 12/23/2016.
  */
 
-public class SeaView extends View {
+public class SeaView extends GridView {
     public static final float SHIP_RADIUS = 0.47f;
     static final float PEG_RADIUS = 0.3f;
     private static final String TAG = SeaView.class.getSimpleName();
-    private final EnumMap<Sea.Status, Paint> mPaintMap = new EnumMap<>(Sea.Status.class);
+    private final EnumMap<Sea.SeaStatus, Paint> mPaintMap = new EnumMap<>(Sea.SeaStatus.class);
     @Nullable
     protected Sea mSea;
     protected SeaTile[][] mTiles;
@@ -46,6 +46,16 @@ public class SeaView extends View {
         initializePaintMap();
     }
 
+    @Override
+    protected Point getGridSize() {
+        return new Point(10, 10);
+    }
+
+    @Override
+    protected boolean isSquare() {
+        return true;
+    }
+
     protected void initializePaintMap() {
         Paint none = new Paint(), hit = new Paint(), miss = new Paint();
 
@@ -53,9 +63,9 @@ public class SeaView extends View {
         hit.setColor(ResourcesCompat.getColor(getResources(), R.color.tileHit, null));
         miss.setColor(ResourcesCompat.getColor(getResources(), R.color.tileMiss, null));
 
-        mPaintMap.put(Sea.Status.NONE, none);
-        mPaintMap.put(Sea.Status.HIT, hit);
-        mPaintMap.put(Sea.Status.MISS, miss);
+        mPaintMap.put(Sea.SeaStatus.NONE, none);
+        mPaintMap.put(Sea.SeaStatus.HIT, hit);
+        mPaintMap.put(Sea.SeaStatus.MISS, miss);
     }
 
     @Override
@@ -84,22 +94,6 @@ public class SeaView extends View {
         }
     }
 
-    protected int getTileWidth() {
-        if (mSea != null) {
-            return getWidth() / mSea.getNumberOfColumns();
-        } else {
-            return 0;
-        }
-    }
-
-    protected int getTileHeight() {
-        if (mSea != null) {
-            return getHeight() / mSea.getNumberOfRows();
-        } else {
-            return 0;
-        }
-    }
-
     public void setSea(Sea sea) {
         mSea = sea;
         regenerateSeaTiles();
@@ -113,11 +107,11 @@ public class SeaView extends View {
         int cols = mSea.getNumberOfColumns();
 
         mTiles = new SeaTile[rows][cols];
-        // Assignment and Status
+        // Assignment and SeaStatus
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
                 SeaTile tile = new SeaTile();
-                tile.status = mSea.getStatus(x, y);
+                tile.seaStatus = mSea.getStatus(x, y);
                 mTiles[y][x] = tile;
             }
         }
@@ -130,7 +124,7 @@ public class SeaView extends View {
             for (int i = 0; i < length; i++) {
                 SeaTile tile = mTiles[y][x];
 
-                tile.status = mSea.getStatus(x, y);
+                tile.seaStatus = mSea.getStatus(x, y);
                 tile.orientation = orientation;
                 ShipCap.CapDirection direction;
                 if (i == 0) {
@@ -152,13 +146,13 @@ public class SeaView extends View {
     }
 
     private class SeaTile {
-        Sea.Status status;
+        Sea.SeaStatus seaStatus;
         @Nullable
         ShipCap cap;
         @Nullable
         Ship.Orientation orientation;
 
-        void draw(Canvas canvas, Map<Sea.Status, Paint> paintMap,
+        void draw(Canvas canvas, Map<Sea.SeaStatus, Paint> paintMap,
                   int startX, int startY, int endX, int endY) {
             final int width = endX - startX;
             final int height = endY - startY;
@@ -173,8 +167,8 @@ public class SeaView extends View {
             }
 
             // Peg
-            if (status != Sea.Status.NONE) {
-                final Paint paint_peg = paintMap.get(status);
+            if (seaStatus != Sea.SeaStatus.NONE) {
+                final Paint paint_peg = paintMap.get(seaStatus);
                 final int midX = startX + (width / 2);
                 final int midY = startY + (height / 2);
                 final int minDimension = Math.min(width, height);

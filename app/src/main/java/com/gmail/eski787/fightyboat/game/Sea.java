@@ -1,5 +1,6 @@
 package com.gmail.eski787.fightyboat.game;
 
+import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -29,15 +30,15 @@ public class Sea implements Parcelable {
     @Deprecated
     private static final int NUMBER_OF_SHIPS = 5;
     @Nullable
-    private Status[][] mOcean;
+    private SeaStatus[][] mOcean;
     @Nullable
     private List<Ship> mShips;
 
     public Sea(int columns, int rows) {
-        mOcean = new Status[columns][rows];
+        mOcean = new SeaStatus[columns][rows];
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
-                mOcean[x][y] = Status.NONE;
+                mOcean[x][y] = SeaStatus.NONE;
             }
         }
 
@@ -48,10 +49,10 @@ public class Sea implements Parcelable {
         int len = in.readInt();
 
         if (len != -1) {
-            mOcean = new Status[len][];
+            mOcean = new SeaStatus[len][];
             for (int i = 0; i < len; i++) {
-                Object[] objects = in.readArray(Status.class.getClassLoader());
-                mOcean[i] = Arrays.copyOf(objects, objects.length, Status[].class);
+                Object[] objects = in.readArray(SeaStatus.class.getClassLoader());
+                mOcean[i] = Arrays.copyOf(objects, objects.length, SeaStatus[].class);
             }
         } else {
             // No ocean?
@@ -69,7 +70,7 @@ public class Sea implements Parcelable {
             // Write array-of-array length
             // Write single arrays
             dest.writeInt(mOcean.length);
-            for (Status[] statuses : mOcean) {
+            for (SeaStatus[] statuses : mOcean) {
                 dest.writeArray(statuses);
             }
         } else {
@@ -88,9 +89,9 @@ public class Sea implements Parcelable {
         return 0;
     }
 
-    public void set(int x, int y, Status status) {
+    public void set(int x, int y, SeaStatus seaStatus) {
         if (mOcean != null) {
-            mOcean[x][y] = status;
+            mOcean[x][y] = seaStatus;
         }
     }
 
@@ -111,7 +112,7 @@ public class Sea implements Parcelable {
         }
     }
 
-    public Status getStatus(int x, int y) {
+    public SeaStatus getStatus(int x, int y) {
         if (mOcean != null) {
             return mOcean[x][y];
         } else {
@@ -123,7 +124,11 @@ public class Sea implements Parcelable {
         return mShips;
     }
 
-    public enum Status {
+    public SeaStatus getStatus(Point tile) {
+        return getStatus(tile.x, tile.y);
+    }
+
+    public enum SeaStatus {
         NONE,
         MISS,
         HIT
