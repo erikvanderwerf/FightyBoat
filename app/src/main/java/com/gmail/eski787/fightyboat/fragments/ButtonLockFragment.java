@@ -20,7 +20,8 @@ public class ButtonLockFragment extends LockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentUnlockButtonBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_unlock_button, container, false);
+        FragmentUnlockButtonBinding binding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_unlock_button, container, false);
         View view = binding.getRoot();
 
         binding.setUser(new PlayerModel(mPlayer));

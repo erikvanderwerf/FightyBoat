@@ -3,8 +3,6 @@ package com.gmail.eski787.fightyboat.presenters;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import kotlin.NotImplementedError;
-
 import static com.gmail.eski787.fightyboat.views.SeaView.SHIP_RADIUS;
 
 /**
@@ -110,7 +108,7 @@ public abstract class ShipCap {
     private static class PointShipCap extends ShipCap {
         @Override
         public void drawCap(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
-            throw new NotImplementedError("PointShipCap not implemented. Do Not Use.");
+//            throw new NotImplementedError("PointShipCap not implemented. Do Not Use.");
         }
     }
 

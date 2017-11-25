@@ -2,6 +2,7 @@ package com.gmail.eski787.fightyboat.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.gmail.eski787.fightyboat.fragments.ButtonLockFragment;
 import com.gmail.eski787.fightyboat.fragments.LockFragment;
@@ -23,9 +24,10 @@ public class Player implements Parcelable {
             return new Player[size];
         }
     };
+    private static final String TAG = Player.class.getCanonicalName();
     private String mName;
     private Sea mSea;
-    private Radar mRadar;
+    //    private Radar mRadar;
     private Class<? extends LockFragment> mLockClass = ButtonLockFragment.class;
 
     public Player(String name, Sea sea) {
@@ -36,6 +38,13 @@ public class Player implements Parcelable {
     private Player(Parcel in) {
         mName = in.readString();
         mSea = in.readParcelable(Sea.class.getClassLoader());
+        try {
+            // noinspection unchecked
+            mLockClass = (Class<? extends LockFragment>) Class.forName(in.readString());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            Log.e(TAG, "This should not be possible.");
+        }
     }
 
     public Class<? extends LockFragment> getLockClass() {
@@ -59,5 +68,6 @@ public class Player implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
         dest.writeParcelable(mSea, flags);
+        dest.writeString(mLockClass.getCanonicalName());
     }
 }

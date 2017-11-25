@@ -19,7 +19,6 @@ import java.util.Iterator;
 public class PlaceShipActivity extends AppCompatActivity implements LockFragment.LockInteraction, PlaceShipFragment.PlaceShipInteraction {
     public final String TAG = PlaceShipActivity.class.getSimpleName();
     private Game mGame;
-    private Iterator<Player> mPlayerIterator;
     private PlayerFragment mFragment;
     private Player currPlayer;
 
@@ -32,25 +31,31 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
         Intent intent = getIntent();
         mGame = intent.getParcelableExtra(IntentConstant.GAME);
 
-        // Get player iterable
-        mPlayerIterator = Arrays.asList(mGame.getPlayers()).iterator();
-
         advanceAndLockPlayer();
     }
 
+    /*
+    Iterate over every player to get their ship choice.
+     */
     private void advanceAndLockPlayer() {
-        if (!mPlayerIterator.hasNext()) {
-            // Done placing ships
-            Intent intent = new Intent(this, PlayGameActivity.class);
-            intent.putExtra(IntentConstant.GAME, mGame);
-            startActivity(intent);
-        } else {
-            // Next player place ships.
+        // Get player iterable
+        Iterator<Player> mPlayerIterator = Arrays.asList(mGame.getPlayers()).iterator();
+
+        while (mPlayerIterator.hasNext()) {
+            // Iterate over each player.
             currPlayer = mPlayerIterator.next();
             lock();
         }
+
+        // Done placing ships
+        Intent intent = new Intent(this, PlayGameActivity.class);
+        intent.putExtra(IntentConstant.GAME, mGame);
+        startActivity(intent);
     }
 
+    /*
+    Displays the player's chosen lock screen.
+     */
     private void lock() {
         Class<? extends LockFragment> lockClass = currPlayer.getLockClass();
         try {

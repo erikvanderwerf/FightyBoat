@@ -2,7 +2,9 @@ package com.gmail.eski787.fightyboat.views;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,6 +15,8 @@ import com.gmail.eski787.fightyboat.presenters.GridPresenter;
  */
 
 public abstract class GridView extends View {
+    private static final String TAG = GridView.class.getCanonicalName();
+    @Nullable
     protected GridPresenter mPresenter;
 
 
@@ -58,7 +62,11 @@ public abstract class GridView extends View {
         final int ty = y / getTileHeight();
         final Point coordinate = new Point(x, y);
 
-        mPresenter.onTouchEvent(coordinate, event);
+        if (mPresenter != null) {
+            mPresenter.onTouchEvent(coordinate, event);
+        } else {
+            Log.e(TAG, "No presenter attached.");
+        }
 
         return true;
     }

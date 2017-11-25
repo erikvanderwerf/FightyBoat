@@ -11,7 +11,7 @@ import android.util.Log;
  * to handle interaction events.
  */
 public abstract class LockFragment extends PlayerFragment {
-    public static final String TAG = LockFragment.class.getSimpleName();
+    private static final String TAG = LockFragment.class.getCanonicalName();
     protected LockInteraction mListener;
 
     public LockFragment() {

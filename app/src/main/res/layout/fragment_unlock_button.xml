@@ -1,11 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.gmail.eski787.fightyboat.fragments.LockFragment">
 
     <data>
+
         <variable
-            name= "User"
-            type= "com.gmail.eski787.fightyboat.models.PlayerModel"/>
+            name="User"
+            type="com.gmail.eski787.fightyboat.models.PlayerModel" />
     </data>
 
     <LinearLayout
@@ -24,7 +26,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@{User.name}"
-            tools:text="User.name" />
+            tools:text="Player Name" />
 
         <Button
             android:id="@+id/button_unlock"
