@@ -1,5 +1,6 @@
 package com.gmail.eski787.fightyboat.fragments;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.databinding.FragmentPlayerDetailBinding;
+import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.models.PlayerModel;
 
 /**
@@ -18,6 +20,17 @@ import com.gmail.eski787.fightyboat.models.PlayerModel;
  */
 public class PlayerDetailFragment extends PlayerFragment {
     private int layoutId = R.layout.fragment_player_detail;
+    private PlayerDetailInteraction mListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof PlayerDetailInteraction) {
+            mListener = (PlayerDetailInteraction) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement PlayerDetailInteraction.");
+        }
+    }
 
     @Nullable
     @Override
@@ -26,6 +39,26 @@ public class PlayerDetailFragment extends PlayerFragment {
 //        View view = inflater.inflate(R.layout.fragment_player_detail, container, false);
         FragmentPlayerDetailBinding binding = DataBindingUtil.inflate(inflater, layoutId, container, false);
         binding.setUser(new PlayerModel(mPlayer));
+
+        // Add onClick callbacks
+        binding.layoutChangeLock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        binding.layoutMoveShips.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onMoveShips(mPlayer);
+            }
+        });
+
         return binding.getRoot();
+    }
+
+    public interface PlayerDetailInteraction {
+        void onMoveShips(Player mPlayer);
     }
 }

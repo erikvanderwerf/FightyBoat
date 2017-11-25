@@ -85,7 +85,7 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
     }
 
     @Override
-    public void onComplete(Player player) {
+    public void onShipPlaceComplete(Player player) {
         advanceAndLockPlayer();
     }
 

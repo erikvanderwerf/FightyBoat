@@ -48,15 +48,15 @@ public class PlaceShipFragment extends PlayerFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_place_ship, container, false);
-        Button button = (Button) view.findViewById(R.id.b_place_ship_continue);
+        Button button = view.findViewById(R.id.b_place_ship_continue);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onComplete(mPlayer);
+                mListener.onShipPlaceComplete(mPlayer);
             }
         });
 
-        mSeaView = (SeaView) view.findViewById(R.id.placeShipSeaView);
+        mSeaView = view.findViewById(R.id.place_ship_sea_view);
         mSeaView.setSea(mPlayer.getSea());
 
         return view;
@@ -90,6 +90,6 @@ public class PlaceShipFragment extends PlayerFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface PlaceShipInteraction {
-        void onComplete(Player player);
+        void onShipPlaceComplete(Player player);
     }
 }

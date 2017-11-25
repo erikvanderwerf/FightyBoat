@@ -9,7 +9,6 @@ import com.gmail.eski787.fightyboat.fragments.LockFragment;
 
 /**
  * Created by Erik on 12/13/2016.
- *
  */
 
 public class Player implements Parcelable {

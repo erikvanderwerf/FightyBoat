@@ -8,6 +8,7 @@ import android.transition.AutoTransition;
 import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
+import com.gmail.eski787.fightyboat.fragments.PlaceShipFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerDetailFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerListFragment;
 import com.gmail.eski787.fightyboat.game.Player;
@@ -19,21 +20,32 @@ import java.util.List;
 import static com.gmail.eski787.fightyboat.fragments.PlayerFragment.ARG_PLAYER;
 
 public class NewGameActivity extends AppCompatActivity
-        implements PlayerListFragment.PlayerListInteraction {
+        implements PlayerListFragment.PlayerListInteraction, PlayerDetailFragment.PlayerDetailInteraction, PlaceShipFragment.PlaceShipInteraction {
     private static final String TAG = NewGameActivity.class.getCanonicalName();
+    private static final String ARG_PLAYER_LIST = "ARG_PLAYER_LIST";
     private Fragment mFragment;
-    private List<Player> players;
+    /* ArrayList (not List) in order to serialize in Bundle */
+    private ArrayList<Player> players;
 
+
+    @Override
+    public List<Player> getPlayerList() {
+        return players;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
 
-        // Initialize players with 1 local player.
-        players = new ArrayList<>();
-        players.add(new Player("Player 1", new Sea(10, 10)));
-        // players.add(new Player("Player 2", new Sea(10, 10)));
+        if (savedInstanceState == null) {
+            // Initialize players with 1 local player.
+            players = new ArrayList<>();
+            players.add(new Player("Player 1", new Sea(10, 10)));
+            // players.add(new Player("Player 2", new Sea(10, 10)));
+        } else {
+            players = savedInstanceState.getParcelableArrayList(ARG_PLAYER_LIST);
+        }
 
         // Initialize activity with player list.
         mFragment = new PlayerListFragment();
@@ -44,8 +56,9 @@ public class NewGameActivity extends AppCompatActivity
     }
 
     @Override
-    public List<Player> getPlayerList() {
-        return players;
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(ARG_PLAYER_LIST, players);
     }
 
     /**
@@ -82,6 +95,26 @@ public class NewGameActivity extends AppCompatActivity
                 .addToBackStack(TAG)
                 .replace(R.id.fragment_new_game, mFragment)
                 .commit();
+    }
+
+    @Override
+    public void onMoveShips(Player player) {
+        // Setup PlaceShip Fragment
+        mFragment = new PlaceShipFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARG_PLAYER, player);
+        mFragment.setArguments(bundle);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(TAG)
+                .replace(R.id.fragment_new_game, mFragment)
+                .commit();
+    }
+
+    @Override
+    public void onShipPlaceComplete(Player player) {
+        getSupportFragmentManager().popBackStack();
     }
 
 //    private void onStartGame() {

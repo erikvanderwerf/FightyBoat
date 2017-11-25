@@ -6,7 +6,7 @@
     tools:context="com.gmail.eski787.fightyboat.fragments.PlaceShipFragment">
 
     <com.gmail.eski787.fightyboat.views.PlaceShipSeaView
-        android:id="@+id/placeShipSeaView"
+        android:id="@+id/place_ship_sea_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
