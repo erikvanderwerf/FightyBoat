@@ -1,16 +1,23 @@
 package com.gmail.eski787.fightyboat.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.AutoTransition;
+import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlayerDetailFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerListFragment;
 import com.gmail.eski787.fightyboat.game.Player;
 
+import static com.gmail.eski787.fightyboat.fragments.PlayerFragment.ARG_PLAYER;
+
 public class NewGameActivity extends AppCompatActivity
         implements PlayerListFragment.PlayerListInteraction {
     private static final String TAG = NewGameActivity.class.getCanonicalName();
+    private Fragment mFragment;
 //    private List<Player> players;
 
 
@@ -24,23 +31,46 @@ public class NewGameActivity extends AppCompatActivity
 //        players.add(new Player("Player 1", new Sea(10, 10)));
 
         // Initialize activity with player list.
-        PlayerListFragment playerListFragment = new PlayerListFragment();
+        mFragment = new PlayerListFragment();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_new_game, playerListFragment)
+                .replace(R.id.fragment_new_game, mFragment)
                 .commit();
     }
 
+    /**
+     * Change the fragment to display a detailed view of a single player.
+     * Called when the user selects a player from the {@link PlayerListFragment}.
+     *
+     * @param player   The Player to view.
+     * @param itemView The list element view to map transitions to.
+     */
     @Override
-    public void onPlayerSelect(Player player) {
-        PlayerDetailFragment detailFragment = new PlayerDetailFragment();
+    public void onPlayerSelect(Player player, View itemView) {
+        // Setup detail fragment with player.
+        mFragment = new PlayerDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("player", player);
-        detailFragment.setArguments(bundle);
+        bundle.putParcelable(ARG_PLAYER, player);
+        mFragment.setArguments(bundle);
 
+        // Set transition behavior.
+        mFragment.setSharedElementEnterTransition(new AutoTransition());
+//        mFragment.setSharedElementReturnTransition(new AutoTransition());
+
+        // Get transition views.
+        View avatar = itemView.findViewById(R.id.player_avatar);
+        ViewCompat.setTransitionName(avatar, getString(R.string.transition_avatar));
+
+        View name = itemView.findViewById(R.id.player_name);
+        ViewCompat.setTransitionName(name, getString(R.string.transition_name));
+
+        // Begin fragment transaction.
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_new_game, detailFragment)
+                .addSharedElement(avatar, getString(R.string.transition_avatar))
+                .addSharedElement(name, getString(R.string.transition_name))
+                .addToBackStack(TAG)
+                .replace(R.id.fragment_new_game, mFragment)
                 .commit();
     }
 

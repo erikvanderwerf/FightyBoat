@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,7 @@ public class PlayerListFragment extends Fragment {
      * This interface must be implemented by activities that contain this fragment.
      */
     public interface PlayerListInteraction {
-        void onPlayerSelect(Player player);
+        void onPlayerSelect(Player player, View itemView);
     }
 
     private static class PlayerViewHolder extends RecyclerView.ViewHolder {
@@ -107,15 +106,15 @@ public class PlayerListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(PlayerViewHolder holder, int position) {
+        public void onBindViewHolder(final PlayerViewHolder holder, int position) {
             final Player player = players.get(position);
             final PlayerModel model = new PlayerModel(player);
             holder.binding.setUser(model);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "OnClick: " + player.getName());
-                    mListener.onPlayerSelect(player);
+//                    Log.d(TAG, "OnClick: " + player.getName());
+                    mListener.onPlayerSelect(player, holder.itemView);
                 }
             });
         }

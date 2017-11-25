@@ -5,4 +5,6 @@
     <string name="unlock">Unlock</string>
     <string name="finish">Finish</string>
     <string name="new_game">New Game</string>
+    <string name="transition_avatar">transition_avatar</string>
+    <string name="transition_name">transition_name</string>
 </resources>

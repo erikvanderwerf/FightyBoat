@@ -1,31 +1,31 @@
 package com.gmail.eski787.fightyboat.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.gmail.eski787.fightyboat.game.Player;
 
 /**
- * Any Fragment which uses a Player instance should extend this, and use
- * onAttachPlayer to assign the Player.
+ * Any Fragment which uses a Player instance should extend this.
+ * Use .setArguments(Bundle) to attach a bundle with the relevant Player to ARG_PLAYER.
  */
 
 public abstract class PlayerFragment extends Fragment {
-    protected static final String ARG_PLAYER = "arg_player";
+    public static final String ARG_PLAYER = "arg_player";
 
-    @Nullable
+    @NonNull
     protected Player mPlayer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPlayer = getArguments().getParcelable(ARG_PLAYER);
+        Bundle arguments = getArguments();
+        Player player = arguments.getParcelable(ARG_PLAYER);
+        if (player == null) {
+            throw new RuntimeException("Cannot create a PlayerFragment with no Player.");
         }
-    }
-
-    public void onAttachPlayer(Player player) {
         mPlayer = player;
+
     }
 }

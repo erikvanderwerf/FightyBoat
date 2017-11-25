@@ -14,9 +14,7 @@ import com.gmail.eski787.fightyboat.fragments.PlayerFragment;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
 
-import java.util.Arrays;
-import java.util.Iterator;
-
+@Deprecated
 public class PlaceShipActivity extends AppCompatActivity implements LockFragment.LockInteraction, PlaceShipFragment.PlaceShipInteraction {
     public final String TAG = PlaceShipActivity.class.getSimpleName();
     private Game mGame;
@@ -39,12 +37,9 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
      * Iterate over every player to get their ship choice.
      */
     private void advanceAndLockPlayer() {
-        // Get player iterable
-        Iterator<Player> mPlayerIterator = Arrays.asList(mGame.getPlayers()).iterator();
-
-        while (mPlayerIterator.hasNext()) {
-            // Iterate over each player.
-            currPlayer = mPlayerIterator.next();
+        // Iterate over each player.
+        for (Player player : mGame.getPlayers()) {
+            currPlayer = player;
             lock();
         }
 
@@ -66,7 +61,10 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
             mFragment = new ButtonLockFragment();
         }
 
-        mFragment.onAttachPlayer(currPlayer);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(PlayerFragment.ARG_PLAYER, currPlayer);
+        mFragment.setArguments(bundle);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_ship_placement, mFragment)
@@ -76,7 +74,10 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
     @Override
     public void onSuccessfulUnlock() {
         mFragment = new PlaceShipFragment();
-        mFragment.onAttachPlayer(currPlayer);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(PlayerFragment.ARG_PLAYER, currPlayer);
+        mFragment.setArguments(bundle);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_ship_placement, mFragment)
