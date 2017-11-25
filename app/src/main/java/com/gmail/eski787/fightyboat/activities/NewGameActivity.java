@@ -11,6 +11,10 @@ import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlayerDetailFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerListFragment;
 import com.gmail.eski787.fightyboat.game.Player;
+import com.gmail.eski787.fightyboat.game.Sea;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.gmail.eski787.fightyboat.fragments.PlayerFragment.ARG_PLAYER;
 
@@ -18,7 +22,7 @@ public class NewGameActivity extends AppCompatActivity
         implements PlayerListFragment.PlayerListInteraction {
     private static final String TAG = NewGameActivity.class.getCanonicalName();
     private Fragment mFragment;
-//    private List<Player> players;
+    private List<Player> players;
 
 
     @Override
@@ -27,8 +31,9 @@ public class NewGameActivity extends AppCompatActivity
         setContentView(R.layout.activity_new_game);
 
         // Initialize players with 1 local player.
-//        players = new ArrayList<>();
-//        players.add(new Player("Player 1", new Sea(10, 10)));
+        players = new ArrayList<>();
+        players.add(new Player("Player 1", new Sea(10, 10)));
+        // players.add(new Player("Player 2", new Sea(10, 10)));
 
         // Initialize activity with player list.
         mFragment = new PlayerListFragment();
@@ -38,12 +43,17 @@ public class NewGameActivity extends AppCompatActivity
                 .commit();
     }
 
+    @Override
+    public List<Player> getPlayerList() {
+        return players;
+    }
+
     /**
      * Change the fragment to display a detailed view of a single player.
      * Called when the user selects a player from the {@link PlayerListFragment}.
      *
      * @param player   The Player to view.
-     * @param itemView The list element view to map transitions to.
+     * @param itemView The list element View to map transitions to.
      */
     @Override
     public void onPlayerSelect(Player player, View itemView) {
@@ -55,7 +65,7 @@ public class NewGameActivity extends AppCompatActivity
 
         // Set transition behavior.
         mFragment.setSharedElementEnterTransition(new AutoTransition());
-//        mFragment.setSharedElementReturnTransition(new AutoTransition());
+        // mFragment.setSharedElementReturnTransition(new AutoTransition());
 
         // Get transition views.
         View avatar = itemView.findViewById(R.id.player_avatar);

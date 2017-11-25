@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.databinding.LayoutPlayerShortBinding;
 import com.gmail.eski787.fightyboat.game.Player;
-import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.models.PlayerModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This Fragment gets the list of Players from the {@link com.gmail.eski787.fightyboat.activities.NewGameActivity},
+ * and displays it to the user in a {@link RecyclerView}.
  * Created by Erik on 11/24/2017.
  */
 
@@ -41,6 +41,7 @@ public class PlayerListFragment extends Fragment {
         } else {
             throw new RuntimeException(context.toString() + " must implement PlayerListInteraction");
         }
+        players = mListener.getPlayerList();
     }
 
     @Nullable
@@ -49,9 +50,6 @@ public class PlayerListFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        players = new ArrayList<>();
-        players.add(new Player("Player 1", new Sea(10, 10)));
 
         // Inflate the layout for this fragment.
         View view = inflater.inflate(R.layout.fragment_player_list, container, false);
@@ -72,12 +70,27 @@ public class PlayerListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        players = null;
     }
 
     /**
-     * This interface must be implemented by activities that contain this fragment.
+     * This interface must be implemented by activities that contain this fragment. This interface
+     * allows for communication from the Fragment back to the containing activity.
      */
     public interface PlayerListInteraction {
+        /**
+         * Gets the master list of players in the game.
+         *
+         * @return The list of Players.
+         */
+        List<Player> getPlayerList();
+
+        /**
+         * Called when the user selects a Player from the list.
+         *
+         * @param player   The Player that was selected.
+         * @param itemView The list element View that was selected.
+         */
         void onPlayerSelect(Player player, View itemView);
     }
 
