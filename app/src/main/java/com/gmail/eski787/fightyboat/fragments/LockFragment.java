@@ -47,6 +47,10 @@ public abstract class LockFragment extends PlayerFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface LockInteraction {
-        void onUnlockAttempt(boolean success);
+        /**
+         * This method is called to indicate to the parent that a user has successfully unlocked
+         * the {@link LockFragment}.
+         */
+        void onSuccessfulUnlock();
     }
 }

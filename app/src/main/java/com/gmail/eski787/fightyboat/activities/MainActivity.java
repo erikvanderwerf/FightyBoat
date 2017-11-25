@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onNewGame(View view) {
-        Intent new_game = new Intent(this, ChoosePlayersActivity.class);
+        Intent new_game = new Intent(this, NewGameActivity.class);
         startActivity(new_game);
     }
 }

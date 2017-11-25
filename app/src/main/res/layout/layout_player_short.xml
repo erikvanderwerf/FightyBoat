@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="User"
             type="com.gmail.eski787.fightyboat.models.PlayerModel" />

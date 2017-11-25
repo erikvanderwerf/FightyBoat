@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.ButtonLockFragment;
@@ -25,7 +26,7 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ship_placement);
+        setContentView(R.layout.activity_place_ship);
 
         // Get game
         Intent intent = getIntent();
@@ -34,8 +35,8 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
         advanceAndLockPlayer();
     }
 
-    /*
-    Iterate over every player to get their ship choice.
+    /**
+     * Iterate over every player to get their ship choice.
      */
     private void advanceAndLockPlayer() {
         // Get player iterable
@@ -61,7 +62,7 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
         try {
             mFragment = lockClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to instantiate " + lockClass.getCanonicalName());
             mFragment = new ButtonLockFragment();
         }
 
@@ -73,18 +74,7 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
     }
 
     @Override
-    public void onUnlockAttempt(boolean success) {
-        if (success) {
-            unlock();
-        }
-    }
-
-    @Override
-    public void onComplete(Player player) {
-        advanceAndLockPlayer();
-    }
-
-    private void unlock() {
+    public void onSuccessfulUnlock() {
         mFragment = new PlaceShipFragment();
         mFragment.onAttachPlayer(currPlayer);
         getSupportFragmentManager()
@@ -92,4 +82,10 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
                 .replace(R.id.fragment_ship_placement, mFragment)
                 .commit();
     }
+
+    @Override
+    public void onComplete(Player player) {
+        advanceAndLockPlayer();
+    }
+
 }

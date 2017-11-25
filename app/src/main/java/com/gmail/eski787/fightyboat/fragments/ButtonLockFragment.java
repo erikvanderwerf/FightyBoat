@@ -22,15 +22,14 @@ public class ButtonLockFragment extends LockFragment {
         // Inflate the layout for this fragment
         FragmentUnlockButtonBinding binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_unlock_button, container, false);
-        View view = binding.getRoot();
 
         binding.setUser(new PlayerModel(mPlayer));
         binding.buttonUnlock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onUnlockAttempt(true);
+                mListener.onSuccessfulUnlock();
             }
         });
-        return view;
+        return binding.getRoot();
     }
 }
