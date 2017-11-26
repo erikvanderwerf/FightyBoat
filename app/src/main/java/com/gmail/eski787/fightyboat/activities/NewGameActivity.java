@@ -5,7 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.AutoTransition;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlaceShipFragment;
@@ -42,7 +46,7 @@ public class NewGameActivity extends AppCompatActivity
             // Initialize players with 1 local player.
             players = new ArrayList<>();
             players.add(new Player("Player 1", new Sea(10, 10)));
-            // players.add(new Player("Player 2", new Sea(10, 10)));
+            players.add(new Player("Player 2", new Sea(10, 10)));
         } else {
             players = savedInstanceState.getParcelableArrayList(ARG_PLAYER_LIST);
         }
@@ -53,6 +57,34 @@ public class NewGameActivity extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.fragment_new_game, mFragment)
                 .commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.new_game, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // action with ID action_refresh was selected
+            case R.id.action_refresh:
+                Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            // action with ID action_settings was selected
+            case R.id.action_settings:
+                Toast.makeText(this, "Settings selected", Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     @Override

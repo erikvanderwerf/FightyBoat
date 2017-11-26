@@ -14,9 +14,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.NewGameActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.NewGameActivity" />
+        <!--android:theme="@style/AppTheme.NoActionBar" -->
         <activity android:name=".activities.PlaceShipActivity" />
         <activity android:name=".activities.PlayGameActivity" />
     </application>
