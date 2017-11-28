@@ -1,6 +1,7 @@
 package com.gmail.eski787.fightyboat.activities;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,11 @@ import com.gmail.eski787.fightyboat.fragments.PlaceShipFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerFragment;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
+import com.gmail.eski787.fightyboat.game.Ship;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 @Deprecated
 public class PlaceShipActivity extends AppCompatActivity implements LockFragment.LockInteraction, PlaceShipFragment.PlaceShipInteraction {
@@ -30,6 +36,14 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
         Intent intent = getIntent();
         mGame = intent.getParcelableExtra(IntentConstant.GAME);
 
+        for(Player player: mGame.getPlayers()) {
+            List<Ship> ships = player.getSea().getShips();
+            Log.d(TAG, String.format("Ships: %s", ships));
+            for (int i = 0; i < 5; i++) {
+                Ship s = new Ship(new Point(0, i), Ship.Orientation.HORIZONTAL, i + 2);
+                ships.add(s);
+            }
+        }
         advanceAndLockPlayer();
     }
 

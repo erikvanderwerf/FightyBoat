@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.gmail.eski787.fightyboat.presenters.RadarPresenter;
 
@@ -12,7 +13,7 @@ import com.gmail.eski787.fightyboat.presenters.RadarPresenter;
  * Created by Erik on 1/15/2017.
  */
 
-public class RadarView extends GridView {
+public class RadarView extends GridView.SquareView {
     @Nullable
     private RadarPresenter mPresenter;
 
@@ -38,8 +39,8 @@ public class RadarView extends GridView {
     }
 
     @Override
-    protected boolean isSquare() {
-        return true;
+    protected void onGridTouchEvent(Point coordinate, MotionEvent event) {
+
     }
 
     @Override

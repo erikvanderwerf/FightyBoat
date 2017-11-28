@@ -11,7 +11,7 @@ import android.view.View;
 import com.gmail.eski787.fightyboat.presenters.GridPresenter;
 
 /**
- * Created by Erik on 1/15/2017.
+ * Special implementation of View to handle grids.
  */
 
 public abstract class GridView extends View {
@@ -36,20 +36,11 @@ public abstract class GridView extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    /**
+     * Gets the number of rows (y) and number of columns (x) in the grid display
+     * @return Rows -> y, Columns -> x
+     */
     protected abstract Point getGridSize();
-
-    protected abstract boolean isSquare();
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (isSquare()) {
-            int height = getMeasuredHeight();
-            int width = getMeasuredWidth();
-            int min = Math.min(height, width);
-            setMeasuredDimension(min, min);
-        }
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -60,10 +51,10 @@ public abstract class GridView extends View {
 
         final int tx = x / getTileWidth();
         final int ty = y / getTileHeight();
-        final Point coordinate = new Point(x, y);
+        final Point coordinate = new Point(tx, ty);
 
         if (mPresenter != null) {
-            mPresenter.onTouchEvent(coordinate, event);
+            onGridTouchEvent(coordinate, event);
         } else {
             Log.e(TAG, "No presenter attached.");
         }
@@ -71,11 +62,41 @@ public abstract class GridView extends View {
         return true;
     }
 
-    protected int getTileWidth() {
+    protected abstract void onGridTouchEvent(Point coordinate, MotionEvent event);
+
+    protected final int getTileWidth() {
         return getWidth() / getGridSize().x;
     }
 
-    protected int getTileHeight() {
+    protected final int getTileHeight() {
         return getHeight() / getGridSize().y;
+    }
+
+    public abstract static class SquareView extends GridView {
+
+        public SquareView(Context context) {
+            super(context);
+        }
+
+        public SquareView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public SquareView(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+
+        public SquareView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            super(context, attrs, defStyleAttr, defStyleRes);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            int height = getMeasuredHeight();
+            int width = getMeasuredWidth();
+            int min = Math.min(height, width);
+            setMeasuredDimension(min, min);
+        }
     }
 }

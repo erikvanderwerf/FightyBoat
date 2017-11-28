@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Sea;
@@ -22,7 +23,7 @@ import java.util.Map;
  * Created by Erik on 12/23/2016.
  */
 
-public class SeaView extends GridView {
+public class SeaView extends GridView.SquareView {
     public static final float SHIP_RADIUS = 0.47f;
     static final float PEG_RADIUS = 0.3f;
     private static final String TAG = SeaView.class.getSimpleName();
@@ -52,8 +53,8 @@ public class SeaView extends GridView {
     }
 
     @Override
-    protected boolean isSquare() {
-        return true;
+    protected void onGridTouchEvent(Point coordinate, MotionEvent event) {
+
     }
 
     protected void initializePaintMap() {
