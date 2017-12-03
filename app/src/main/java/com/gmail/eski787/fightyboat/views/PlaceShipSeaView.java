@@ -15,9 +15,9 @@ import com.gmail.eski787.fightyboat.game.Sea;
  */
 
 public class PlaceShipSeaView extends SeaView {
+    private static final String TAG = PlaceShipSeaView.class.getSimpleName();
     private int cnt = 0;
 
-    private static final String TAG = PlaceShipSeaView.class.getSimpleName();
 
     public PlaceShipSeaView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -41,27 +41,29 @@ public class PlaceShipSeaView extends SeaView {
             return;
         }
 
-        if (mSea != null) {
-            final int x = coordinate.x;
-            final int y = coordinate.y;
-
-            Sea.SeaStatus current = mSea.getStatus(x, y);
-            Sea.SeaStatus advance = null;
-            switch (current) {
-                case NONE:
-                    advance = Sea.SeaStatus.HIT;
-                    break;
-                case HIT:
-                    advance = Sea.SeaStatus.MISS;
-                    break;
-                case MISS:
-                    advance = Sea.SeaStatus.NONE;
-                    break;
-            }
-            mSea.set(x, y, advance);
-        } else {
+        if (mSea == null) {
             Log.d(TAG, "Sea is null");
+            return;
         }
+
+        final int x = coordinate.x;
+        final int y = coordinate.y;
+
+        Sea.SeaStatus current = mSea.getStatus(x, y);
+        Sea.SeaStatus advance = null;
+        switch (current) {
+            case NONE:
+                advance = Sea.SeaStatus.HIT;
+                break;
+            case HIT:
+                advance = Sea.SeaStatus.MISS;
+                break;
+            case MISS:
+                advance = Sea.SeaStatus.NONE;
+                break;
+        }
+        mSea.set(x, y, advance);
+
         regenerateSeaTiles();
         invalidate();
     }

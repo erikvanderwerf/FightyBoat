@@ -1,5 +1,6 @@
 package com.gmail.eski787.fightyboat.activities;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -17,11 +18,10 @@ import com.gmail.eski787.fightyboat.fragments.PlayerDetailFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerListFragment;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.game.Sea;
+import com.gmail.eski787.fightyboat.game.Ship;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.gmail.eski787.fightyboat.fragments.PlayerFragment.ARG_PLAYER;
 
 public class NewGameActivity extends AppCompatActivity
         implements PlayerListFragment.PlayerListInteraction, PlayerDetailFragment.PlayerDetailInteraction, PlaceShipFragment.PlaceShipInteraction {
@@ -44,8 +44,12 @@ public class NewGameActivity extends AppCompatActivity
 
         if (savedInstanceState == null) {
             // Initialize players with 1 local player.
+            Player player1 = new Player("Player 1", new Sea(10, 10));
+            List<Ship> p1ship = player1.getSea().getShips();
+            p1ship.add(new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, 3));
+
             players = new ArrayList<>();
-            players.add(new Player("Player 1", new Sea(10, 10)));
+            players.add(player1);
             players.add(new Player("Player 2", new Sea(10, 10)));
         } else {
             players = savedInstanceState.getParcelableArrayList(ARG_PLAYER_LIST);
@@ -103,14 +107,11 @@ public class NewGameActivity extends AppCompatActivity
     @Override
     public void onPlayerSelect(Player player, View itemView) {
         // Setup detail fragment with player.
-        mFragment = new PlayerDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ARG_PLAYER, player);
-        mFragment.setArguments(bundle);
+        mFragment = PlayerDetailFragment.newInstance(player);
 
         // Set transition behavior.
         mFragment.setSharedElementEnterTransition(new AutoTransition());
-        // mFragment.setSharedElementReturnTransition(new AutoTransition());
+        mFragment.setSharedElementReturnTransition(new AutoTransition());
 
         // Get transition views.
         View avatar = itemView.findViewById(R.id.player_avatar);
@@ -132,10 +133,7 @@ public class NewGameActivity extends AppCompatActivity
     @Override
     public void onMoveShips(Player player) {
         // Setup PlaceShip Fragment
-        mFragment = new PlaceShipFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ARG_PLAYER, player);
-        mFragment.setArguments(bundle);
+        mFragment = PlaceShipFragment.newInstance(player);
 
         getSupportFragmentManager()
                 .beginTransaction()

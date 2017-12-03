@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.gmail.eski787.fightyboat.game.Player;
@@ -12,9 +11,7 @@ import com.gmail.eski787.fightyboat.game.Player;
  */
 
 public abstract class PlayerFragment extends Fragment {
-    public static final String ARG_PLAYER = "arg_player";
-
-    @NonNull
+    public static final String ARG_PLAYER = "ARG_PLAYER";
     protected Player mPlayer;
 
     @Override

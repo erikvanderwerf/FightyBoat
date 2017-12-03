@@ -15,9 +15,8 @@ import com.gmail.eski787.fightyboat.views.SeaView;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PlaceShipInteraction} interface
- * to handle interaction events.
- * Use the {@link PlaceShipFragment#newInstance} factory method to
+ * {@link PlaceShipInteraction} interface to handle interaction events.
+ * Use the {@link LockFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class PlaceShipFragment extends PlayerFragment {
@@ -32,8 +31,8 @@ public class PlaceShipFragment extends PlayerFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
+     * @param player Player to use for this Fragment.
      * @return A new instance of fragment PlaceShipFragment.
-     * @param player Player to place ships for.
      */
     public static PlaceShipFragment newInstance(Player player) {
         PlaceShipFragment fragment = new PlaceShipFragment();

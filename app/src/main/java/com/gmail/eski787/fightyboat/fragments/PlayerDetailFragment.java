@@ -22,6 +22,21 @@ public class PlayerDetailFragment extends PlayerFragment {
     private int layoutId = R.layout.fragment_player_detail;
     private PlayerDetailInteraction mListener;
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param player Player to use for this Fragment.
+     * @return A new instance of fragment PlaceShipFragment.
+     */
+    public static PlayerDetailFragment newInstance(Player player) {
+        PlayerDetailFragment fragment = new PlayerDetailFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_PLAYER, player);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
