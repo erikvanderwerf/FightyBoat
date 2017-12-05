@@ -3,6 +3,7 @@ package com.gmail.eski787.fightyboat.game;
 import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
@@ -24,6 +25,7 @@ public class Ship implements Parcelable {
         }
     };
     private Point origin;
+    @NonNull
     private Orientation orientation;
     private int length;
     private ShipCap.CapType startCap = ShipCap.CapType.ROUND;
@@ -37,7 +39,7 @@ public class Ship implements Parcelable {
         endCap = (ShipCap.CapType) in.readSerializable();
     }
 
-    public Ship(Point origin, Orientation orientation, int length) {
+    public Ship(Point origin, @NonNull Orientation orientation, int length) {
         this.origin = origin;
         this.orientation = orientation;
         this.length = length;
@@ -69,12 +71,23 @@ public class Ship implements Parcelable {
         return origin;
     }
 
+    @NonNull
     public Orientation getOrientation() {
         return orientation;
     }
 
     public int getLength() {
         return length;
+    }
+
+    public boolean contains(Point point) {
+        switch (orientation) {
+            case VERTICAL:
+                return point.x == origin.x && point.y >= origin.y && point.y < origin.y + length;
+            case HORIZONTAL:
+                return point.y == origin.y && point.x >= origin.x && point.x < origin.x + length;
+        }
+        throw new RuntimeException("Ignored orientation switch. Why? Case: " + orientation.toString());
     }
 
     public enum Orientation {

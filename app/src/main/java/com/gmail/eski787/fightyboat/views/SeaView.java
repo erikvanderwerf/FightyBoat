@@ -54,7 +54,36 @@ public class SeaView extends GridView.SquareView {
 
     @Override
     protected boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
-        return false;
+        if (event.getAction() != MotionEvent.ACTION_DOWN) {
+            return false;
+        }
+
+        if (mSea == null) {
+            Log.d(TAG, "Sea is null");
+            return false;
+        }
+
+        final int x = coordinate.x;
+        final int y = coordinate.y;
+
+        Sea.SeaStatus current = mSea.getStatus(x, y);
+        Sea.SeaStatus advance = null;
+        switch (current) {
+            case NONE:
+                advance = Sea.SeaStatus.HIT;
+                break;
+            case HIT:
+                advance = Sea.SeaStatus.MISS;
+                break;
+            case MISS:
+                advance = Sea.SeaStatus.NONE;
+                break;
+        }
+        mSea.set(x, y, advance);
+
+        regenerateSeaTiles();
+        invalidate();
+        return true;
     }
 
     protected void initializePaintMap() {

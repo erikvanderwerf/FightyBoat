@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.gmail.eski787.fightyboat.game.Sea;
+import com.gmail.eski787.fightyboat.game.Ship;
 
 // TODO: Drag-and-drop of ships from bottom bar
 
@@ -33,10 +33,6 @@ public class PlaceShipSeaView extends SeaView {
 
     @Override
     public boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
-        // TODO: Selection of ship highlights, brings up option menu.
-        // TODO: Option menu allows for rotation and deletion of ship.
-        // TODO: Get rid of all of this
-
         if (event.getAction() != MotionEvent.ACTION_DOWN) {
             return false;
         }
@@ -46,25 +42,16 @@ public class PlaceShipSeaView extends SeaView {
             return false;
         }
 
-        final int x = coordinate.x;
-        final int y = coordinate.y;
-
-        Sea.SeaStatus current = mSea.getStatus(x, y);
-        Sea.SeaStatus advance = null;
-        switch (current) {
-            case NONE:
-                advance = Sea.SeaStatus.HIT;
-                break;
-            case HIT:
-                advance = Sea.SeaStatus.MISS;
-                break;
-            case MISS:
-                advance = Sea.SeaStatus.NONE;
-                break;
+        // TODO: Selection of ship highlights, brings up option menu.
+        // TODO: Option menu allows for rotation and deletion of ship.
+        for (Ship ship : mSea.getShips()) {
+            if (ship.contains(coordinate)) {
+                Log.d(TAG, "TouchEvent inside Ship.");
+            }
         }
-        mSea.set(x, y, advance);
 
-        regenerateSeaTiles();
+
+//        regenerateSeaTiles();
         invalidate();
         return true;
     }
