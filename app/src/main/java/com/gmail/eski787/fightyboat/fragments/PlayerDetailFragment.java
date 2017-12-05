@@ -19,7 +19,6 @@ import com.gmail.eski787.fightyboat.models.PlayerModel;
  * Created by Erik on 11/24/2017.
  */
 public class PlayerDetailFragment extends PlayerFragment {
-    private int layoutId = R.layout.fragment_player_detail;
     private PlayerDetailInteraction mListener;
 
     /**
@@ -52,18 +51,19 @@ public class PlayerDetailFragment extends PlayerFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 //        View view = inflater.inflate(R.layout.fragment_player_detail, container, false);
+        final int layoutId = R.layout.fragment_player_detail;
         FragmentPlayerDetailBinding binding = DataBindingUtil.inflate(inflater, layoutId, container, false);
         binding.setUser(new PlayerModel(mPlayer));
 
         // Add onClick callbacks
-        binding.layoutChangeLock.setOnClickListener(new View.OnClickListener() {
+        binding.changeLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mListener.onChangeLock(mPlayer);
             }
         });
 
-        binding.layoutMoveShips.setOnClickListener(new View.OnClickListener() {
+        binding.moveShips.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onMoveShips(mPlayer);
@@ -74,6 +74,7 @@ public class PlayerDetailFragment extends PlayerFragment {
     }
 
     public interface PlayerDetailInteraction {
+        void onChangeLock(Player mPlayer);
         void onMoveShips(Player mPlayer);
     }
 }

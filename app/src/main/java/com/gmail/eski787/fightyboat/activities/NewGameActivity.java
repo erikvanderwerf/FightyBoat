@@ -23,6 +23,15 @@ import com.gmail.eski787.fightyboat.game.Ship;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This activity manages the state for creating a new game.
+ * <p>
+ * This activity supports the following fragments:
+ * - {@link PlayerListFragment}
+ * - {@link PlayerDetailFragment}
+ * - {@link PlaceShipFragment}
+ */
 public class NewGameActivity extends AppCompatActivity
         implements PlayerListFragment.PlayerListInteraction, PlayerDetailFragment.PlayerDetailInteraction, PlaceShipFragment.PlaceShipInteraction {
     private static final String TAG = NewGameActivity.class.getCanonicalName();
@@ -128,6 +137,11 @@ public class NewGameActivity extends AppCompatActivity
                 .addToBackStack(TAG)
                 .replace(R.id.fragment_new_game, mFragment)
                 .commit();
+    }
+
+    @Override
+    public void onChangeLock(Player mPlayer) {
+        // TODO Change Lock display
     }
 
     @Override

@@ -39,8 +39,8 @@ public class RadarView extends GridView.SquareView {
     }
 
     @Override
-    protected void onGridTouchEvent(Point coordinate, MotionEvent event) {
-
+    protected boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
+        return false;
     }
 
     @Override

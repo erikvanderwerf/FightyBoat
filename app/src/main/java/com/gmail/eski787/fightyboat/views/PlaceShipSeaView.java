@@ -32,18 +32,18 @@ public class PlaceShipSeaView extends SeaView {
     }
 
     @Override
-    public void onGridTouchEvent(Point coordinate, MotionEvent event) {
+    public boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
         // TODO: Selection of ship highlights, brings up option menu.
         // TODO: Option menu allows for rotation and deletion of ship.
         // TODO: Get rid of all of this
 
         if (event.getAction() != MotionEvent.ACTION_DOWN) {
-            return;
+            return false;
         }
 
         if (mSea == null) {
             Log.d(TAG, "Sea is null");
-            return;
+            return false;
         }
 
         final int x = coordinate.x;
@@ -66,5 +66,6 @@ public class PlaceShipSeaView extends SeaView {
 
         regenerateSeaTiles();
         invalidate();
+        return true;
     }
 }

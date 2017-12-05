@@ -53,8 +53,8 @@ public class SeaView extends GridView.SquareView {
     }
 
     @Override
-    protected void onGridTouchEvent(Point coordinate, MotionEvent event) {
-
+    protected boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
+        return false;
     }
 
     protected void initializePaintMap() {

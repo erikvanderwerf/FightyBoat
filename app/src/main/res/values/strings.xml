@@ -7,4 +7,8 @@
     <string name="new_game">New Game</string>
     <string name="transition_avatar">transition_avatar</string>
     <string name="transition_name">transition_name</string>
+    <string name="change_lock">Change Lock</string>
+    <string name="change_ship_positions">Change Ship Positions</string>
+    <string name="player_icon">Player Icon</string>
+    <string name="player_name">Player Name</string>
 </resources>
