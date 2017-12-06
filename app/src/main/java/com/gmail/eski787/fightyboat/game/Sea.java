@@ -3,8 +3,7 @@ package com.gmail.eski787.fightyboat.game;
 import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,11 +26,9 @@ public class Sea implements Parcelable {
         }
     };
     private static final String TAG = Sea.class.getSimpleName();
-    @Deprecated
-    private static final int NUMBER_OF_SHIPS = 5;
-    @Nullable
+    @NonNull
     private SeaStatus[][] mOcean;
-    @Nullable
+    @NonNull
     private List<Ship> mShips;
 
     public Sea(int columns, int rows) {
@@ -42,46 +39,37 @@ public class Sea implements Parcelable {
             }
         }
 
-        mShips = new ArrayList<>(NUMBER_OF_SHIPS);
+        mShips = new ArrayList<>();
     }
 
     private Sea(Parcel in) {
         int len = in.readInt();
 
-        if (len != -1) {
+        if (len < 0) {
             mOcean = new SeaStatus[len][];
             for (int i = 0; i < len; i++) {
                 Object[] objects = in.readArray(SeaStatus.class.getClassLoader());
                 mOcean[i] = Arrays.copyOf(objects, objects.length, SeaStatus[].class);
             }
         } else {
-            // No ocean?
+            throw new RuntimeException("Bad Ocean Length: " + len);
         }
 
-        Object[] objects = in.readArray(Ship.class.getClassLoader());
-        Ship[] ships = Arrays.copyOf(objects, objects.length, Ship[].class);
+        Ship[] ships = (Ship[]) in.readArray(Ship.class.getClassLoader());
+//        Ship[] ships = Arrays.copyOf(objects, objects.length, Ship[].class);
         mShips = Arrays.asList(ships);
-        //mShips = new ArrayList<Ship>(objects);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (mOcean != null) {
-            // Write array-of-array length
-            // Write single arrays
-            dest.writeInt(mOcean.length);
-            for (SeaStatus[] statuses : mOcean) {
-                dest.writeArray(statuses);
-            }
-        } else {
-            dest.writeInt(-1);
+        // Write array-of-array length
+        // Write single arrays
+        dest.writeInt(mOcean.length);
+        for (SeaStatus[] statuses : mOcean) {
+            dest.writeArray(statuses);
         }
 
-        Object[] array = null;
-        if (mShips != null) {
-            array = mShips.toArray();
-        }
-        dest.writeArray(array);
+        dest.writeArray(mShips.toArray());
     }
 
     @Override
@@ -90,42 +78,27 @@ public class Sea implements Parcelable {
     }
 
     public void set(int x, int y, SeaStatus seaStatus) {
-        if (mOcean != null) {
-            mOcean[x][y] = seaStatus;
-        }
+        mOcean[x][y] = seaStatus;
     }
 
     public int getNumberOfRows() {
-        if (mOcean != null) {
-            return mOcean[0].length;
-        } else {
-            Log.d(TAG, "getNumberOfRows Ocean is null");
-            return -1;
-        }
+        return mOcean[0].length;
     }
 
     public int getNumberOfColumns() {
-        if (mOcean != null) {
-            return mOcean.length;
-        } else {
-            return -1;
-        }
+        return mOcean.length;
     }
 
     public SeaStatus getStatus(int x, int y) {
-        if (mOcean != null) {
-            return mOcean[x][y];
-        } else {
-            return null;
-        }
-    }
-
-    public List<Ship> getShips() {
-        return mShips;
+        return mOcean[x][y];
     }
 
     public SeaStatus getStatus(Point tile) {
         return getStatus(tile.x, tile.y);
+    }
+
+    public List<Ship> getShips() {
+        return mShips;
     }
 
     public enum SeaStatus {
