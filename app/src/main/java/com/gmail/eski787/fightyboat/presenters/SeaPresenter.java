@@ -14,6 +14,7 @@ import java.util.List;
  */
 
 public class SeaPresenter implements GridPresenter {
+    private static final String TAG = ShipPresenter.class.getCanonicalName();
     private final Sea mSea;
 
     public SeaPresenter(Sea sea) {
@@ -39,5 +40,9 @@ public class SeaPresenter implements GridPresenter {
 
     public Sea.SeaStatus getStatus(int x, int y) {
         return mSea.getStatus(x, y);
+    }
+
+    public void setStatus(int x, int y, Sea.SeaStatus status) {
+        mSea.setStatus(x, y, status);
     }
 }

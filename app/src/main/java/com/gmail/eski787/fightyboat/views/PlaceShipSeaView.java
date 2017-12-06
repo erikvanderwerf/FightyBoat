@@ -33,6 +33,9 @@ public class PlaceShipSeaView extends SeaView {
 
     @Override
     public boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
+        // TODO Move this logic to presenter level.
+        super.onGridTouchEvent(coordinate, event);
+
         if (event.getAction() != MotionEvent.ACTION_DOWN) {
             return false;
         }

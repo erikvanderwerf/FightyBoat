@@ -82,8 +82,8 @@ public class SeaView extends GridView.SquareView {
                 advance = Sea.SeaStatus.NONE;
                 break;
         }
-//        mSea.setStatus(x, y, advance);
 
+        mSea.setStatus(x, y, advance);
         invalidate();
         return true;
     }
