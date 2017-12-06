@@ -1,6 +1,5 @@
 package com.gmail.eski787.fightyboat.presenters;
 
-import android.graphics.Canvas;
 import android.graphics.Point;
 
 import com.gmail.eski787.fightyboat.game.Ship;
@@ -16,8 +15,27 @@ public class ShipPresenter implements Presenter {
         this.mShip = ship;
     }
 
-    @Override
-    public void draw(Canvas canvas, Point start, Point end) {
+    public Point getOrigin() {
+        return mShip.getOrigin();
+    }
 
+    public int getLength() {
+        return mShip.getLength();
+    }
+
+    public Ship.Orientation getOrientation() {
+        return mShip.getOrientation();
+    }
+
+    public boolean contains(Point point) {
+        return mShip.contains(point);
+    }
+
+    public ShipCap.CapType getStartCap() {
+        return mShip.getStartCap();
+    }
+
+    public ShipCap.CapType getEndCap() {
+        return mShip.getEndCap();
     }
 }

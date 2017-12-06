@@ -77,16 +77,16 @@ public class Sea implements Parcelable {
         return 0;
     }
 
-    public void set(int x, int y, SeaStatus seaStatus) {
-        mOcean[x][y] = seaStatus;
-    }
-
     public int getNumberOfRows() {
         return mOcean[0].length;
     }
 
     public int getNumberOfColumns() {
         return mOcean.length;
+    }
+
+    public Point getSize() {
+        return new Point(getNumberOfRows(), getNumberOfColumns());
     }
 
     public SeaStatus getStatus(int x, int y) {
@@ -99,6 +99,10 @@ public class Sea implements Parcelable {
 
     public List<Ship> getShips() {
         return mShips;
+    }
+
+    public void setStatus(int x, int y, SeaStatus seaStatus) {
+        mOcean[x][y] = seaStatus;
     }
 
     public enum SeaStatus {

@@ -2,6 +2,7 @@ package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 
 import com.google.errorprone.annotations.DoNotCall;
 
@@ -16,29 +17,29 @@ import static com.gmail.eski787.fightyboat.views.SeaView.SHIP_RADIUS;
 public abstract class ShipCap {
     CapDirection mDirection;
 
+    ShipCap(CapDirection direction) {
+        super();
+        mDirection = direction;
+    }
+
     /**
      * @param type      The cap type to return.
      * @param direction The direction for the cap to open.
      * @return An instance of a {@link ShipCap} with specified parameters.
      */
+    @NonNull
     public static ShipCap getCap(CapType type, CapDirection direction) {
         ShipCap cap = null;
 
         switch (type) {
             case POINT:
-                cap = new PointShipCap();
-                break;
+                return new PointShipCap(direction);
             case SQUARE:
-                cap = new SquareShipCap();
-                break;
+                return new SquareShipCap(direction);
             case ROUND:
-                cap = new RoundShipCap();
-                break;
+                return new RoundShipCap(direction);
         }
-
-        cap.setDirection(direction);
-
-        return cap;
+        throw new RuntimeException("Invalid CapType: " + type.toString());
     }
 
     private void setDirection(CapDirection direction) {
@@ -58,10 +59,14 @@ public abstract class ShipCap {
      * Available styles for {@link com.gmail.eski787.fightyboat.game.Ship} end caps.
      */
     public enum CapType {
-        @Deprecated POINT, SQUARE, ROUND
+        POINT, SQUARE, ROUND
     }
 
     private static class RoundShipCap extends ShipCap {
+        RoundShipCap(CapDirection direction) {
+            super(direction);
+        }
+
         @Override
         public void drawCap(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
             final int width = endX - startX;
@@ -107,6 +112,10 @@ public abstract class ShipCap {
     }
 
     private static class PointShipCap extends ShipCap {
+        PointShipCap(CapDirection direction) {
+            super(direction);
+        }
+
         @Override
         @DoNotCall
         public void drawCap(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
@@ -115,6 +124,10 @@ public abstract class ShipCap {
     }
 
     private static class SquareShipCap extends ShipCap {
+        SquareShipCap(CapDirection direction) {
+            super(direction);
+        }
+
         @Override
         public void drawCap(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
             final int width = endX - startX;

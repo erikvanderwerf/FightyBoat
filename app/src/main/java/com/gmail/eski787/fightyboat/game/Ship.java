@@ -91,6 +91,27 @@ public class Ship implements Parcelable {
     }
 
     public enum Orientation {
-        HORIZONTAL, VERTICAL
+        HORIZONTAL,
+        VERTICAL;
+
+        public ShipCap.CapDirection shipStartCap() {
+            switch (this) {
+                case HORIZONTAL:
+                    return ShipCap.CapDirection.RIGHT;
+                case VERTICAL:
+                    return ShipCap.CapDirection.DOWN;
+            }
+            throw new RuntimeException("Invalid Ship Orientation: " + this.toString());
+        }
+
+        public ShipCap.CapDirection shipEndCap() {
+            switch (this) {
+                case HORIZONTAL:
+                    return ShipCap.CapDirection.LEFT;
+                case VERTICAL:
+                    return ShipCap.CapDirection.UP;
+            }
+            throw new RuntimeException("Invalid Ship Orientation " + this.toString());
+        }
     }
 }

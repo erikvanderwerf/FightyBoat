@@ -6,6 +6,6 @@ import android.view.MotionEvent;
 /**
  * Created by Erik on 1/15/2017.
  */
-public interface GridPresenter {
+public interface GridPresenter extends Presenter {
     void onTouchEvent(Point coordinate, MotionEvent event);
 }

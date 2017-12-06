@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.gmail.eski787.fightyboat.game.Ship;
+import com.gmail.eski787.fightyboat.presenters.ShipPresenter;
 
 // TODO: Drag-and-drop of ships from bottom bar
 
@@ -44,7 +44,7 @@ public class PlaceShipSeaView extends SeaView {
 
         // TODO: Selection of ship highlights, brings up option menu.
         // TODO: Option menu allows for rotation and deletion of ship.
-        for (Ship ship : mSea.getShips()) {
+        for (ShipPresenter ship : mSea.getShips()) {
             if (ship.contains(coordinate)) {
                 Log.d(TAG, "TouchEvent inside Ship.");
             }

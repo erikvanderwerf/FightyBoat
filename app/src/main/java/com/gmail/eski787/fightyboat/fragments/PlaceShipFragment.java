@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Player;
+import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
 import com.gmail.eski787.fightyboat.views.SeaView;
 
 /**
@@ -56,7 +57,7 @@ public class PlaceShipFragment extends PlayerFragment {
         });
 
         mSeaView = view.findViewById(R.id.place_ship_sea_view);
-        mSeaView.setSea(mPlayer.getSea());
+        mSeaView.setSeaPresenter(new SeaPresenter(mPlayer.getSea()));
 
         return view;
     }
