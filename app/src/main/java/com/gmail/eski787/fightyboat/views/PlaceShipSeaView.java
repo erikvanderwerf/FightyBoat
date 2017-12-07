@@ -1,12 +1,10 @@
 package com.gmail.eski787.fightyboat.views;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 
-import com.gmail.eski787.fightyboat.presenters.ShipPresenter;
+import com.gmail.eski787.fightyboat.presenters.PlaceShipSeaPresenter;
+import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
 
 // TODO: Drag-and-drop of ships from bottom bar
 
@@ -17,7 +15,6 @@ import com.gmail.eski787.fightyboat.presenters.ShipPresenter;
 public class PlaceShipSeaView extends SeaView {
     private static final String TAG = PlaceShipSeaView.class.getSimpleName();
     private int cnt = 0;
-
 
     public PlaceShipSeaView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -32,30 +29,11 @@ public class PlaceShipSeaView extends SeaView {
     }
 
     @Override
-    public boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
-        // TODO Move this logic to presenter level.
-        super.onGridTouchEvent(coordinate, event);
-
-        if (event.getAction() != MotionEvent.ACTION_DOWN) {
-            return false;
+    public void onAttachSeaPresenter(SeaPresenter seaPresenter) {
+        if (seaPresenter instanceof PlaceShipSeaPresenter) {
+            super.onAttachSeaPresenter(seaPresenter);
+        } else {
+            throw new RuntimeException("SeaPresenter must be a PlaceShipSeaPresenter: " + seaPresenter.getClass().getName());
         }
-
-        if (mSea == null) {
-            Log.d(TAG, "Sea is null");
-            return false;
-        }
-
-        // TODO: Selection of ship highlights, brings up option menu.
-        // TODO: Option menu allows for rotation and deletion of ship.
-        for (ShipPresenter ship : mSea.getShips()) {
-            if (ship.contains(coordinate)) {
-                Log.d(TAG, "TouchEvent inside Ship.");
-            }
-        }
-
-
-//        regenerateSeaTiles();
-        invalidate();
-        return true;
     }
 }

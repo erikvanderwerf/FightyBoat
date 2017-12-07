@@ -73,7 +73,11 @@ public abstract class GridView extends View {
         final int ty = y / getTileHeight();
         final Point coordinate = new Point(tx, ty);
 
-        return onGridTouchEvent(coordinate, event);
+        boolean handled = onGridTouchEvent(coordinate, event);
+        if (handled) {
+            invalidate();
+        }
+        return handled;
     }
 
     /**

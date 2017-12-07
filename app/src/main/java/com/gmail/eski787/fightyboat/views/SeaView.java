@@ -28,9 +28,10 @@ public class SeaView extends GridView.SquareView {
     public static final float SHIP_RADIUS = 0.47f;
     static final float PEG_RADIUS = 0.3f;
     private static final String TAG = SeaView.class.getSimpleName();
+    // TODO move mPaintMap to SeaPresenter.
     private final EnumMap<Sea.SeaStatus, Paint> mPaintMap = new EnumMap<>(Sea.SeaStatus.class);
     @Nullable
-    protected SeaPresenter mSea;
+    protected SeaPresenter mSeaPresenter;
 
     public SeaView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -49,43 +50,15 @@ public class SeaView extends GridView.SquareView {
 
     @Override
     protected Point getGridSize() {
-        if (mSea == null) {
+        if (mSeaPresenter == null) {
             throw new RuntimeException("SeaView has no size without Sea attached.");
         }
-        return mSea.getSize();
+        return mSeaPresenter.getSize();
     }
 
     @Override
     protected boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
-        if (event.getAction() != MotionEvent.ACTION_DOWN) {
-            return false;
-        }
-
-        if (mSea == null) {
-            Log.d(TAG, "Sea is null");
-            return false;
-        }
-
-        final int x = coordinate.x;
-        final int y = coordinate.y;
-
-        Sea.SeaStatus current = mSea.getStatus(x, y);
-        Sea.SeaStatus advance = null;
-        switch (current) {
-            case NONE:
-                advance = Sea.SeaStatus.HIT;
-                break;
-            case HIT:
-                advance = Sea.SeaStatus.MISS;
-                break;
-            case MISS:
-                advance = Sea.SeaStatus.NONE;
-                break;
-        }
-
-        mSea.setStatus(x, y, advance);
-        invalidate();
-        return true;
+        return mSeaPresenter != null && mSeaPresenter.onGridTouchEvent(coordinate, event);
     }
 
     protected void initializePaintMap() {
@@ -104,23 +77,23 @@ public class SeaView extends GridView.SquareView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         final boolean EDIT = isInEditMode();
-        if (mSea == null || EDIT) {
-            Log.d(TAG, "mSea is null.");
+        if (mSeaPresenter == null || EDIT) {
+            Log.d(TAG, "mSeaPresenter is null.");
             return;
         }
 
         // Ships
-        for (ShipPresenter ship : mSea.getShips()) {
+        for (ShipPresenter ship : mSeaPresenter.getShips()) {
             drawShip(ship, canvas);
         }
 
         // Pegs
         final int height = getTileHeight();
         final int width = getTileWidth();
-        Point oceanSize = mSea.getSize();
+        Point oceanSize = mSeaPresenter.getSize();
         for (int x = 0; x < oceanSize.x; x++) {
             for (int y = 0; y < oceanSize.y; y++) {
-                final Sea.SeaStatus seaStatus = mSea.getStatus(x, y);
+                final Sea.SeaStatus seaStatus = mSeaPresenter.getStatus(x, y);
                 if (seaStatus == Sea.SeaStatus.NONE) {
                     continue;
                 }
@@ -192,8 +165,12 @@ public class SeaView extends GridView.SquareView {
                 .drawCap(canvas, paint, endX - width, endY - height, endX, endY);
     }
 
-    public void setSeaPresenter(SeaPresenter sea) {
-        mSea = sea;
+    public void onAttachSeaPresenter(SeaPresenter seaPresenter) {
+        this.mSeaPresenter = seaPresenter;
         invalidate();
+    }
+
+    public void onDetachSeaPresenter() {
+        mSeaPresenter = null;
     }
 }
