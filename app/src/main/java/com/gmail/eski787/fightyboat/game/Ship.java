@@ -13,6 +13,7 @@ import com.gmail.eski787.fightyboat.presenters.ShipCap;
  */
 
 public class Ship implements Parcelable {
+    // TODO Ship instantiation needs a Factory.
     public static final Creator<Ship> CREATOR = new Creator<Ship>() {
         @Override
         public Ship createFromParcel(Parcel in) {
@@ -24,6 +25,7 @@ public class Ship implements Parcelable {
             return new Ship[size];
         }
     };
+    @NonNull
     private Point origin;
     @NonNull
     private Orientation orientation;
@@ -39,7 +41,7 @@ public class Ship implements Parcelable {
         endCap = (ShipCap.CapType) in.readSerializable();
     }
 
-    public Ship(Point origin, @NonNull Orientation orientation, int length) {
+    public Ship(@NonNull Point origin, @NonNull Orientation orientation, int length) {
         this.origin = origin;
         this.orientation = orientation;
         this.length = length;
@@ -67,13 +69,22 @@ public class Ship implements Parcelable {
         return endCap;
     }
 
+    @NonNull
     public Point getOrigin() {
         return origin;
+    }
+
+    public void setOrigin(@NonNull Point origin) {
+        this.origin = origin;
     }
 
     @NonNull
     public Orientation getOrientation() {
         return orientation;
+    }
+
+    public void setOrientation(@NonNull Orientation orientation) {
+        this.orientation = orientation;
     }
 
     public int getLength() {
@@ -112,6 +123,10 @@ public class Ship implements Parcelable {
                     return ShipCap.CapDirection.UP;
             }
             throw new RuntimeException("Invalid Ship Orientation " + this.toString());
+        }
+
+        public Orientation toggle() {
+            return this == HORIZONTAL ? VERTICAL : HORIZONTAL;
         }
     }
 }

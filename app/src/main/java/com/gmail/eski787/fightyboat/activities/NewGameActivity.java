@@ -52,10 +52,14 @@ public class NewGameActivity extends AppCompatActivity
         setContentView(R.layout.activity_new_game);
 
         if (savedInstanceState == null) {
-            // Initialize players with 1 local player.
+            // Initialize players with 2 local players.
             Player player1 = new Player("Player 1", new Sea(10, 10));
             List<Ship> p1ship = player1.getSea().getShips();
+            p1ship.add(new Ship(new Point(5, 5), Ship.Orientation.VERTICAL, 5));
+            p1ship.add(new Ship(new Point(0, 7), Ship.Orientation.HORIZONTAL, 4));
             p1ship.add(new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, 3));
+            p1ship.add(new Ship(new Point(7, 3), Ship.Orientation.HORIZONTAL, 3));
+            p1ship.add(new Ship(new Point(2, 2), Ship.Orientation.HORIZONTAL, 2));
 
             players = new ArrayList<>();
             players.add(player1);
