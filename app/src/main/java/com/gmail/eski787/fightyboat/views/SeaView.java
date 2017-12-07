@@ -57,8 +57,9 @@ public class SeaView extends GridView.SquareView {
     }
 
     @Override
-    protected boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
-        return mSeaPresenter != null && mSeaPresenter.onGridTouchEvent(coordinate, event);
+    protected boolean onClick(MotionEvent event) {
+        return mSeaPresenter != null && mSeaPresenter.onClick(
+                getCoordinate((int) event.getX(), (int) event.getY()), event);
     }
 
     protected void initializePaintMap() {
@@ -73,6 +74,11 @@ public class SeaView extends GridView.SquareView {
         mPaintMap.put(Sea.SeaStatus.MISS, miss);
     }
 
+    /**
+     * Redraws the Sea onto the View.
+     *
+     * @param canvas Canvas to draw on.
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

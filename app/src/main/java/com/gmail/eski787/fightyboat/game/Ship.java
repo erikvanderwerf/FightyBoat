@@ -30,7 +30,9 @@ public class Ship implements Parcelable {
     @NonNull
     private Orientation orientation;
     private int length;
+    @NonNull
     private ShipCap.CapType startCap = ShipCap.CapType.ROUND;
+    @NonNull
     private ShipCap.CapType endCap = ShipCap.CapType.SQUARE;
 
     private Ship(Parcel in) {
@@ -61,10 +63,12 @@ public class Ship implements Parcelable {
         parcel.writeSerializable(endCap);
     }
 
+    @NonNull
     public ShipCap.CapType getStartCap() {
         return startCap;
     }
 
+    @NonNull
     public ShipCap.CapType getEndCap() {
         return endCap;
     }

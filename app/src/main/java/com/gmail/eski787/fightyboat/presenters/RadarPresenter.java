@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 
 public class RadarPresenter implements GridPresenter {
     @Override
-    public boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
+    public boolean onClick(Point coordinate, MotionEvent event) {
         return false;
     }
 }

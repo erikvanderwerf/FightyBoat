@@ -1,6 +1,7 @@
 package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.gmail.eski787.fightyboat.game.Sea;
@@ -18,22 +19,20 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     }
 
     @Override
-    public boolean onGridTouchEvent(Point coordinate, MotionEvent event) {
-        if (event.getAction() != MotionEvent.ACTION_DOWN) {
-            return false;
-        }
-
+    public boolean onClick(Point coordinate, MotionEvent event) {
+        Log.d(TAG, "Click Event: " + coordinate);
         // TODO: Long Selection of ship highlights, brings up option menu.
         // TODO: Option menu allows for rotation and deletion of ship.
         for (Ship ship : mSea.getShips()) {
             if (ship.contains(coordinate)) {
-                onShipTouch(ship);
+                onShipClick(ship);
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    private void onShipTouch(Ship ship) {
+    private void onShipClick(Ship ship) {
         Ship.Orientation toggle = ship.getOrientation().toggle();
         ship.setOrientation(toggle);
 

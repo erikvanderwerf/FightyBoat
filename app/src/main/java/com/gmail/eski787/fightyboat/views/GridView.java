@@ -3,6 +3,7 @@ package com.gmail.eski787.fightyboat.views;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -12,6 +13,8 @@ import android.view.View;
 
 public abstract class GridView extends View {
     private static final String TAG = GridView.class.getCanonicalName();
+    private static final double TOUCH_SLOP = 20;
+    private Point mTouchPoint = null;
 
     /**
      * View constructor.
@@ -58,36 +61,62 @@ public abstract class GridView extends View {
 
     /**
      * This callback is run when the user generates a touch event. The coordinates of the touch event
-     * are converted into grid coordinates and the onGridTouchEvent method is called.
+     * are converted into grid coordinates. Depending on how the user is interacting, the onClick
+     * or onLongClick methods are called.
      * @param event The motion event.
      * @return True if the event was handled, false otherwise.
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
+        boolean handled = false;
 
-        final int x = ((int) event.getX());
-        final int y = ((int) event.getY());
-
-        final int tx = x / getTileWidth();
-        final int ty = y / getTileHeight();
-        final Point coordinate = new Point(tx, ty);
-
-        boolean handled = onGridTouchEvent(coordinate, event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mTouchPoint = new Point((int) event.getX(), (int) event.getY());
+                handled = true;
+                break;
+            case MotionEvent.ACTION_UP:
+                Point point = new Point((int) event.getX(), (int) event.getY());
+                double distance = distance(mTouchPoint, point);
+                Log.d(TAG, "Touch Distance: " + distance);
+                if (distance < TOUCH_SLOP) {
+                    handled = onClick(event);
+                }
+        }
         if (handled) {
             invalidate();
         }
         return handled;
+
+
+//        Point coordinate = getCoordinate((int) event.getX(), (int) event.getY());
+//        boolean handled = onClick(coordinate, event);
+//        if (handled) {
+//            invalidate();
+//        }
+//        return handled;
+    }
+
+    private double distance(Point a, Point b) {
+        return Math.sqrt(
+                Math.pow(a.x - b.x, 2) +
+                        Math.pow(a.y - b.y, 2));
+    }
+
+    protected final Point getCoordinate(int x, int y) {
+        final int tx = x / getTileWidth();
+        final int ty = y / getTileHeight();
+        return new Point(tx, ty);
     }
 
     /**
-     * Called when the user generates a touch event.
+     * Called when the user generates a click event.
      *
-     * @param coordinate The grid coordinate of the touch event.
-     * @param event      The original touch event.
+     * @param event The original click event.
      * @return True if the event was handled, false otherwise.
      */
-    protected abstract boolean onGridTouchEvent(Point coordinate, MotionEvent event);
+    protected abstract boolean onClick(MotionEvent event);
 
     protected final int getTileWidth() {
         return getWidth() / getGridSize().x;
