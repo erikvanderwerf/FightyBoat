@@ -23,7 +23,7 @@ public class Player implements Parcelable {
             return new Player[size];
         }
     };
-    private static final String TAG = Player.class.getCanonicalName();
+    private static final String TAG = Player.class.getSimpleName();
     private String mName;
     private Sea mSea;
     //    private Radar mRadar;

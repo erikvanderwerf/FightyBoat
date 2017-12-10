@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Point;
-import android.view.MotionEvent;
 
 /**
  * Created by Erik on 1/15/2017.
@@ -9,7 +8,12 @@ import android.view.MotionEvent;
 
 public class RadarPresenter implements GridPresenter {
     @Override
-    public boolean onClick(Point coordinate, MotionEvent event) {
+    public boolean onClick(Point coordinate) {
+        return false;
+    }
+
+    @Override
+    public boolean onLongClick(Point coordinate) {
         return false;
     }
 }

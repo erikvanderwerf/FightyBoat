@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class NewGameActivity extends AppCompatActivity
         implements PlayerListFragment.PlayerListInteraction, PlayerDetailFragment.PlayerDetailInteraction, PlaceShipFragment.PlaceShipInteraction {
-    private static final String TAG = NewGameActivity.class.getCanonicalName();
+    private static final String TAG = NewGameActivity.class.getSimpleName();
     private static final String ARG_PLAYER_LIST = "ARG_PLAYER_LIST";
     private Fragment mFragment;
     /* ArrayList (not List) in order to serialize in Bundle */

@@ -1,8 +1,8 @@
 package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Point;
+import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.MotionEvent;
 
 import com.gmail.eski787.fightyboat.game.Ship;
 
@@ -11,23 +11,33 @@ import com.gmail.eski787.fightyboat.game.Ship;
  */
 
 public class PlaceShipSeaPresenter extends SeaPresenter {
-    private static final String TAG = PlaceShipSeaPresenter.class.getCanonicalName();
+    private static final String TAG = PlaceShipSeaPresenter.class.getSimpleName();
 
     @Override
-    public boolean onClick(Point coordinate, MotionEvent event) {
+    public boolean onClick(@NonNull Point coordinate) {
         Log.d(TAG, "Click Event: " + coordinate);
-        // TODO: Long Selection of ship highlights, brings up option menu.
-        // TODO: Option menu allows for rotation and deletion of ship.
-        for (Ship ship : mSea.getShips()) {
-            if (ship.contains(coordinate)) {
-                onShipClick(ship);
-                return true;
-            }
+        Ship ship = getShipAtCoordinate(coordinate);
+        if (ship != null) {
+            onShipClick(ship);
+            return true;
         }
         return false;
     }
 
-    private void onShipClick(Ship ship) {
+    @Override
+    public boolean onLongClick(@NonNull Point coordinate) {
+        // TODO: Long Selection of ship highlights, brings up option menu.
+        // TODO: Option menu allows for rotation and deletion of ship.
+        Ship ship = getShipAtCoordinate(coordinate);
+        if (ship != null) {
+            Log.d(TAG, "Long click ship");
+        }
+        return false;
+    }
+
+    private void onShipClick(@NonNull Ship ship) {
+        assert mSea != null;
+
         Ship.Orientation toggle = ship.getOrientation().toggle();
         ship.setOrientation(toggle);
 

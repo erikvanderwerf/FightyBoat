@@ -25,7 +25,7 @@ import java.util.List;
  */
 
 public class PlayerListFragment extends Fragment {
-    private static String TAG = PlayerListFragment.class.getCanonicalName();
+    private static String TAG = PlayerListFragment.class.getSimpleName();
 
     private List<Player> players;
     private RecyclerView mRecyclerView;
@@ -95,7 +95,7 @@ public class PlayerListFragment extends Fragment {
     }
 
     private static class PlayerViewHolder extends RecyclerView.ViewHolder {
-        private static final String TAG = PlayerViewHolder.class.getCanonicalName();
+        private static final String TAG = PlayerViewHolder.class.getSimpleName();
         LayoutPlayerShortBinding binding;
 
         public PlayerViewHolder(View itemView) {

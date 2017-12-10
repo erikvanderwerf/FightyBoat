@@ -11,9 +11,9 @@ import android.view.View;
  */
 
 public abstract class GridView extends View {
-    private static final String TAG = GridView.class.getCanonicalName();
+    private static final String TAG = GridView.class.getSimpleName();
     private static final double TOUCH_SLOP = 20;
-    protected Point mTouchPoint = null;
+    protected CustomEvent mTouchEvent = null;
 
     /**
      * View constructor.
@@ -67,7 +67,7 @@ public abstract class GridView extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mTouchPoint = new Point((int) event.getX(), (int) event.getY());
+        mTouchEvent = new CustomEvent(event);
         return super.onTouchEvent(event);
 
 //        boolean handled = false;
@@ -77,7 +77,7 @@ public abstract class GridView extends View {
 //                break;
 //            case MotionEvent.ACTION_UP:
 //                Point point = new Point((int) event.getX(), (int) event.getY());
-//                double distance = distance(mTouchPoint, point);
+//                double distance = distance(mTouchEvent, point);
 //                Log.d(TAG, "Touch Distance: " + distance);
 //                if (distance < TOUCH_SLOP) {
 //                    handled = onClick(event);
@@ -101,20 +101,29 @@ public abstract class GridView extends View {
         return new Point(tx, ty);
     }
 
-    /**
-     * Called when the user generates a click event.
-     *
-     * @param event The original click event.
-     * @return True if the event was handled, false otherwise.
-     */
-    protected abstract boolean onClick(MotionEvent event);
-
     protected final int getTileWidth() {
         return getWidth() / getGridSize().x;
     }
 
     protected final int getTileHeight() {
         return getHeight() / getGridSize().y;
+    }
+
+    public static class CustomEvent {
+        private int x, y;
+
+        CustomEvent(MotionEvent event) {
+            x = (int) event.getX();
+            y = (int) event.getY();
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
     }
 
     /**

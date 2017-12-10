@@ -1,6 +1,7 @@
 package com.gmail.eski787.fightyboat.views;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import com.gmail.eski787.fightyboat.presenters.PlaceShipSeaPresenter;
@@ -29,11 +30,12 @@ public class PlaceShipSeaView extends SeaView {
     }
 
     @Override
-    public void setSeaPresenter(SeaPresenter seaPresenter) {
-        if (seaPresenter instanceof PlaceShipSeaPresenter) {
+    public void setSeaPresenter(@Nullable SeaPresenter seaPresenter) {
+        if (seaPresenter instanceof PlaceShipSeaPresenter || seaPresenter == null) {
             super.setSeaPresenter(seaPresenter);
         } else {
-            throw new RuntimeException("SeaPresenter must be a PlaceShipSeaPresenter: " + seaPresenter.getClass().getName());
+            throw new RuntimeException("SeaPresenter must be a PlaceShipSeaPresenter: " +
+                    seaPresenter.getClass().getName());
         }
     }
 }

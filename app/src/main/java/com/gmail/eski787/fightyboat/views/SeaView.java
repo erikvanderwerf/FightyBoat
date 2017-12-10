@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.DragEvent;
 import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
@@ -16,7 +16,6 @@ import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
 import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
 import com.gmail.eski787.fightyboat.presenters.ShipCap;
-import com.gmail.eski787.fightyboat.presenters.ShipPresenter;
 
 import java.util.EnumMap;
 
@@ -51,81 +50,13 @@ public class SeaView extends GridView.SquareView {
         initializePaintMap();
     }
 
-    @Override
-    protected Point getGridSize() {
-        if (mSeaPresenter == null) {
-            throw new RuntimeException("SeaView has no size without Sea attached.");
-        }
-        return mSeaPresenter.getSize();
-    }
-
-    @Override
-    protected boolean onClick(MotionEvent event) {
-        return mSeaPresenter != null && mSeaPresenter.onClick(
-                getCoordinate((int) event.getX(), (int) event.getY()), event);
-    }
-
-    protected void initializePaintMap() {
-        Paint none = new Paint(), hit = new Paint(), miss = new Paint();
-
-        none.setColor(ResourcesCompat.getColor(getResources(), R.color.tileNone, null));
-        hit.setColor(ResourcesCompat.getColor(getResources(), R.color.tileHit, null));
-        miss.setColor(ResourcesCompat.getColor(getResources(), R.color.tileMiss, null));
-
-        mPaintMap.put(Sea.SeaStatus.NONE, none);
-        mPaintMap.put(Sea.SeaStatus.HIT, hit);
-        mPaintMap.put(Sea.SeaStatus.MISS, miss);
-    }
-
-    /**
-     * Redraws the Sea onto the View.
-     *
-     * @param canvas Canvas to draw on.
-     */
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        final boolean EDIT = isInEditMode();
-        if (mSeaPresenter == null || EDIT) {
-            Log.d(TAG, "mSeaPresenter is null.");
-            return;
-        }
-
-        // Ships
-        for (ShipPresenter ship : mSeaPresenter.getShips()) {
-            drawShip(ship, canvas);
-        }
-
-        // Pegs
-        final int height = getTileHeight();
-        final int width = getTileWidth();
-        Point oceanSize = mSeaPresenter.getSize();
-        for (int x = 0; x < oceanSize.x; x++) {
-            for (int y = 0; y < oceanSize.y; y++) {
-                final Sea.SeaStatus seaStatus = mSeaPresenter.getStatus(x, y);
-                if (seaStatus == Sea.SeaStatus.NONE) {
-                    continue;
-                }
-
-                final int startX = x * width;
-                final int startY = y * height;
-                final int midX = startX + (width / 2);
-                final int midY = startY + (height / 2);
-                final int minDimension = Math.min(width, height);
-                final float radius = minDimension * PEG_RADIUS;
-                final Paint paint_peg = mPaintMap.get(seaStatus);
-                canvas.drawCircle(midX, midY, radius, paint_peg);
-            }
-        }
-    }
-
     /**
      * Draws a Ship on the View.
      *
      * @param ship   The ship to draw.
      * @param canvas The canvas to draw on.
      */
-    private void drawShip(ShipPresenter ship, Canvas canvas) {
+    private void drawShip(SeaPresenter.ShipPresenter ship, Canvas canvas) {
         final Paint paint = new Paint();
         paint.setColor(ResourcesCompat.getColor(getResources(), R.color.steelGray, null));
 
@@ -174,37 +105,116 @@ public class SeaView extends GridView.SquareView {
                 .drawCap(canvas, paint, endX - width, endY - height, endX, endY);
     }
 
-    public void setSeaPresenter(SeaPresenter seaPresenter) {
+    @Override
+    protected Point getGridSize() {
+        if (mSeaPresenter == null) {
+            throw new RuntimeException("SeaView has no size without Sea attached.");
+        }
+        return mSeaPresenter.getSize();
+    }
+
+    protected void initializePaintMap() {
+        Paint none = new Paint(), hit = new Paint(), miss = new Paint();
+
+        none.setColor(ResourcesCompat.getColor(getResources(), R.color.tileNone, null));
+        hit.setColor(ResourcesCompat.getColor(getResources(), R.color.tileHit, null));
+        miss.setColor(ResourcesCompat.getColor(getResources(), R.color.tileMiss, null));
+
+        mPaintMap.put(Sea.SeaStatus.NONE, none);
+        mPaintMap.put(Sea.SeaStatus.HIT, hit);
+        mPaintMap.put(Sea.SeaStatus.MISS, miss);
+    }
+
+    /**
+     * Redraws the Sea onto the View.
+     *
+     * @param canvas Canvas to draw on.
+     */
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        final boolean EDIT = isInEditMode();
+        if (mSeaPresenter == null || EDIT) {
+            Log.d(TAG, "mSeaPresenter is null.");
+            return;
+        }
+
+        // Ships
+        for (SeaPresenter.ShipPresenter ship : mSeaPresenter.getShips()) {
+            drawShip(ship, canvas);
+        }
+
+        // Pegs
+        final int height = getTileHeight();
+        final int width = getTileWidth();
+        Point oceanSize = mSeaPresenter.getSize();
+        for (int x = 0; x < oceanSize.x; x++) {
+            for (int y = 0; y < oceanSize.y; y++) {
+                final Sea.SeaStatus seaStatus = mSeaPresenter.getStatus(x, y);
+                if (seaStatus == Sea.SeaStatus.NONE) {
+                    continue;
+                }
+
+                final int startX = x * width;
+                final int startY = y * height;
+                final int midX = startX + (width / 2);
+                final int midY = startY + (height / 2);
+                final int minDimension = Math.min(width, height);
+                final float radius = minDimension * PEG_RADIUS;
+                final Paint paint_peg = mPaintMap.get(seaStatus);
+                canvas.drawCircle(midX, midY, radius, paint_peg);
+            }
+        }
+    }
+
+    public void setSeaPresenter(@Nullable SeaPresenter seaPresenter) {
+        // Unset previous presenter, and set new one.
+        if (mSeaPresenter != null) {
+            mSeaPresenter.setGridView(null);
+        }
         mSeaPresenter = seaPresenter;
-        mClickListener = new ClickListener();
+        mClickListener = null;
+        if (mSeaPresenter != null) {
+            mSeaPresenter.setGridView(this);
+            mClickListener = new ClickListener();
+        }
+
+        // Change click listeners.
         setOnClickListener(mClickListener);
         setOnLongClickListener(mClickListener);
-        setOnGenericMotionListener(mClickListener);
+        setOnDragListener(mClickListener);
+
         invalidate();
     }
 
-    public void onDetachSeaPresenter() {
-        mSeaPresenter = null;
-        setOnClickListener(null);
-        setOnLongClickListener(null);
-        setOnGenericMotionListener(null);
-    }
-
-    private class ClickListener implements OnClickListener, OnLongClickListener, OnGenericMotionListener {
-
+    private class ClickListener implements OnClickListener, OnLongClickListener, OnDragListener {
         @Override
         public void onClick(View v) {
-
-            mSeaPresenter.onClick()
+            assert mSeaPresenter != null;
+            Log.d(TAG, "OnClick");
+            final boolean handled = mSeaPresenter.onClick(
+                    getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
+            if (handled) {
+                invalidate();
+            }
         }
 
         @Override
         public boolean onLongClick(View v) {
+            assert mSeaPresenter != null;
+            Log.d(TAG, "OnLongClick");
+            final boolean handled = mSeaPresenter.onLongClick(
+                    getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
+//            if (handled) {
+            Log.d(TAG, "Handled LongClick");
+//            }
             return false;
         }
 
         @Override
-        public boolean onGenericMotion(View v, MotionEvent event) {
+        public boolean onDrag(View v, DragEvent event) {
+            assert mSeaPresenter != null;
+            Log.d(TAG, "OnDrag");
             return false;
         }
     }

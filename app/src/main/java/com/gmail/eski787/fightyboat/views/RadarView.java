@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 
 import com.gmail.eski787.fightyboat.presenters.RadarPresenter;
 
@@ -36,11 +35,6 @@ public class RadarView extends GridView.SquareView {
     @Override
     protected Point getGridSize() {
         return new Point(10, 10);
-    }
-
-    @Override
-    protected boolean onClick(MotionEvent event) {
-        return false;
     }
 
     @Override
