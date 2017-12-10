@@ -57,10 +57,11 @@ public class PlaceShipFragment extends PlayerFragment {
             }
         });
 
-        SeaPresenter seaPresenter = new PlaceShipSeaPresenter(mPlayer.getSea());
+        final SeaPresenter seaPresenter = new PlaceShipSeaPresenter();
+        seaPresenter.setSea(mPlayer.getSea());
 
         mSeaView = view.findViewById(R.id.place_ship_sea_view);
-        mSeaView.onAttachSeaPresenter(seaPresenter);
+        mSeaView.setSeaPresenter(seaPresenter);
 
         return view;
     }

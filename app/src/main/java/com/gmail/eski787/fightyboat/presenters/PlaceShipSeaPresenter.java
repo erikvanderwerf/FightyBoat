@@ -4,7 +4,6 @@ import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
 
 /**
@@ -13,10 +12,6 @@ import com.gmail.eski787.fightyboat.game.Ship;
 
 public class PlaceShipSeaPresenter extends SeaPresenter {
     private static final String TAG = PlaceShipSeaPresenter.class.getCanonicalName();
-
-    public PlaceShipSeaPresenter(Sea sea) {
-        super(sea);
-    }
 
     @Override
     public boolean onClick(Point coordinate, MotionEvent event) {

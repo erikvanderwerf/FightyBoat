@@ -9,6 +9,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Sea;
@@ -32,6 +33,8 @@ public class SeaView extends GridView.SquareView {
     private final EnumMap<Sea.SeaStatus, Paint> mPaintMap = new EnumMap<>(Sea.SeaStatus.class);
     @Nullable
     protected SeaPresenter mSeaPresenter;
+    private ClickListener mClickListener;
+
 
     public SeaView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -171,12 +174,38 @@ public class SeaView extends GridView.SquareView {
                 .drawCap(canvas, paint, endX - width, endY - height, endX, endY);
     }
 
-    public void onAttachSeaPresenter(SeaPresenter seaPresenter) {
-        this.mSeaPresenter = seaPresenter;
+    public void setSeaPresenter(SeaPresenter seaPresenter) {
+        mSeaPresenter = seaPresenter;
+        mClickListener = new ClickListener();
+        setOnClickListener(mClickListener);
+        setOnLongClickListener(mClickListener);
+        setOnGenericMotionListener(mClickListener);
         invalidate();
     }
 
     public void onDetachSeaPresenter() {
         mSeaPresenter = null;
+        setOnClickListener(null);
+        setOnLongClickListener(null);
+        setOnGenericMotionListener(null);
+    }
+
+    private class ClickListener implements OnClickListener, OnLongClickListener, OnGenericMotionListener {
+
+        @Override
+        public void onClick(View v) {
+
+            mSeaPresenter.onClick()
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
+        }
+
+        @Override
+        public boolean onGenericMotion(View v, MotionEvent event) {
+            return false;
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.gmail.eski787.fightyboat.views;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -14,7 +13,7 @@ import android.view.View;
 public abstract class GridView extends View {
     private static final String TAG = GridView.class.getCanonicalName();
     private static final double TOUCH_SLOP = 20;
-    private Point mTouchPoint = null;
+    protected Point mTouchPoint = null;
 
     /**
      * View constructor.
@@ -68,41 +67,33 @@ public abstract class GridView extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
-        boolean handled = false;
+        mTouchPoint = new Point((int) event.getX(), (int) event.getY());
+        return super.onTouchEvent(event);
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mTouchPoint = new Point((int) event.getX(), (int) event.getY());
-                handled = true;
-                break;
-            case MotionEvent.ACTION_UP:
-                Point point = new Point((int) event.getX(), (int) event.getY());
-                double distance = distance(mTouchPoint, point);
-                Log.d(TAG, "Touch Distance: " + distance);
-                if (distance < TOUCH_SLOP) {
-                    handled = onClick(event);
-                }
-        }
-        if (handled) {
-            invalidate();
-        }
-        return handled;
-
-
-//        Point coordinate = getCoordinate((int) event.getX(), (int) event.getY());
-//        boolean handled = onClick(coordinate, event);
+//        boolean handled = false;
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                handled = true;
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                Point point = new Point((int) event.getX(), (int) event.getY());
+//                double distance = distance(mTouchPoint, point);
+//                Log.d(TAG, "Touch Distance: " + distance);
+//                if (distance < TOUCH_SLOP) {
+//                    handled = onClick(event);
+//                }
+//        }
 //        if (handled) {
 //            invalidate();
 //        }
 //        return handled;
     }
 
-    private double distance(Point a, Point b) {
-        return Math.sqrt(
-                Math.pow(a.x - b.x, 2) +
-                        Math.pow(a.y - b.y, 2));
-    }
+//    private double distance(Point a, Point b) {
+//        return Math.sqrt(
+//                Math.pow(a.x - b.x, 2) +
+//                        Math.pow(a.y - b.y, 2));
+//    }
 
     protected final Point getCoordinate(int x, int y) {
         final int tx = x / getTileWidth();

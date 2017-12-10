@@ -29,9 +29,9 @@ public class PlaceShipSeaView extends SeaView {
     }
 
     @Override
-    public void onAttachSeaPresenter(SeaPresenter seaPresenter) {
+    public void setSeaPresenter(SeaPresenter seaPresenter) {
         if (seaPresenter instanceof PlaceShipSeaPresenter) {
-            super.onAttachSeaPresenter(seaPresenter);
+            super.setSeaPresenter(seaPresenter);
         } else {
             throw new RuntimeException("SeaPresenter must be a PlaceShipSeaPresenter: " + seaPresenter.getClass().getName());
         }

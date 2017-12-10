@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Point;
-import android.support.annotation.NonNull;
 
 import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
@@ -15,12 +14,7 @@ import java.util.List;
 
 public abstract class SeaPresenter implements GridPresenter {
     private static final String TAG = ShipPresenter.class.getCanonicalName();
-    @NonNull
-    final Sea mSea;
-
-    public SeaPresenter(@NonNull Sea sea) {
-        mSea = sea;
-    }
+    Sea mSea;
 
     public List<ShipPresenter> getShips() {
         List<ShipPresenter> ships = new ArrayList<>(mSea.getShips().size());
@@ -36,5 +30,9 @@ public abstract class SeaPresenter implements GridPresenter {
 
     public Sea.SeaStatus getStatus(int x, int y) {
         return mSea.getStatus(x, y);
+    }
+
+    public void setSea(Sea sea) {
+        mSea = sea;
     }
 }
