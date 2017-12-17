@@ -19,6 +19,7 @@ import com.gmail.eski787.fightyboat.fragments.PlayerListFragment;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
+import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +55,13 @@ public class NewGameActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             // Initialize players with 2 local players.
             Player player1 = new Player("Player 1", new Sea(10, 10));
+            ShipCap.CapType startCap = ShipCap.CapType.ROUND, endCap = ShipCap.CapType.SQUARE;
             List<Ship> p1ship = player1.getSea().getShips();
-            p1ship.add(new Ship(new Point(5, 5), Ship.Orientation.VERTICAL, 5));
-            p1ship.add(new Ship(new Point(0, 7), Ship.Orientation.HORIZONTAL, 4));
-            p1ship.add(new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, 3));
-            p1ship.add(new Ship(new Point(7, 3), Ship.Orientation.HORIZONTAL, 3));
-            p1ship.add(new Ship(new Point(2, 2), Ship.Orientation.HORIZONTAL, 2));
+            p1ship.add(new Ship(new Point(5, 5), Ship.Orientation.VERTICAL, 5, startCap, endCap));
+            p1ship.add(new Ship(new Point(0, 7), Ship.Orientation.HORIZONTAL, 4, startCap, endCap));
+            p1ship.add(new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, 3, startCap, endCap));
+            p1ship.add(new Ship(new Point(7, 3), Ship.Orientation.HORIZONTAL, 3, startCap, endCap));
+            p1ship.add(new Ship(new Point(2, 2), Ship.Orientation.HORIZONTAL, 2, startCap, endCap));
 
             players = new ArrayList<>();
             players.add(player1);

@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Player;
@@ -56,14 +58,30 @@ public class PlaceShipFragment extends PlayerFragment {
             }
         });
 
+        // Get references to View elements.
+        mSeaView = view.findViewById(R.id.place_ship_sea_view);
+        final ImageView[] shelves = new ImageView[5];
+        shelves[0] = view.findViewById(R.id.ship_shelf_aircraft_carrier);
+        shelves[1] = view.findViewById(R.id.ship_shelf_battleship);
+        shelves[2] = view.findViewById(R.id.ship_shelf_submarine);
+        shelves[3] = view.findViewById(R.id.ship_shelf_destroyer);
+        shelves[4] = view.findViewById(R.id.ship_shelf_cruiser);
+
+
+        // Instantiate and attach models to presenters to views.
         final PlaceShipSeaPresenter seaPresenter = new PlaceShipSeaPresenter();
         seaPresenter.setSea(mPlayer.getSea());
-
-        mSeaView = view.findViewById(R.id.place_ship_sea_view);
         mSeaView.setSeaPresenter(seaPresenter);
-
-        // Set click listener.
         mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
+        // TODO: Toast with summary, implement drag-and-drop from shelf to mSeaView.
+        for (ImageView imageView : shelves) {
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "Selected", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         return view;
     }

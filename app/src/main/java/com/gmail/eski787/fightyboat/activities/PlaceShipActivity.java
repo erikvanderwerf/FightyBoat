@@ -15,9 +15,8 @@ import com.gmail.eski787.fightyboat.fragments.PlayerFragment;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.game.Ship;
+import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @Deprecated
@@ -40,7 +39,7 @@ public class PlaceShipActivity extends AppCompatActivity implements LockFragment
             List<Ship> ships = player.getSea().getShips();
             Log.d(TAG, String.format("Ships: %s", ships));
             for (int i = 0; i < 5; i++) {
-                Ship s = new Ship(new Point(0, i), Ship.Orientation.HORIZONTAL, i + 2);
+                Ship s = new Ship(new Point(0, i), Ship.Orientation.HORIZONTAL, i + 2, ShipCap.CapType.ROUND, ShipCap.CapType.SQUARE);
                 ships.add(s);
             }
         }

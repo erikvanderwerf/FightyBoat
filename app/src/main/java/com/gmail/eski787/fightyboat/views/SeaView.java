@@ -112,9 +112,14 @@ public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
     @Override
     protected Point getGridSize() {
         if (mSeaPresenter == null) {
+            if (isInEditMode()) {
+                // Check if View is being rendered in a static developer tool.
+                return new Point(10, 10);
+            }
             throw new RuntimeException("SeaView has no size without Sea attached.");
+        } else {
+            return mSeaPresenter.getSize();
         }
-        return mSeaPresenter.getSize();
     }
 
     protected void initializePaintMap() {

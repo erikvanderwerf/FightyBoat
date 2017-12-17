@@ -14,7 +14,6 @@ import com.gmail.eski787.fightyboat.presenters.ShipCap;
  */
 
 public class Ship implements Parcelable {
-    // TODO Ship instantiation needs a Factory.
     public static final Creator<Ship> CREATOR = new Creator<Ship>() {
         @Override
         public Ship createFromParcel(Parcel in) {
@@ -32,9 +31,9 @@ public class Ship implements Parcelable {
     private Orientation orientation;
     private int length;
     @NonNull
-    private ShipCap.CapType startCap = ShipCap.CapType.ROUND;
+    private ShipCap.CapType startCap;
     @NonNull
-    private ShipCap.CapType endCap = ShipCap.CapType.SQUARE;
+    private ShipCap.CapType endCap;
 
     private Ship(Parcel in) {
         origin = in.readParcelable(Point.class.getClassLoader());
@@ -44,10 +43,13 @@ public class Ship implements Parcelable {
         endCap = (ShipCap.CapType) in.readSerializable();
     }
 
-    public Ship(@NonNull Point origin, @NonNull Orientation orientation, int length) {
+    public Ship(@NonNull Point origin, @NonNull Orientation orientation, int length,
+                @NonNull ShipCap.CapType startCap, @NonNull ShipCap.CapType endCap) {
         this.origin = origin;
         this.orientation = orientation;
         this.length = length;
+        this.startCap = startCap;
+        this.endCap = endCap;
     }
 
     public Ship(Ship ship) {
@@ -130,6 +132,48 @@ public class Ship implements Parcelable {
 
         public Orientation toggle() {
             return this == HORIZONTAL ? VERTICAL : HORIZONTAL;
+        }
+    }
+
+    public static class ShipFactory {
+        // TODO Make methods for basic types.
+
+        private Point origin;
+        private Orientation orientation;
+        private int length;
+        private ShipCap.CapType startCap;
+        private ShipCap.CapType endCap;
+
+        public ShipFactory() {
+        }
+
+        public Ship generate() {
+            return new Ship(origin, orientation, length, startCap, endCap);
+        }
+
+        public ShipFactory setOrigin(Point origin) {
+            this.origin = origin;
+            return this;
+        }
+
+        public ShipFactory setOrientation(Orientation orientation) {
+            this.orientation = orientation;
+            return this;
+        }
+
+        public ShipFactory setLength(int length) {
+            this.length = length;
+            return this;
+        }
+
+        public ShipFactory setStartCap(ShipCap.CapType cap) {
+            startCap = cap;
+            return this;
+        }
+
+        public ShipFactory setEndCap(ShipCap.CapType cap) {
+            endCap = cap;
+            return this;
         }
     }
 }

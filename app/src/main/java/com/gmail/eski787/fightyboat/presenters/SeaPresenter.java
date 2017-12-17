@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -26,7 +26,7 @@ public abstract class SeaPresenter extends GridPresenter {
         if (mSea == null) {
             throw new RuntimeException("Cannot get ships without Sea attached.");
         }
-        List<ShipPresenter> ships = new ArrayList<>(mSea.getShips().size());
+        List<ShipPresenter> ships = new LinkedList<>();
         for (Ship ship : mSea.getShips()) {
             ships.add(new ShipPresenter(ship));
         }

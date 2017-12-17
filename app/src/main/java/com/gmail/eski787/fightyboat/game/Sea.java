@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 
 import com.gmail.eski787.fightyboat.presenters.AppColors;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -41,7 +41,7 @@ public class Sea implements Parcelable {
             }
         }
 
-        mShips = new ArrayList<>();
+        mShips = new LinkedList<>();
     }
 
     private Sea(Parcel in) {
