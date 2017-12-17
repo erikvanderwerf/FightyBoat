@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.gmail.eski787.fightyboat.presenters.AppColors;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +37,7 @@ public class Sea implements Parcelable {
         mOcean = new SeaStatus[columns][rows];
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
-                mOcean[x][y] = SeaStatus.NONE;
+                mOcean[x][y] = SeaStatus.PEG_NONE;
             }
         }
 
@@ -106,10 +108,18 @@ public class Sea implements Parcelable {
     }
 
     public enum SeaStatus {
-        NONE,
-        MISS,
-        HIT
+        PEG_NONE(AppColors.PEG_NONE),
+        PEG_MISS(AppColors.PEG_MISS),
+        PEG_HIT(AppColors.PEG_HIT);
+
+        private final AppColors color;
+
+        SeaStatus(AppColors color) {
+            this.color = color;
+        }
+
+        public AppColors getColor() {
+            return color;
+        }
     }
-
-
 }

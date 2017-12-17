@@ -2,9 +2,12 @@ package com.gmail.eski787.fightyboat.views;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.Locale;
 
 /**
  * Special implementation of View to handle grids.
@@ -12,7 +15,6 @@ import android.view.View;
 
 public abstract class GridView extends View {
     private static final String TAG = GridView.class.getSimpleName();
-    private static final double TOUCH_SLOP = 20;
     protected CustomEvent mTouchEvent = null;
 
     /**
@@ -69,36 +71,12 @@ public abstract class GridView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         mTouchEvent = new CustomEvent(event);
         return super.onTouchEvent(event);
-
-//        boolean handled = false;
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                handled = true;
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                Point point = new Point((int) event.getX(), (int) event.getY());
-//                double distance = distance(mTouchEvent, point);
-//                Log.d(TAG, "Touch Distance: " + distance);
-//                if (distance < TOUCH_SLOP) {
-//                    handled = onClick(event);
-//                }
-//        }
-//        if (handled) {
-//            invalidate();
-//        }
-//        return handled;
     }
 
-//    private double distance(Point a, Point b) {
-//        return Math.sqrt(
-//                Math.pow(a.x - b.x, 2) +
-//                        Math.pow(a.y - b.y, 2));
-//    }
-
-    protected final Point getCoordinate(int x, int y) {
-        final int tx = x / getTileWidth();
-        final int ty = y / getTileHeight();
-        return new Point(tx, ty);
+    protected final PointF getCoordinate(float x, float y) {
+        final float tx = x / getTileWidth();
+        final float ty = y / getTileHeight();
+        return new PointF(tx, ty);
     }
 
     protected final int getTileWidth() {
@@ -115,6 +93,11 @@ public abstract class GridView extends View {
         CustomEvent(MotionEvent event) {
             x = (int) event.getX();
             y = (int) event.getY();
+        }
+
+        @Override
+        public String toString() {
+            return String.format(Locale.US, "%s: %d %d", CustomEvent.class.getSimpleName(), x, y);
         }
 
         public int getX() {

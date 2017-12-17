@@ -11,19 +11,18 @@ import android.widget.Button;
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.presenters.PlaceShipSeaPresenter;
-import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
-import com.gmail.eski787.fightyboat.views.SeaView;
+import com.gmail.eski787.fightyboat.views.PlaceShipSeaView;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link PlaceShipInteraction} interface to handle interaction events.
- * Use the {@link LockFragment#newInstance} factory method to
+ * Use the newInstance factory method to
  * create an instance of this fragment.
  */
 public class PlaceShipFragment extends PlayerFragment {
     private PlaceShipInteraction mListener;
-    private SeaView mSeaView;
+    private PlaceShipSeaView mSeaView;
 
     public PlaceShipFragment() {
         // Required empty public constructor
@@ -57,11 +56,14 @@ public class PlaceShipFragment extends PlayerFragment {
             }
         });
 
-        final SeaPresenter seaPresenter = new PlaceShipSeaPresenter();
+        final PlaceShipSeaPresenter seaPresenter = new PlaceShipSeaPresenter();
         seaPresenter.setSea(mPlayer.getSea());
 
         mSeaView = view.findViewById(R.id.place_ship_sea_view);
         mSeaView.setSeaPresenter(seaPresenter);
+
+        // Set click listener.
+        mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
 
         return view;
     }

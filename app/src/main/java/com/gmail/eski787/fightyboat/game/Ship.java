@@ -1,6 +1,7 @@
 package com.gmail.eski787.fightyboat.game;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -49,6 +50,14 @@ public class Ship implements Parcelable {
         this.length = length;
     }
 
+    public Ship(Ship ship) {
+        origin = new Point(ship.origin);
+        orientation = ship.orientation;
+        length = ship.length;
+        startCap = ship.startCap;
+        endCap = ship.endCap;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -95,38 +104,28 @@ public class Ship implements Parcelable {
         return length;
     }
 
-    public boolean contains(Point point) {
+    public boolean contains(PointF point) {
+        int x = (int) point.x;
+        int y = (int) point.y;
         switch (orientation) {
             case VERTICAL:
-                return point.x == origin.x && point.y >= origin.y && point.y < origin.y + length;
+                return x == origin.x && y >= origin.y && y < origin.y + length;
             case HORIZONTAL:
-                return point.y == origin.y && point.x >= origin.x && point.x < origin.x + length;
+                return y == origin.y && x >= origin.x && x < origin.x + length;
         }
         throw new RuntimeException("Ignored orientation switch. Why? Case: " + orientation.toString());
     }
 
     public enum Orientation {
-        HORIZONTAL,
-        VERTICAL;
+        HORIZONTAL(ShipCap.CapDirection.RIGHT, ShipCap.CapDirection.LEFT),
+        VERTICAL(ShipCap.CapDirection.DOWN, ShipCap.CapDirection.UP);
 
-        public ShipCap.CapDirection shipStartCap() {
-            switch (this) {
-                case HORIZONTAL:
-                    return ShipCap.CapDirection.RIGHT;
-                case VERTICAL:
-                    return ShipCap.CapDirection.DOWN;
-            }
-            throw new RuntimeException("Invalid Ship Orientation: " + this.toString());
-        }
+        public final ShipCap.CapDirection start;
+        public final ShipCap.CapDirection end;
 
-        public ShipCap.CapDirection shipEndCap() {
-            switch (this) {
-                case HORIZONTAL:
-                    return ShipCap.CapDirection.LEFT;
-                case VERTICAL:
-                    return ShipCap.CapDirection.UP;
-            }
-            throw new RuntimeException("Invalid Ship Orientation " + this.toString());
+        Orientation(ShipCap.CapDirection start, ShipCap.CapDirection end) {
+            this.start = start;
+            this.end = end;
         }
 
         public Orientation toggle() {

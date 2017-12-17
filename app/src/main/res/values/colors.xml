@@ -9,4 +9,5 @@
     <color name="tileHit">#FF0000</color>
     <color name="tileMiss">#FFFFFF</color>
     <color name="shipHull">#778899</color>
+    <color name="ghostShip">#958F79</color>
 </resources>

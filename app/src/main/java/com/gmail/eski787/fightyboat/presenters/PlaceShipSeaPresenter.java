@@ -1,21 +1,26 @@
 package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.gmail.eski787.fightyboat.game.Ship;
 
 /**
- * Created by Erik on 12/6/2017.
+ * This Presenter contains all of the interactions that the user will need to perform to place ships
+ * on their Sea.
  */
 
 public class PlaceShipSeaPresenter extends SeaPresenter {
     private static final String TAG = PlaceShipSeaPresenter.class.getSimpleName();
+    /**
+     * The ship that is currently selected by the user to drag around.
+     */
+    private Ship ghostShip;
 
     @Override
-    public boolean onClick(@NonNull Point coordinate) {
-        Log.d(TAG, "Click Event: " + coordinate);
+    public boolean onClick(@NonNull PointF coordinate) {
+//        Log.d(TAG, "Click Event: " + coordinate);
         Ship ship = getShipAtCoordinate(coordinate);
         if (ship != null) {
             onShipClick(ship);
@@ -25,12 +30,14 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     }
 
     @Override
-    public boolean onLongClick(@NonNull Point coordinate) {
-        // TODO: Long Selection of ship highlights, brings up option menu.
-        // TODO: Option menu allows for rotation and deletion of ship.
+    public boolean onLongClick(@NonNull PointF coordinate) {
+        assert mSea != null;
+
         Ship ship = getShipAtCoordinate(coordinate);
         if (ship != null) {
-            Log.d(TAG, "Long click ship");
+            ghostShip = ship;
+            mSea.getShips().remove(ghostShip);
+            return true;
         }
         return false;
     }
@@ -38,9 +45,11 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     private void onShipClick(@NonNull Ship ship) {
         assert mSea != null;
 
+        // Switch ship orientation
         Ship.Orientation toggle = ship.getOrientation().toggle();
         ship.setOrientation(toggle);
 
+        // Move ship to fit Sea bounds.
         Point dimensions = mSea.getSize();
         Point origin = ship.getOrigin();
         switch (toggle) {
@@ -51,5 +60,28 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
                 origin.y = Math.min(dimensions.y - ship.getLength(), origin.y);
                 break;
         }
+    }
+
+    public boolean hasGhostShip() {
+        return ghostShip != null;
+    }
+
+    public ShipPresenter getGhostShip() {
+        return new ShipPresenter(ghostShip) {
+            @Override
+            public AppColors getColor() {
+                return AppColors.GHOST_SHIP;
+            }
+        };
+    }
+
+    public boolean onDropShip(PointF coordinate) {
+        assert mSea != null;
+
+        if (coordinate != null) {
+            ghostShip.getOrigin().set((int) coordinate.x, (int) coordinate.y);
+        }
+        mSea.getShips().add(ghostShip);
+        return true;
     }
 }

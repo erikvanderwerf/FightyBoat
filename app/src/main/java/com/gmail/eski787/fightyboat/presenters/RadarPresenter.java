@@ -1,19 +1,19 @@
 package com.gmail.eski787.fightyboat.presenters;
 
-import android.graphics.Point;
+import android.graphics.PointF;
 
 /**
  * Created by Erik on 1/15/2017.
  */
 
-public class RadarPresenter implements GridPresenter {
+public class RadarPresenter extends GridPresenter {
     @Override
-    public boolean onClick(Point coordinate) {
+    public boolean onClick(PointF coordinate) {
         return false;
     }
 
     @Override
-    public boolean onLongClick(Point coordinate) {
+    public boolean onLongClick(PointF coordinate) {
         return false;
     }
 }

@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
-import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
@@ -14,6 +14,7 @@ import android.view.View;
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
+import com.gmail.eski787.fightyboat.presenters.AppColors;
 import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
 import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
@@ -24,15 +25,18 @@ import java.util.EnumMap;
  * Created by Erik on 12/23/2016.
  */
 
-public class SeaView extends GridView.SquareView {
+public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
     public static final float SHIP_RADIUS = 0.47f;
     static final float PEG_RADIUS = 0.3f;
     private static final String TAG = SeaView.class.getSimpleName();
-    // TODO move mPaintMap to SeaPresenter.
-    private final EnumMap<Sea.SeaStatus, Paint> mPaintMap = new EnumMap<>(Sea.SeaStatus.class);
+    private final EnumMap<AppColors, Integer> mPaintMap = new EnumMap<>(AppColors.class);
     @Nullable
-    protected SeaPresenter mSeaPresenter;
+    protected T mSeaPresenter;
     private ClickListener mClickListener;
+    /**
+     * Preallocate instance to be modified during drawing.
+     */
+    private Paint paint = new Paint();
 
 
     public SeaView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -56,9 +60,9 @@ public class SeaView extends GridView.SquareView {
      * @param ship   The ship to draw.
      * @param canvas The canvas to draw on.
      */
-    private void drawShip(SeaPresenter.ShipPresenter ship, Canvas canvas) {
+    protected void drawShip(SeaPresenter.ShipPresenter ship, Canvas canvas) {
         final Paint paint = new Paint();
-        paint.setColor(ResourcesCompat.getColor(getResources(), R.color.steelGray, null));
+        paint.setColor(mPaintMap.get(ship.getColor()));
 
         // Setup math
         final int height = getTileHeight();
@@ -94,14 +98,14 @@ public class SeaView extends GridView.SquareView {
         }
 
         // Start
-        ShipCap.getCap(ship.getStartCap(), orientation.shipStartCap())
+        ShipCap.getCap(ship.getStartCap(), orientation.start)
                 .drawCap(canvas, paint, startX, startY, startX + width, startY + height);
 
         // Middle
         canvas.drawRect(minX, minY, maxX, maxY, paint);
 
         // End
-        ShipCap.getCap(ship.getEndCap(), orientation.shipEndCap())
+        ShipCap.getCap(ship.getEndCap(), orientation.end)
                 .drawCap(canvas, paint, endX - width, endY - height, endX, endY);
     }
 
@@ -114,15 +118,12 @@ public class SeaView extends GridView.SquareView {
     }
 
     protected void initializePaintMap() {
-        Paint none = new Paint(), hit = new Paint(), miss = new Paint();
-
-        none.setColor(ResourcesCompat.getColor(getResources(), R.color.tileNone, null));
-        hit.setColor(ResourcesCompat.getColor(getResources(), R.color.tileHit, null));
-        miss.setColor(ResourcesCompat.getColor(getResources(), R.color.tileMiss, null));
-
-        mPaintMap.put(Sea.SeaStatus.NONE, none);
-        mPaintMap.put(Sea.SeaStatus.HIT, hit);
-        mPaintMap.put(Sea.SeaStatus.MISS, miss);
+        Context cont = getContext();
+        mPaintMap.put(AppColors.GHOST_SHIP, ContextCompat.getColor(cont, R.color.ghostShip));
+        mPaintMap.put(AppColors.STEEL_GRAY, ContextCompat.getColor(cont, R.color.steelGray));
+        mPaintMap.put(AppColors.PEG_NONE, ContextCompat.getColor(cont, R.color.tileNone));
+        mPaintMap.put(AppColors.PEG_HIT, ContextCompat.getColor(cont, R.color.tileHit));
+        mPaintMap.put(AppColors.PEG_MISS, ContextCompat.getColor(cont, R.color.tileMiss));
     }
 
     /**
@@ -151,7 +152,7 @@ public class SeaView extends GridView.SquareView {
         for (int x = 0; x < oceanSize.x; x++) {
             for (int y = 0; y < oceanSize.y; y++) {
                 final Sea.SeaStatus seaStatus = mSeaPresenter.getStatus(x, y);
-                if (seaStatus == Sea.SeaStatus.NONE) {
+                if (seaStatus == Sea.SeaStatus.PEG_NONE) {
                     continue;
                 }
 
@@ -161,37 +162,37 @@ public class SeaView extends GridView.SquareView {
                 final int midY = startY + (height / 2);
                 final int minDimension = Math.min(width, height);
                 final float radius = minDimension * PEG_RADIUS;
-                final Paint paint_peg = mPaintMap.get(seaStatus);
-                canvas.drawCircle(midX, midY, radius, paint_peg);
+                paint.setColor(mPaintMap.get(seaStatus.getColor()));
+                canvas.drawCircle(midX, midY, radius, paint);
             }
         }
     }
 
-    public void setSeaPresenter(@Nullable SeaPresenter seaPresenter) {
+    public void setSeaPresenter(@Nullable T seaPresenter) {
         // Unset previous presenter, and set new one.
         if (mSeaPresenter != null) {
             mSeaPresenter.setGridView(null);
         }
         mSeaPresenter = seaPresenter;
-        mClickListener = null;
         if (mSeaPresenter != null) {
             mSeaPresenter.setGridView(this);
-            mClickListener = new ClickListener();
         }
-
-        // Change click listeners.
-        setOnClickListener(mClickListener);
-        setOnLongClickListener(mClickListener);
-        setOnDragListener(mClickListener);
 
         invalidate();
     }
 
-    private class ClickListener implements OnClickListener, OnLongClickListener, OnDragListener {
+    public void setClickListener(ClickListener clickListener) {
+        mClickListener = clickListener;
+
+        setOnClickListener(mClickListener);
+        setOnLongClickListener(mClickListener);
+        setOnDragListener(mClickListener);
+    }
+
+    public class ClickListener implements OnClickListener, OnLongClickListener, OnDragListener {
         @Override
         public void onClick(View v) {
             assert mSeaPresenter != null;
-            Log.d(TAG, "OnClick");
             final boolean handled = mSeaPresenter.onClick(
                     getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
             if (handled) {
@@ -202,19 +203,13 @@ public class SeaView extends GridView.SquareView {
         @Override
         public boolean onLongClick(View v) {
             assert mSeaPresenter != null;
-            Log.d(TAG, "OnLongClick");
             final boolean handled = mSeaPresenter.onLongClick(
                     getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
-//            if (handled) {
-            Log.d(TAG, "Handled LongClick");
-//            }
-            return false;
+            return handled;
         }
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
-            assert mSeaPresenter != null;
-            Log.d(TAG, "OnDrag");
             return false;
         }
     }
