@@ -8,8 +8,9 @@ import android.support.annotation.NonNull;
 import com.gmail.eski787.fightyboat.presenters.AppColors;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Holds information for a Player's ships and hits taken
@@ -31,9 +32,9 @@ public class Sea implements Parcelable {
     @NonNull
     private SeaStatus[][] mOcean;
     @NonNull
-    private List<Ship> mShips;
+    private Set<Ship> mShips;
 
-    public Sea(int columns, int rows) {
+    public Sea(int columns, int rows, int numShips) {
         mOcean = new SeaStatus[columns][rows];
         for (int x = 0; x < columns; x++) {
             for (int y = 0; y < rows; y++) {
@@ -41,13 +42,13 @@ public class Sea implements Parcelable {
             }
         }
 
-        mShips = new LinkedList<>();
+        mShips = new HashSet<>(numShips);
     }
 
     private Sea(Parcel in) {
         int len = in.readInt();
 
-        if (len < 0) {
+        if (len > 0) {
             mOcean = new SeaStatus[len][];
             for (int i = 0; i < len; i++) {
                 Object[] objects = in.readArray(SeaStatus.class.getClassLoader());
@@ -57,9 +58,10 @@ public class Sea implements Parcelable {
             throw new RuntimeException("Bad Ocean Length: " + len);
         }
 
-        Ship[] ships = (Ship[]) in.readArray(Ship.class.getClassLoader());
-//        Ship[] ships = Arrays.copyOf(objects, objects.length, Ship[].class);
-        mShips = Arrays.asList(ships);
+        Object[] shipObjects = in.readArray(Ship.class.getClassLoader());
+        Ship[] shipArray = Arrays.copyOf(shipObjects, shipObjects.length, Ship[].class);
+        mShips = new HashSet<>(shipArray.length);
+        Collections.addAll(mShips, shipArray);
     }
 
     @Override
@@ -99,7 +101,7 @@ public class Sea implements Parcelable {
         return getStatus(tile.x, tile.y);
     }
 
-    public List<Ship> getShips() {
+    public Set<Ship> getShips() {
         return mShips;
     }
 

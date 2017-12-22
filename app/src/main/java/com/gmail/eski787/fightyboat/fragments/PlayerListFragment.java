@@ -7,7 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -67,6 +71,26 @@ public class PlayerListFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.player_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_play_game:
+                Log.d(TAG, "Play Game");
+                mListener.onStartGame();
+                break;
+            default:
+                Log.d(TAG, "Received Unknown Option.");
+                return false;
+        }
+        return true;
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -75,7 +99,7 @@ public class PlayerListFragment extends Fragment {
 
     /**
      * This interface must be implemented by activities that contain this fragment. This interface
-     * allows for communication from the Fragment back to the containing activity.
+     * allows for communication from the fragment back to the containing activity.
      */
     public interface PlayerListInteraction {
         /**
@@ -92,6 +116,11 @@ public class PlayerListFragment extends Fragment {
          * @param itemView The list element View that was selected.
          */
         void onPlayerSelect(Player player, View itemView);
+
+        /**
+         * Called when the user commands the game to start.
+         */
+        void onStartGame();
     }
 
     private static class PlayerViewHolder extends RecyclerView.ViewHolder {

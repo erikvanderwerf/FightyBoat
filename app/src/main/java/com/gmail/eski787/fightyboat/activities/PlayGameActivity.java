@@ -1,18 +1,18 @@
 package com.gmail.eski787.fightyboat.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.google.common.collect.Iterables;
 
-public class PlayGameActivity extends AppCompatActivity {
+import java.util.Iterator;
 
+public class PlayGameActivity extends LockableActivity {
     private Game mGame;
-    private Iterable<Player> mPlayers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,25 @@ public class PlayGameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mGame = intent.getParcelableExtra(IntentConstant.GAME);
 
-        mPlayers = Iterables.cycle(mGame.getPlayers());
+        Iterator<Player> players = Iterables.cycle(mGame.getPlayers()).iterator();
+        setPlayers(players);
+
+        advanceAndLock();
+    }
+
+    @Override
+    protected int getFragmentId() {
+        return R.id.fragment_play_game;
+    }
+
+    @Override
+    protected void onIteratorComplete() {
+        throw new RuntimeException("Cycle should never complete. Was it set?");
+    }
+
+    @Override
+    protected void onSuccessfulUnlock(Player player) {
+        Toast.makeText(getApplicationContext(), "Unlocked " + player.getName(), Toast.LENGTH_SHORT).show();
+        advanceAndLock();
     }
 }

@@ -50,7 +50,6 @@ public class PlayerDetailFragment extends PlayerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-//        View view = inflater.inflate(R.layout.fragment_player_detail, container, false);
         final int layoutId = R.layout.fragment_player_detail;
         FragmentPlayerDetailBinding binding = DataBindingUtil.inflate(inflater, layoutId, container, false);
         binding.setUser(new PlayerModel(mPlayer));

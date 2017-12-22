@@ -37,12 +37,13 @@ public class Player implements Parcelable {
     private Player(Parcel in) {
         mName = in.readString();
         mSea = in.readParcelable(Sea.class.getClassLoader());
+        String className = in.readString();
         try {
             // noinspection unchecked
-            mLockClass = (Class<? extends LockFragment>) Class.forName(in.readString());
+            mLockClass = (Class<? extends LockFragment>) Class.forName(className);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            Log.e(TAG, "This should not be possible.");
+            Log.e(TAG, "Unable to find class " + className);
         }
     }
 
