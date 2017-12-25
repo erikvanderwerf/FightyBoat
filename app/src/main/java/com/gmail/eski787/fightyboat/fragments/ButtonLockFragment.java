@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gmail.eski787.fightyboat.R;
-import com.gmail.eski787.fightyboat.databinding.FragmentUnlockButtonBinding;
+import com.gmail.eski787.fightyboat.databinding.FragmentLockButtonBinding;
 import com.gmail.eski787.fightyboat.models.PlayerModel;
 
 /**
@@ -20,11 +20,11 @@ public class ButtonLockFragment extends LockFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentUnlockButtonBinding binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_unlock_button, container, false);
+        FragmentLockButtonBinding binding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_lock_button, container, false);
 
         binding.setUser(new PlayerModel(mPlayer));
-        binding.buttonUnlock.setOnClickListener(new View.OnClickListener() {
+        binding.unlockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onSuccessfulUnlock();

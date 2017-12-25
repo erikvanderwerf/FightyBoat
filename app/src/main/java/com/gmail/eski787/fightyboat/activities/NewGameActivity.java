@@ -49,6 +49,12 @@ public class NewGameActivity extends AppCompatActivity
         return mPlayers;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mFragment = mFragmentStack.pop();
+    }
+
     public void onButtonClick(View view) {
         boolean handled = false;
         if (mFragment != null) {
@@ -58,12 +64,6 @@ public class NewGameActivity extends AppCompatActivity
             Log.d(TAG, String.format("Button click was not handled. View: %d\tFragment: %s",
                     view.getId(), mFragment));
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mFragment = mFragmentStack.pop();
     }
 
     @Override
@@ -121,7 +121,7 @@ public class NewGameActivity extends AppCompatActivity
         mFragment.setSharedElementReturnTransition(new AutoTransition());
 
         // Get transition views.
-        View avatar = itemView.findViewById(R.id.player_avatar);
+        View avatar = itemView.findViewById(R.id.player_detail_avatar);
         ViewCompat.setTransitionName(avatar, getString(R.string.transition_avatar));
 
         View name = itemView.findViewById(R.id.player_name);

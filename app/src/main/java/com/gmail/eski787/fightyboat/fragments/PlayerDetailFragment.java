@@ -55,14 +55,14 @@ public class PlayerDetailFragment extends PlayerFragment {
         binding.setUser(new PlayerModel(mPlayer));
 
         // Add onClick callbacks
-        binding.changeLock.setOnClickListener(new View.OnClickListener() {
+        binding.playerDetailChangeLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onChangeLock(mPlayer);
             }
         });
 
-        binding.moveShips.setOnClickListener(new View.OnClickListener() {
+        binding.playerDetailMoveShips.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onMoveShips(mPlayer);

@@ -1,28 +1,60 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
     tools:context="com.gmail.eski787.fightyboat.fragments.PlayGameFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        tools:context="com.gmail.eski787.fightyboat.fragments.PlayGameFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.gmail.eski787.fightyboat.views.RadarView
+                android:id="@+id/play_radar_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@color/radarBlack" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="0"
+                android:src="@mipmap/ic_launcher" />
+
+            <com.gmail.eski787.fightyboat.views.SeaView
+                android:id="@+id/play_sea_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@color/seaBlue" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <com.gmail.eski787.fightyboat.views.RadarView
-            android:id="@+id/play_radar_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:background="@color/radarBlack" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-        <com.gmail.eski787.fightyboat.views.SeaView
-            android:id="@+id/play_sea_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:background="@color/seaBlue" />
-
+        <Button
+            android:id="@+id/play_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Fire" />
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

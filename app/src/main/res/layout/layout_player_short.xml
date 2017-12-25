@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/player_avatar"
+            android:id="@+id/player_detail_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -31,7 +31,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@{User.name}"
-            app:layout_constraintStart_toEndOf="@+id/player_avatar"
+            app:layout_constraintStart_toEndOf="@+id/player_detail_avatar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Player Name" />
 
