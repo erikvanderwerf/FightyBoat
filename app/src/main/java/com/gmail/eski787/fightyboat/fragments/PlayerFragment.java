@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.gmail.eski787.fightyboat.game.Player;
 
@@ -10,7 +9,7 @@ import com.gmail.eski787.fightyboat.game.Player;
  * Use .setArguments(Bundle) to attach a bundle with the relevant Player to ARG_PLAYER.
  */
 
-public abstract class PlayerFragment extends Fragment {
+public abstract class PlayerFragment extends ClickableFragment {
     public static final String ARG_PLAYER = "ARG_PLAYER";
     protected Player mPlayer;
 

@@ -103,6 +103,11 @@ public class PlaceShipFragment extends PlayerFragment {
         mListener = null;
     }
 
+    @Override
+    public boolean onButtonClick(View view) {
+        return false;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

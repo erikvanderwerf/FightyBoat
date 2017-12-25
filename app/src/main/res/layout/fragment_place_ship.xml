@@ -1,22 +1,29 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.gmail.eski787.fightyboat.fragments.PlaceShipFragment">
 
     <com.gmail.eski787.fightyboat.views.PlaceShipSeaView
         android:id="@+id/place_ship_sea_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/seaBlue"/>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/seaBlue"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/steelGray"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <include
             android:id="@+id/include"
@@ -31,4 +38,5 @@
             android:layout_height="wrap_content"
             android:text="@string/finish" />
     </LinearLayout>
-</LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

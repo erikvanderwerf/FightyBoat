@@ -3,16 +3,14 @@ package com.gmail.eski787.fightyboat.activities;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.AutoTransition;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
+import com.gmail.eski787.fightyboat.fragments.ClickableFragment;
 import com.gmail.eski787.fightyboat.fragments.PlaceShipFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerDetailFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerListFragment;
@@ -26,6 +24,7 @@ import com.gmail.eski787.fightyboat.presenters.ShipCap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 
 /**
@@ -40,14 +39,31 @@ public class NewGameActivity extends AppCompatActivity
         implements PlayerListFragment.PlayerListInteraction, PlayerDetailFragment.PlayerDetailInteraction, PlaceShipFragment.PlaceShipInteraction {
     private static final String TAG = NewGameActivity.class.getSimpleName();
     private static final String ARG_PLAYER_LIST = "ARG_PLAYER_LIST";
-    private Fragment mFragment;
+    private Stack<ClickableFragment> mFragmentStack = new Stack<>();
+    private ClickableFragment mFragment;
     /* ArrayList (not List) in order to serialize in Bundle */
     private ArrayList<Player> mPlayers;
-
 
     @Override
     public List<Player> getPlayerList() {
         return mPlayers;
+    }
+
+    public void onButtonClick(View view) {
+        boolean handled = false;
+        if (mFragment != null) {
+            handled = mFragment.onButtonClick(view);
+        }
+        if (!handled) {
+            Log.d(TAG, String.format("Button click was not handled. View: %d\tFragment: %s",
+                    view.getId(), mFragment));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mFragment = mFragmentStack.pop();
     }
 
     @Override
@@ -82,19 +98,6 @@ public class NewGameActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        mFragment.onCreateOptionsMenu(menu, inflater);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return mFragment.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(ARG_PLAYER_LIST, mPlayers);
@@ -110,6 +113,7 @@ public class NewGameActivity extends AppCompatActivity
     @Override
     public void onPlayerSelect(Player player, View itemView) {
         // Setup detail fragment with player.
+        mFragmentStack.push(mFragment);
         mFragment = PlayerDetailFragment.newInstance(player);
 
         // Set transition behavior.
@@ -136,6 +140,7 @@ public class NewGameActivity extends AppCompatActivity
     @Override
     public void onChangeLock(Player mPlayer) {
         // TODO Change Lock display
+        mFragmentStack.push(mFragment);
     }
 
     /**
@@ -146,6 +151,7 @@ public class NewGameActivity extends AppCompatActivity
     @Override
     public void onMoveShips(Player player) {
         // Setup PlaceShip Fragment
+        mFragmentStack.push(mFragment);
         mFragment = PlaceShipFragment.newInstance(player);
 
         getSupportFragmentManager()
@@ -157,7 +163,7 @@ public class NewGameActivity extends AppCompatActivity
 
     @Override
     public void onShipPlaceComplete(Player player) {
-        getSupportFragmentManager().popBackStack();
+        onBackPressed();
     }
 
     public void onStartGame() {

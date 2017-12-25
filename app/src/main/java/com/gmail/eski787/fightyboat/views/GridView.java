@@ -168,7 +168,8 @@ public abstract class GridView extends View {
             }
             if (heightMode != MeasureSpec.EXACTLY &&
                     widthMode != MeasureSpec.EXACTLY) {
-                throw new RuntimeException("GridView is underconstrained. X or Y must be set exactly.");
+                width = getSuggestedMinimumWidth();
+                height = getSuggestedMinimumHeight();
             }
 
             Point size = getGridSize();

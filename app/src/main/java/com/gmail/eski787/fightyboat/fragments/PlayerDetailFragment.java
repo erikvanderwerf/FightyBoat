@@ -72,6 +72,11 @@ public class PlayerDetailFragment extends PlayerFragment {
         return binding.getRoot();
     }
 
+    @Override
+    public boolean onButtonClick(View view) {
+        return false;
+    }
+
     public interface PlayerDetailInteraction {
         void onChangeLock(Player mPlayer);
         void onMoveShips(Player mPlayer);

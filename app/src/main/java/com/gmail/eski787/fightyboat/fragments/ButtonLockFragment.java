@@ -32,4 +32,9 @@ public class ButtonLockFragment extends LockFragment {
         });
         return binding.getRoot();
     }
+
+    @Override
+    public boolean onButtonClick(View view) {
+        return false;
+    }
 }

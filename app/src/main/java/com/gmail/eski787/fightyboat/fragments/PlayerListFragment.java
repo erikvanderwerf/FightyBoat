@@ -4,14 +4,9 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,7 +23,7 @@ import java.util.List;
  * Created by Erik on 11/24/2017.
  */
 
-public class PlayerListFragment extends Fragment {
+public class PlayerListFragment extends ClickableFragment {
     private static String TAG = PlayerListFragment.class.getSimpleName();
 
     private List<Player> players;
@@ -46,6 +41,18 @@ public class PlayerListFragment extends Fragment {
             throw new RuntimeException(context.toString() + " must implement PlayerListInteraction");
         }
         players = mListener.getPlayerList();
+    }
+
+    public boolean onButtonClick(View view) {
+        switch (view.getId()) {
+            case R.id.button_play:
+                mListener.onStartGame();
+                return true;
+            case R.id.button_back:
+                // TODO: Go back to game settings.
+                return false;
+        }
+        return false;
     }
 
     @Nullable
@@ -68,26 +75,6 @@ public class PlayerListFragment extends Fragment {
         mAdapter = new PlayerListAdapter();
         mRecyclerView.setAdapter(mAdapter);
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.player_list, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_play_game:
-                Log.d(TAG, "Play Game");
-                mListener.onStartGame();
-                break;
-            default:
-                Log.d(TAG, "Received Unknown Option.");
-                return false;
-        }
-        return true;
     }
 
     @Override
@@ -127,11 +114,11 @@ public class PlayerListFragment extends Fragment {
         private static final String TAG = PlayerViewHolder.class.getSimpleName();
         LayoutPlayerShortBinding binding;
 
-        public PlayerViewHolder(View itemView) {
+        PlayerViewHolder(View itemView) {
             super(itemView);
         }
 
-        public PlayerViewHolder(LayoutPlayerShortBinding playerListBinding) {
+        PlayerViewHolder(LayoutPlayerShortBinding playerListBinding) {
             this(playerListBinding.getRoot());
             binding = playerListBinding;
         }
