@@ -175,13 +175,13 @@ public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
 
     public void setSeaPresenter(@Nullable T seaPresenter) {
         // Unset previous presenter, and set new one.
-        if (mSeaPresenter != null) {
-            mSeaPresenter.setGridView(null);
-        }
+//        if (mSeaPresenter != null) {
+//            mSeaPresenter.setGridView(null);
+//        }
         mSeaPresenter = seaPresenter;
-        if (mSeaPresenter != null) {
-            mSeaPresenter.setGridView(this);
-        }
+//        if (mSeaPresenter != null) {
+//            mSeaPresenter.setGridView(this);
+//        }
 
         invalidate();
     }

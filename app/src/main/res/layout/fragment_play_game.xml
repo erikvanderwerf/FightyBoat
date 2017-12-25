@@ -1,0 +1,28 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="com.gmail.eski787.fightyboat.fragments.PlayGameFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.gmail.eski787.fightyboat.views.RadarView
+            android:id="@+id/play_radar_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@color/radarBlack" />
+
+        <com.gmail.eski787.fightyboat.views.SeaView
+            android:id="@+id/play_sea_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@color/seaBlue" />
+
+    </LinearLayout>
+</ScrollView>

@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.gmail.eski787.fightyboat.R;
+import com.gmail.eski787.fightyboat.fragments.PlayGameFragment;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.google.common.collect.Iterables;
 
 import java.util.Iterator;
 
-public class PlayGameActivity extends LockableActivity {
+public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction {
     private Game mGame;
 
     @Override
@@ -42,6 +43,16 @@ public class PlayGameActivity extends LockableActivity {
     @Override
     protected void onSuccessfulUnlock(Player player) {
         Toast.makeText(getApplicationContext(), "Unlocked " + player.getName(), Toast.LENGTH_SHORT).show();
-        advanceAndLock();
+
+        PlayGameFragment gameFragment = PlayGameFragment.newInstance(player);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(getFragmentId(), gameFragment)
+                .commit();
+    }
+
+    @Override
+    public Player[] getPlayers() {
+        return mGame.getPlayers();
     }
 }

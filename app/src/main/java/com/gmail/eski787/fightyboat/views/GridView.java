@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -142,16 +143,40 @@ public abstract class GridView extends View {
          */
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            int height = getMeasuredHeight();
-            int width = getMeasuredWidth();
+            int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+            int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+            int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+
+            Log.d(TAG, String.format("onMeasure Height Mode: %d\tSize: %d Width Mode: %d\t Size: %d",
+                    heightMode, heightSize, widthMode, widthSize));
+
+            int height = Integer.MAX_VALUE;
+            int width = Integer.MAX_VALUE;
+
+            // There's a few different cases here.
+            if (heightMode == MeasureSpec.EXACTLY &&
+                    widthMode == MeasureSpec.EXACTLY) {
+                Log.e(TAG, "GridView is overconstrained. Only one of X or Y may be set " +
+                        "exactly. Defaulting to minimum of two.");
+            }
+            if (heightMode == MeasureSpec.EXACTLY) {
+                height = heightSize;
+            }
+            if (widthMode == MeasureSpec.EXACTLY) {
+                width = widthSize;
+            }
+            if (heightMode != MeasureSpec.EXACTLY &&
+                    widthMode != MeasureSpec.EXACTLY) {
+                throw new RuntimeException("GridView is underconstrained. X or Y must be set exactly.");
+            }
+
             Point size = getGridSize();
+            int dx = width / size.x;
+            int dy = height / size.y;
 
-            int dx = height / size.x;
-            int dy = width / size.y;
-
-            int min = Math.min(dx, dy);
-            setMeasuredDimension(min * size.x, min * size.y);
+            int edge_max = Math.min(dx, dy);
+            setMeasuredDimension(edge_max * size.x, edge_max * size.y);
         }
     }
 }

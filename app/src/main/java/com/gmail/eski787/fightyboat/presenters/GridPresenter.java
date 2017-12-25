@@ -2,16 +2,12 @@ package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.PointF;
 
-import com.gmail.eski787.fightyboat.views.GridView;
-
-import javax.annotation.Nullable;
-
 /**
  * Created by Erik on 1/15/2017.
  */
 public abstract class GridPresenter implements Presenter {
-    @Nullable
-    GridView mGridView;
+//    @Nullable
+//    private GridView mGridView;
 
     /**
      * Called when the user has clicked on a grid coordinate.
@@ -29,7 +25,7 @@ public abstract class GridPresenter implements Presenter {
      */
     public abstract boolean onLongClick(PointF coordinate);
 
-    public void setGridView(GridView gridView) {
-        mGridView = gridView;
-    }
+//    public void setGridView(GridView gridView) {
+//        mGridView = gridView;
+//    }
 }

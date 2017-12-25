@@ -46,6 +46,17 @@ public class PlaceShipFragment extends PlayerFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof PlaceShipInteraction) {
+            mListener = (PlaceShipInteraction) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement PlaceShipInteraction");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -84,17 +95,6 @@ public class PlaceShipFragment extends PlayerFragment {
         }
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof PlaceShipInteraction) {
-            mListener = (PlaceShipInteraction) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement PlaceShipInteraction");
-        }
     }
 
     @Override

@@ -10,4 +10,5 @@
     <color name="tileMiss">#FFFFFF</color>
     <color name="shipHull">#778899</color>
     <color name="ghostShip">#958F79</color>
+    <color name="radarBlack">#000077</color>
 </resources>
