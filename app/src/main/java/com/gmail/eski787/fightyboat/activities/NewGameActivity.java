@@ -5,12 +5,17 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListPopupWindow;
 import android.transition.AutoTransition;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.ClickableFragment;
+import com.gmail.eski787.fightyboat.fragments.LockFragment;
 import com.gmail.eski787.fightyboat.fragments.PlaceShipFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerDetailFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerListFragment;
@@ -137,10 +142,44 @@ public class NewGameActivity extends AppCompatActivity
                 .commit();
     }
 
+    /**
+     * Called when the user chooses to change their lock type.
+     *
+     * @param player The player whose lock to select.
+     */
     @Override
-    public void onChangeLock(Player mPlayer) {
+    public void onChangeLock(final Player player) {
         // TODO Change Lock display
         mFragmentStack.push(mFragment);
+
+        final String[] types = LockFragment.LockType.getNames();
+        final ListPopupWindow popupWindow = new ListPopupWindow(this);
+
+        popupWindow.setAnchorView(this.findViewById(R.id.player_detail_change_lock));
+        popupWindow.setAdapter(new ArrayAdapter<>(NewGameActivity.this,
+                R.layout.layout_select_lock, types));
+        popupWindow.setModal(true);
+        popupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the mapping to the LockType that was selected.
+                String name = types[position];
+                LockFragment.LockType lockType = LockFragment.LockType.valueOfName(name);
+                if (lockType == null) {
+                    Log.e(TAG, String.format("Cannot find Lock Type with name: %s. Defaulting to " +
+                            "Button.", name));
+                    lockType = LockFragment.LockType.BUTTON_LOCK;
+                }
+
+                // Change Player Lock to selected. Get user settings if required.
+                Class<? extends LockFragment> lockClass = lockType.classType;
+                Toast.makeText(NewGameActivity.this,
+                        "Selected " + lockClass.toString(), Toast.LENGTH_SHORT).show();
+                player.setLockClass(lockClass);
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.show();
     }
 
     /**

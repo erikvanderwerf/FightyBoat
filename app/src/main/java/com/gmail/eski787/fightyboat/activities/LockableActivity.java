@@ -1,10 +1,7 @@
 package com.gmail.eski787.fightyboat.activities;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import com.gmail.eski787.fightyboat.fragments.ButtonLockFragment;
 import com.gmail.eski787.fightyboat.fragments.LockFragment;
 import com.gmail.eski787.fightyboat.fragments.PlayerFragment;
 import com.gmail.eski787.fightyboat.game.Player;
@@ -52,23 +49,13 @@ public abstract class LockableActivity extends AppCompatActivity implements Lock
     protected abstract void onIteratorComplete();
 
     /**
-     * Display the player's chosen lock screen to the fragment id from getFragmentId.
+     * Display the player's chosen lock screen to the fragment from getFragmentId.
      *
      * @param player The player whose lock screen to display.
      */
     private void lock(Player player) {
         mLockedPlayer = player;
-        Class<? extends LockFragment> lockClass = mLockedPlayer.getLockClass();
-        try {
-            mFragment = lockClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            Log.e(TAG, "Unable to instantiate " + lockClass.getCanonicalName());
-            mFragment = new ButtonLockFragment();
-        }
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(PlayerFragment.ARG_PLAYER, mLockedPlayer);
-        mFragment.setArguments(bundle);
+        mFragment = mLockedPlayer.getLockFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()

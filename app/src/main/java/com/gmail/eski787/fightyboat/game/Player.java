@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.gmail.eski787.fightyboat.fragments.ButtonLockFragment;
 import com.gmail.eski787.fightyboat.fragments.LockFragment;
 
 /**
@@ -26,8 +25,8 @@ public class Player implements Parcelable {
     private static final String TAG = Player.class.getSimpleName();
     private String mName;
     private Sea mSea;
-    //    private Radar mRadar;
-    private Class<? extends LockFragment> mLockClass = ButtonLockFragment.class;
+    private Radar mRadar;
+    private LockSettings mLockSettings;
 
     public Player(String name, Sea sea) {
         this.mName = name;
@@ -38,17 +37,18 @@ public class Player implements Parcelable {
         mName = in.readString();
         mSea = in.readParcelable(Sea.class.getClassLoader());
         String className = in.readString();
+        ClassLoader loader = null;
         try {
-            // noinspection unchecked
-            mLockClass = (Class<? extends LockFragment>) Class.forName(className);
+            loader = Class.forName(className).getClassLoader();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             Log.e(TAG, "Unable to find class " + className);
         }
+        mLockSettings = in.readParcelable(loader);
     }
 
-    public Class<? extends LockFragment> getLockClass() {
-        return mLockClass;
+    public LockFragment getLockFragment() {
+        return mLockSettings.getLockFragment();
     }
 
     public String getName() {
@@ -68,6 +68,7 @@ public class Player implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
         dest.writeParcelable(mSea, flags);
-        dest.writeString(mLockClass.getCanonicalName());
+        dest.writeString(mLockSettings.getClass().getCanonicalName());
+        dest.writeParcelable(mLockSettings, flags);
     }
 }
