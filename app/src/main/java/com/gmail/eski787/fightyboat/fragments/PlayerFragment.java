@@ -13,6 +13,16 @@ public abstract class PlayerFragment extends ClickableFragment {
     public static final String ARG_PLAYER = "ARG_PLAYER";
     protected Player mPlayer;
 
+    public static <T extends PlayerFragment> T newInstance(Player player, Class<T> retClass)
+            throws IllegalAccessException, java.lang.InstantiationException {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARG_PLAYER, player);
+        // I feel dirty.
+        T instance = retClass.newInstance();
+        instance.setArguments(bundle);
+        return instance;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

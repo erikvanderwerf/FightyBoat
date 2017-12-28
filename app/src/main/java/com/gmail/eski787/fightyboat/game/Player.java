@@ -2,16 +2,17 @@ package com.gmail.eski787.fightyboat.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.gmail.eski787.fightyboat.fragments.LockFragment;
 
 /**
- * Created by Erik on 12/13/2016.
+ * Essentially a bean containing information for a player.
  */
 
 public class Player implements Parcelable {
-    public static final Creator<Player> CREATOR = new Creator<Player>() {
+    static final Creator<Player> CREATOR = new Creator<Player>() {
         @Override
         public Player createFromParcel(Parcel in) {
             return new Player(in);
@@ -23,38 +24,72 @@ public class Player implements Parcelable {
         }
     };
     private static final String TAG = Player.class.getSimpleName();
+
+    @NonNull
     private String mName;
+    @NonNull
     private Sea mSea;
-    private Radar mRadar;
+    //    @NonNull
+//    private Radar mRadar;
+    @NonNull
     private LockSettings mLockSettings;
 
-    public Player(String name, Sea sea) {
-        this.mName = name;
+    public Player(@NonNull String name, @NonNull Sea sea) {
+        mName = name;
         mSea = sea;
+//        mRadar = radar;
+        mLockSettings = new LockSettings.ButtonLockSettings();
     }
 
+    /**
+     * Expecting parcel in order:
+     * 1. Name
+     * 2. Sea
+     * 3. Radar
+     * 4. LockSettings class name
+     * 5. LockSettings
+     *
+     * @param in Parcel to unpack.
+     */
     private Player(Parcel in) {
         mName = in.readString();
         mSea = in.readParcelable(Sea.class.getClassLoader());
+//        mRadar = in.readParcelable(Radar.class.getClassLoader());
         String className = in.readString();
         ClassLoader loader = null;
         try {
             loader = Class.forName(className).getClassLoader();
+            mLockSettings = in.readParcelable(loader);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            Log.e(TAG, "Unable to find class " + className);
+            Log.e(TAG, String.format("Unable to find class (%s). Defaulting to Button.",
+                    className));
+            mLockSettings = new LockSettings.ButtonLockSettings();
         }
-        mLockSettings = in.readParcelable(loader);
+
     }
 
-    public LockFragment getLockFragment() {
-        return mLockSettings.getLockFragment();
+    /**
+     * @return A {@link LockFragment} of the appropriate type, connected with the current player.
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
+    public LockFragment getLockFragment() throws InstantiationException, IllegalAccessException {
+        Class<? extends LockFragment> lockFragmentClass = mLockSettings.getLockFragment();
+        return LockFragment.newInstance(this, lockFragmentClass);
+
     }
 
+    /**
+     * @return Player name
+     */
     public String getName() {
         return mName;
     }
 
+    /**
+     * @return Player Sea
+     */
     public Sea getSea() {
         return mSea;
     }
@@ -68,7 +103,16 @@ public class Player implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
         dest.writeParcelable(mSea, flags);
-        dest.writeString(mLockSettings.getClass().getCanonicalName());
+//        dest.writeParcelable(mRadar, flags);
+        dest.writeString(mLockSettings.getClass().getName());
         dest.writeParcelable(mLockSettings, flags);
+    }
+
+    public LockSettings getLockSettings() {
+        return mLockSettings;
+    }
+
+    public void setLockSettings(LockSettings lockSettings) {
+        mLockSettings = lockSettings;
     }
 }

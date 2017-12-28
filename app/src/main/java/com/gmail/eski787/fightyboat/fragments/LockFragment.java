@@ -11,7 +11,6 @@ import android.util.Log;
  * to handle interaction events.
  */
 public abstract class LockFragment extends PlayerFragment {
-    public static final String ARG_LOCK_SETTINGS = "ARG_LOCK_SETTINGS";
     private static final String TAG = LockFragment.class.getSimpleName();
     protected LockInteraction mListener;
 
@@ -35,45 +34,6 @@ public abstract class LockFragment extends PlayerFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * Created by Erik on 12/25/2017.
-     */
-
-    public enum LockType {
-        BUTTON_LOCK(ButtonLockFragment.class, "Button Lock");
-
-        public final Class<? extends LockFragment> classType;
-        public final String name;
-
-        LockType(Class<? extends LockFragment> lockFragmentClass, String name) {
-            classType = lockFragmentClass;
-            this.name = name;
-        }
-
-        /**
-         * Get an array of every lock's name.
-         *
-         * @return Array of every lock's name.
-         */
-        public static String[] getNames() {
-            LockType[] values = LockType.values();
-            String[] names = new String[values.length];
-            for (int i = 0; i < values.length; i++) {
-                names[i] = values[i].name;
-            }
-            return names;
-        }
-
-        public static LockType valueOfName(String name) {
-            for (LockType type : LockType.values()) {
-                if (type.name.equals(name)) {
-                    return type;
-                }
-            }
-            return null;
-        }
     }
 
     /**
