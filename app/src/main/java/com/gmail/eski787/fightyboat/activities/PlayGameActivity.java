@@ -8,27 +8,13 @@ import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlayGameFragment;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
-import com.google.common.collect.Iterables;
-
-import java.util.Iterator;
 
 public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction {
+    public static final String ARG_GAME = "ARG_GAME";
+    private static final String ARG_PLAYER_INDEX = "ARG_PLAYER_INDEX";
     private Game mGame;
+    private int mPlayerIndex;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_game);
-
-        // Get extras
-        Intent intent = getIntent();
-        mGame = intent.getParcelableExtra(IntentConstant.GAME);
-
-        Iterator<Player> players = Iterables.cycle(mGame.getPlayers()).iterator();
-        setPlayers(players);
-
-        advanceAndLock();
-    }
 
     @Override
     protected int getFragmentId() {
@@ -36,12 +22,37 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
     }
 
     @Override
-    protected void onIteratorComplete() {
-        throw new RuntimeException("Cycle should never complete. Was it set?");
+    public Player[] getPlayers() {
+        return mGame.getPlayers();
     }
 
     @Override
-    protected void onSuccessfulUnlock(Player player) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_play_game);
+
+        if (savedInstanceState == null) {
+            // Get extras
+            Intent intent = getIntent();
+            mGame = intent.getParcelableExtra(ARG_GAME);
+            mPlayerIndex = 0;
+        } else {
+            mGame = savedInstanceState.getParcelable(ARG_GAME);
+            mPlayerIndex = savedInstanceState.getInt(ARG_PLAYER_INDEX);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(ARG_GAME, mGame);
+        outState.putInt(ARG_PLAYER_INDEX, mPlayerIndex);
+    }
+
+    @Override
+    public void onSuccessfulUnlock() {
+        super.onSuccessfulUnlock();
+        Player player = mGame.getPlayers()[mPlayerIndex];
         Toast.makeText(getApplicationContext(), "Unlocked " + player.getName(), Toast.LENGTH_SHORT).show();
 
         PlayGameFragment gameFragment = PlayGameFragment.newInstance(player);
@@ -49,10 +60,5 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
         getSupportFragmentManager().beginTransaction()
                 .replace(getFragmentId(), gameFragment)
                 .commit();
-    }
-
-    @Override
-    public Player[] getPlayers() {
-        return mGame.getPlayers();
     }
 }

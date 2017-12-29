@@ -27,9 +27,6 @@ public class PlayerListFragment extends ClickableFragment {
     private static String TAG = PlayerListFragment.class.getSimpleName();
 
     private List<Player> players;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private PlayerListInteraction mListener;
 
     @Override
@@ -65,14 +62,14 @@ public class PlayerListFragment extends ClickableFragment {
         // Inflate the layout for this fragment.
         View view = inflater.inflate(R.layout.fragment_player_list, container, false);
 
-        mRecyclerView = view.findViewById(R.id.player_list);
+        RecyclerView mRecyclerView = view.findViewById(R.id.player_list);
         // Changes in content do not change the layout size.
         mRecyclerView.setHasFixedSize(true);
         // Use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(view.getContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         // Setup Adapter
-        mAdapter = new PlayerListAdapter();
+        RecyclerView.Adapter mAdapter = new PlayerListAdapter();
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
