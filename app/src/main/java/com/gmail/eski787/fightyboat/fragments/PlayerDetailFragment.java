@@ -22,21 +22,6 @@ public class PlayerDetailFragment extends PlayerFragment {
     private static String TAG = PlayerDetailFragment.class.getSimpleName();
     private PlayerDetailInteraction mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param player Player to use for this Fragment.
-     * @return A new instance of fragment PlaceShipFragment.
-     */
-    public static PlayerDetailFragment newInstance(Player player) {
-        PlayerDetailFragment fragment = new PlayerDetailFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_PLAYER, player);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -78,7 +63,7 @@ public class PlayerDetailFragment extends PlayerFragment {
         return false;
     }
 
-    public interface PlayerDetailInteraction {
+    public interface PlayerDetailInteraction extends PlayerFragmentInteraction {
         void onChangeLock(Player mPlayer);
         void onMoveShips(Player mPlayer);
     }

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.databinding.FragmentLockButtonBinding;
-import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.models.PlayerModel;
 
 /**
@@ -17,25 +16,6 @@ import com.gmail.eski787.fightyboat.models.PlayerModel;
  */
 
 public class ButtonLockFragment extends LockFragment {
-
-    /**
-     * This method is provided as a convinience in the case that a certain lock class is unable to
-     * be instantiated using {@link PlayerFragment#newInstance(Player, Class)}. In the event of
-     * a class instantiation failure this method should be used directly as this cannot fail.
-     *
-     * @param player The player to associate the lock with.
-     * @return An instance of a {@link ButtonLockFragment} associated with the player.
-     * @see PlayerFragment#newInstance(Player, Class)
-     */
-    public static ButtonLockFragment newInstance(Player player) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ARG_PLAYER, player);
-
-        ButtonLockFragment buttonLockFragment = new ButtonLockFragment();
-        buttonLockFragment.setArguments(bundle);
-        return buttonLockFragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

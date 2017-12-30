@@ -31,21 +31,6 @@ public class PlayGameFragment extends PlayerFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param player The Player to display
-     * @return A new instance of fragment PlayGameFragment.
-     */
-    public static PlayGameFragment newInstance(Player player) {
-        PlayGameFragment fragment = new PlayGameFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_PLAYER, player);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -54,14 +39,6 @@ public class PlayGameFragment extends PlayerFragment {
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement PlayGameInteraction");
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPlayer = getArguments().getParcelable(ARG_PLAYER);
         }
     }
 
@@ -102,7 +79,7 @@ public class PlayGameFragment extends PlayerFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface PlayGameInteraction {
+    public interface PlayGameInteraction extends PlayerFragmentInteraction {
         // TODO: Update argument type and name
         Player[] getPlayers();
     }

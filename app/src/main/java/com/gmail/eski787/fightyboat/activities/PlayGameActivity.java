@@ -55,10 +55,15 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
         Player player = mGame.getPlayers()[mPlayerIndex];
         Toast.makeText(getApplicationContext(), "Unlocked " + player.getName(), Toast.LENGTH_SHORT).show();
 
-        PlayGameFragment gameFragment = PlayGameFragment.newInstance(player);
+        PlayGameFragment gameFragment = new PlayGameFragment();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(getFragmentId(), gameFragment)
                 .commit();
+    }
+
+    @Override
+    public Player getPlayer() {
+        return null;
     }
 }

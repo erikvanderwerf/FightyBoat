@@ -2,7 +2,6 @@ package com.gmail.eski787.fightyboat.fragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +26,6 @@ public abstract class LockFragment extends PlayerFragment {
             throw new RuntimeException(context.toString()
                     + " must implement LockInteraction");
         }
-        Log.d(TAG, "onAttach: " + mListener.toString());
     }
 
     @Override
@@ -46,7 +44,7 @@ public abstract class LockFragment extends PlayerFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface LockInteraction {
+    public interface LockInteraction extends PlayerFragmentInteraction {
         /**
          * Called by the {@link LockFragment} when the user has unlocked the displayed lock.
          */

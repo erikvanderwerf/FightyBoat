@@ -5,8 +5,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.gmail.eski787.fightyboat.fragments.LockFragment;
-
 /**
  * Essentially a bean containing information for a player.
  */
@@ -66,17 +64,6 @@ public class Player implements Parcelable {
                     className));
             mLockSettings = new LockSettings.ButtonLockSettings();
         }
-
-    }
-
-    /**
-     * @return A {@link LockFragment} of the appropriate type, connected with the current player.
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    public LockFragment getLockFragment() throws InstantiationException, IllegalAccessException {
-        Class<? extends LockFragment> lockFragmentClass = mLockSettings.getLockFragment();
-        return LockFragment.newInstance(this, lockFragmentClass);
 
     }
 

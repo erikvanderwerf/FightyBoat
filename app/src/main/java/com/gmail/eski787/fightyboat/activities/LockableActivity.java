@@ -5,12 +5,8 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import com.gmail.eski787.fightyboat.fragments.ButtonLockFragment;
 import com.gmail.eski787.fightyboat.fragments.LockFragment;
-import com.gmail.eski787.fightyboat.fragments.PlayerFragment;
-import com.gmail.eski787.fightyboat.game.Player;
 
 /**
  * This Activity contains all the required code for displaying a user's lock screen and creating the
@@ -36,25 +32,9 @@ public abstract class LockableActivity extends AppCompatActivity implements Lock
     /**
      * Replace {@link LockableActivity#getFragmentId()} with the passed player's lock screen.
      *
-     * @param player The player whose lock screen to display.
      */
-    protected final void lock(Player player) {
+    protected final void lock() {
         mLocked = true;
-        PlayerFragment mFragment;
-
-        try {
-            mFragment = player.getLockFragment();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-            Log.e(TAG, String.format("Unable to instantiate player lock (%s). Defaulting to " +
-                    "Button.", player.getLockSettings()));
-            mFragment = ButtonLockFragment.newInstance(player);
-        }
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(getFragmentId(), mFragment)
-                .commit();
     }
 
     @Override

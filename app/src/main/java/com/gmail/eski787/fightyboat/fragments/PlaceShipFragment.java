@@ -30,21 +30,6 @@ public class PlaceShipFragment extends PlayerFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param player Player to use for this Fragment.
-     * @return A new instance of fragment PlaceShipFragment.
-     */
-    public static PlaceShipFragment newInstance(Player player) {
-        PlaceShipFragment fragment = new PlaceShipFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_PLAYER, player);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -118,7 +103,7 @@ public class PlaceShipFragment extends PlayerFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface PlaceShipInteraction {
+    public interface PlaceShipInteraction extends PlayerFragmentInteraction {
         void onShipPlaceComplete(Player player);
     }
 }

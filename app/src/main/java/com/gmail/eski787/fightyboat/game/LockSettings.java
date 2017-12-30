@@ -3,6 +3,7 @@ package com.gmail.eski787.fightyboat.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.gmail.eski787.fightyboat.fragments.ButtonLockFragment;
 import com.gmail.eski787.fightyboat.fragments.LockFragment;
@@ -14,6 +15,8 @@ import javax.annotation.Nullable;
  */
 
 public abstract class LockSettings implements Parcelable {
+    private static String TAG = LockSettings.class.getSimpleName();
+
     LockSettings() {
         // Default empty constructor.
     }
@@ -25,7 +28,18 @@ public abstract class LockSettings implements Parcelable {
     /**
      * @return The class of the {@link LockFragment} that this {@link LockSettings} populates.
      */
-    public abstract Class<? extends LockFragment> getLockFragment();
+    protected abstract Class<? extends LockFragment> getLockFragmentClass();
+
+    public LockFragment getLockFragment() {
+        try {
+            return getLockFragmentClass().newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            Log.e(TAG, String.format("Unable to instantiate player lock (%s). Defaulting to " +
+                    "Button.", getLockFragmentClass()));
+            return new ButtonLockFragment();
+        }
+    }
 
     @Override
     public String toString() {
@@ -106,7 +120,7 @@ public abstract class LockSettings implements Parcelable {
 
 
         @Override
-        public Class<? extends LockFragment> getLockFragment() {
+        public Class<? extends LockFragment> getLockFragmentClass() {
             return ButtonLockFragment.class;
         }
 
