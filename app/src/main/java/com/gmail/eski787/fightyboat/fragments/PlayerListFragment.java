@@ -66,7 +66,7 @@ public class PlayerListFragment extends Fragment {
 
         Toolbar toolbar = view.findViewById(R.id.player_list_toolbar);
         toolbar.setTitle("Choose Players");
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

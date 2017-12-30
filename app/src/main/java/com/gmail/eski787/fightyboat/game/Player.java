@@ -74,6 +74,10 @@ public class Player implements Parcelable {
         return mName;
     }
 
+    public void setName(String name) {
+        this.mName = name;
+    }
+
     /**
      * @return Player Sea
      */

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,16 @@ public class PlayerDetailFragment extends PlayerFragment {
             @Override
             public void onClick(View v) {
                 mListener.onMoveShips(mPlayer);
+            }
+        });
+
+        Toolbar toolbar = binding.playerDetailToolbar;
+        toolbar.setTitle(R.string.player_detail_title);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
             }
         });
 

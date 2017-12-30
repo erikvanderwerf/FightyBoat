@@ -13,4 +13,5 @@
     <string name="player_name">Player Name</string>
     <string name="player_avatar">Player Avatar</string>
     <string name="player_ready">Player Ready</string>
+    <string name="player_detail_title">Player Details</string>
 </resources>
