@@ -11,4 +11,6 @@
     <string name="change_ship_positions">Change Ship Positions</string>
     <string name="player_icon">Player Icon</string>
     <string name="player_name">Player Name</string>
+    <string name="player_avatar">Player Avatar</string>
+    <string name="player_ready">Player Ready</string>
 </resources>

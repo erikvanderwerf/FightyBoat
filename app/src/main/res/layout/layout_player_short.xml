@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.support.v4.content.ContextCompat" />
         <variable
             name="User"
             type="com.gmail.eski787.fightyboat.models.PlayerModel" />
@@ -17,9 +19,11 @@
             android:id="@+id/player_detail_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:contentDescription="Player Avatar"
+            android:contentDescription="@string/player_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/ic_launcher" />
@@ -37,13 +41,16 @@
 
         <ImageView
             android:id="@+id/player_ready"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="@string/player_ready"
+            android:src="@{ContextCompat.getDrawable(context, User.readyId)}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_launcher" />
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
 </layout>

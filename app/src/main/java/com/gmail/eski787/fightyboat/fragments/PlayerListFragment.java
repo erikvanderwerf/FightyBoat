@@ -4,9 +4,13 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,7 +27,7 @@ import java.util.List;
  * Created by Erik on 11/24/2017.
  */
 
-public class PlayerListFragment extends ClickableFragment {
+public class PlayerListFragment extends Fragment {
     private static String TAG = PlayerListFragment.class.getSimpleName();
 
     private List<Player> players;
@@ -38,18 +42,6 @@ public class PlayerListFragment extends ClickableFragment {
             throw new RuntimeException(context.toString() + " must implement PlayerListInteraction");
         }
         players = mListener.getPlayerList();
-    }
-
-    public boolean onButtonClick(View view) {
-        switch (view.getId()) {
-            case R.id.button_play:
-                mListener.onStartGame();
-                return true;
-            case R.id.button_back:
-                // TODO: Go back to game settings.
-                return false;
-        }
-        return false;
     }
 
     @Nullable
@@ -71,6 +63,31 @@ public class PlayerListFragment extends ClickableFragment {
         // Setup Adapter
         RecyclerView.Adapter mAdapter = new PlayerListAdapter();
         mRecyclerView.setAdapter(mAdapter);
+
+        Toolbar toolbar = view.findViewById(R.id.player_list_toolbar);
+        toolbar.setTitle("Choose Players");
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+        toolbar.inflateMenu(R.menu.player_list);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.d(TAG, String.format("Menu Item Pressed: %s\t%s", item, item.getItemId()));
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_play_game) {
+                    mListener.onStartGame();
+                } else {
+                    return false;
+                }
+                return true;
+            }
+        });
+
         return view;
     }
 

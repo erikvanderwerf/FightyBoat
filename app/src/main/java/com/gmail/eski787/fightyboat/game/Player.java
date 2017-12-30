@@ -102,4 +102,16 @@ public class Player implements Parcelable {
     public void setLockSettings(LockSettings lockSettings) {
         mLockSettings = lockSettings;
     }
+
+    public boolean isReady() {
+        // TODO Figure out actual ready conditions.
+        final int MAX_SHIPS = 5;
+        boolean shipsReady = mSea.getShips().size() == MAX_SHIPS;
+//        for (Ship ship: mSea.getShips()) {
+//            shipsReady &= ship != null;
+//        }
+
+        return !getName().isEmpty()
+                & shipsReady;
+    }
 }
