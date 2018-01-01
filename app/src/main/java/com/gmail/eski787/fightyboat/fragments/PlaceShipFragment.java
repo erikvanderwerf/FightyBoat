@@ -3,7 +3,6 @@ package com.gmail.eski787.fightyboat.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ public class PlaceShipFragment extends PlayerFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, String.format("onAttach context %s\tmPlayer %s", context, getPlayer()));
         if (context instanceof PlaceShipInteraction) {
             mListener = (PlaceShipInteraction) context;
         } else {
@@ -47,7 +45,6 @@ public class PlaceShipFragment extends PlayerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, String.format("onCreateView mPlayer %s", getPlayer()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_place_ship, container, false);
         Button button = view.findViewById(R.id.b_place_ship_continue);

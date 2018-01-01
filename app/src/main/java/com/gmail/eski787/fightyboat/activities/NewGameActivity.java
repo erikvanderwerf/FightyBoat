@@ -82,11 +82,10 @@ public class NewGameActivity extends LockableActivity
                 }
             }
         }
-        Log.d(TAG, String.format("applyState: %s", fragment));
+//        Log.d(TAG, String.format("applyState: %s", fragment));
 
         getSupportFragmentManager()
                 .beginTransaction()
-//                .addToBackStack(TAG)
                 .replace(getFragmentId(), fragment)
                 .commit();
     }
@@ -99,7 +98,6 @@ public class NewGameActivity extends LockableActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, String.format("onCreate: %s", savedInstanceState));
         setContentView(R.layout.activity_new_game);
 
         if (savedInstanceState == null) {
@@ -291,7 +289,6 @@ public class NewGameActivity extends LockableActivity
 
     @Override
     public Player getPlayer() {
-        Log.d(TAG, String.format("getPlayer mPlayerIndex %d", mLayoutState.mPlayerIndex));
         if (mLayoutState.mPlayerIndex != -1) return getPlayerList().get(mLayoutState.mPlayerIndex);
         else return null;
     }

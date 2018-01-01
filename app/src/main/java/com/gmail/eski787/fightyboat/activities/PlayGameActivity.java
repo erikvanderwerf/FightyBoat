@@ -3,7 +3,6 @@ package com.gmail.eski787.fightyboat.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlayGameFragment;
@@ -42,8 +41,6 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
             mGame = savedInstanceState.getParcelable(ARG_GAME);
             mPlayerIndex = savedInstanceState.getInt(ARG_PLAYER_INDEX);
         }
-
-        Log.d(TAG, String.format("onCreate mGame %s\tmPlayerIndex %s", mGame, mPlayerIndex));
         applyState();
     }
 

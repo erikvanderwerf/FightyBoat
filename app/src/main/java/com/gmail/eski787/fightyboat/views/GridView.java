@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.gmail.eski787.fightyboat.BuildConfig;
+
 import java.util.Locale;
 
 /**
@@ -16,8 +18,8 @@ import java.util.Locale;
 
 public abstract class GridView extends View {
     private static final String TAG = GridView.class.getSimpleName();
-    @SuppressWarnings("FieldCanBeLocal")
-    private static boolean GRID_DEBUG = false;
+    @SuppressWarnings({"FieldCanBeLocal", "PointlessBooleanExpression"})
+    private static boolean GRID_DEBUG = false && BuildConfig.DEBUG;
     protected CustomEvent mTouchEvent = null;
 
     /**

@@ -2,7 +2,6 @@ package com.gmail.eski787.fightyboat.fragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.gmail.eski787.fightyboat.game.Player;
 
@@ -21,7 +20,6 @@ public abstract class PlayerFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "onAttach");
         if (context instanceof PlayerFragmentInteraction) {
             mListener = (PlayerFragmentInteraction) context;
         } else {
