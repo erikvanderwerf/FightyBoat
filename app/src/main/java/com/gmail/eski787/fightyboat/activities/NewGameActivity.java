@@ -99,16 +99,17 @@ public class NewGameActivity extends LockableActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, String.format("onCreate: %s", savedInstanceState));
         setContentView(R.layout.activity_new_game);
 
         if (savedInstanceState == null) {
             mPlayers = onCreateNoSavedState();
             mLayoutState = new LayoutState();
+            applyState();
         } else {
             mPlayers = savedInstanceState.getParcelableArrayList(ARG_PLAYER_LIST);
             mLayoutState = savedInstanceState.getParcelable(ARG_LAYOUT_STATE);
         }
-        applyState();
     }
 
     private ArrayList<Player> onCreateNoSavedState() {
@@ -290,6 +291,7 @@ public class NewGameActivity extends LockableActivity
 
     @Override
     public Player getPlayer() {
+        Log.d(TAG, String.format("getPlayer mPlayerIndex %d", mLayoutState.mPlayerIndex));
         if (mLayoutState.mPlayerIndex != -1) return getPlayerList().get(mLayoutState.mPlayerIndex);
         else return null;
     }

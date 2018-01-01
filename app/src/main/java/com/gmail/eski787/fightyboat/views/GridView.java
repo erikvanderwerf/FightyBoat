@@ -16,6 +16,8 @@ import java.util.Locale;
 
 public abstract class GridView extends View {
     private static final String TAG = GridView.class.getSimpleName();
+    @SuppressWarnings("FieldCanBeLocal")
+    private static boolean GRID_DEBUG = false;
     protected CustomEvent mTouchEvent = null;
 
     /**
@@ -30,8 +32,9 @@ public abstract class GridView extends View {
 
     /**
      * View constructor.
+     *
      * @param context The Context the view is running in, through which it can
-     *        access the current theme, resources, etc.
+     *                access the current theme, resources, etc.
      */
     public GridView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,8 +42,9 @@ public abstract class GridView extends View {
 
     /**
      * View constructor.
+     *
      * @param context The Context the view is running in, through which it can
-     *        access the current theme, resources, etc.
+     *                access the current theme, resources, etc.
      */
     public GridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -48,8 +52,9 @@ public abstract class GridView extends View {
 
     /**
      * View constructor.
+     *
      * @param context The Context the view is running in, through which it can
-     *        access the current theme, resources, etc.
+     *                access the current theme, resources, etc.
      */
     public GridView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -57,6 +62,7 @@ public abstract class GridView extends View {
 
     /**
      * Gets the number of rows (y) and number of columns (x) in the grid display
+     *
      * @return Rows -> y, Columns -> x
      */
     protected abstract Point getGridSize();
@@ -65,6 +71,7 @@ public abstract class GridView extends View {
      * This callback is run when the user generates a touch event. The coordinates of the touch event
      * are converted into grid coordinates. Depending on how the user is interacting, the onClick
      * or onLongClick methods are called.
+     *
      * @param event The motion event.
      * @return True if the event was handled, false otherwise.
      */
@@ -134,42 +141,54 @@ public abstract class GridView extends View {
         /**
          * Sets the measured dimensions of the View to create square grid tiles out of the available
          * space.
-         * @param widthMeasureSpec horizontal space requirements as imposed by the parent.
-         *                         The requirements are encoded with
-         *                         {@link android.view.View.MeasureSpec}.
+         *
+         * @param widthMeasureSpec  horizontal space requirements as imposed by the parent.
+         *                          The requirements are encoded with
+         *                          {@link android.view.View.MeasureSpec}.
          * @param heightMeasureSpec vertical space requirements as imposed by the parent.
-         *                         The requirements are encoded with
-         *                         {@link android.view.View.MeasureSpec}.
+         *                          The requirements are encoded with
+         *                          {@link android.view.View.MeasureSpec}.
          */
         @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-            int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-            int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
+            final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+            final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+            final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+            final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
-            Log.d(TAG, String.format("onMeasure Height Mode: %d\tSize: %d Width Mode: %d\t Size: %d",
-                    heightMode, heightSize, widthMode, widthSize));
+            if (GRID_DEBUG) {
+                final String sHM = heightMode == MeasureSpec.UNSPECIFIED ? "UNSPECIFIED" :
+                        heightMode == MeasureSpec.AT_MOST ? "AT_MOST" :
+                                heightMode == MeasureSpec.EXACTLY ? "EXACTLY" : "ERROR";
+                final String sWM = widthMode == MeasureSpec.UNSPECIFIED ? "UNSPECIFIED" :
+                        widthMode == MeasureSpec.AT_MOST ? "AT_MOST" :
+                                widthMode == MeasureSpec.EXACTLY ? "EXACTLY" : "ERROR";
+                Log.d(TAG, String.format("onMeasure Height: %s %d Width: %s %d",
+                        sHM, heightSize, sWM, widthSize));
+            }
 
             int height = Integer.MAX_VALUE;
             int width = Integer.MAX_VALUE;
 
             // There's a few different cases here.
-            if (heightMode == MeasureSpec.EXACTLY &&
-                    widthMode == MeasureSpec.EXACTLY) {
-                Log.e(TAG, "GridView is overconstrained. Only one of X or Y may be set " +
-                        "exactly. Defaulting to minimum of two.");
-            }
-            if (heightMode == MeasureSpec.EXACTLY) {
+            if (heightMode == MeasureSpec.EXACTLY
+                    || heightMode == MeasureSpec.AT_MOST) {
                 height = heightSize;
             }
-            if (widthMode == MeasureSpec.EXACTLY) {
+            if (widthMode == MeasureSpec.EXACTLY
+                    || widthMode == MeasureSpec.AT_MOST) {
                 width = widthSize;
             }
-            if (heightMode != MeasureSpec.EXACTLY &&
-                    widthMode != MeasureSpec.EXACTLY) {
-                width = getSuggestedMinimumWidth();
-                height = getSuggestedMinimumHeight();
+//            if (heightMode == MeasureSpec.UNSPECIFIED
+//                    && widthMode == MeasureSpec.UNSPECIFIED) {
+//                width = getSuggestedMinimumWidth();
+//                height = getSuggestedMinimumHeight();
+//            }
+            if (GRID_DEBUG && heightMode == MeasureSpec.EXACTLY && widthMode == MeasureSpec.EXACTLY
+                    && width != height) {
+                Log.e(TAG, String.format("GridView is overconstrained. Only one of X or Y may be " +
+                                "set exactly. Defaulting to minimum of either. Width: %d\tHeight: %d",
+                        width, height));
             }
 
             Point size = getGridSize();
@@ -177,6 +196,10 @@ public abstract class GridView extends View {
             int dy = height / size.y;
 
             int edge_max = Math.min(dx, dy);
+
+            if (GRID_DEBUG) {
+                Log.d(TAG, String.format("setMeasuredDimension(%d, %d)", edge_max * size.x, edge_max * size.y));
+            }
             setMeasuredDimension(edge_max * size.x, edge_max * size.y);
         }
     }

@@ -2,7 +2,8 @@ package com.gmail.eski787.fightyboat.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlayGameFragment;
@@ -11,10 +12,10 @@ import com.gmail.eski787.fightyboat.game.Player;
 
 public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction {
     public static final String ARG_GAME = "ARG_GAME";
+    private static final String TAG = PlayGameActivity.class.getSimpleName();
     private static final String ARG_PLAYER_INDEX = "ARG_PLAYER_INDEX";
     private Game mGame;
     private int mPlayerIndex;
-
 
     @Override
     protected int getFragmentId() {
@@ -36,10 +37,26 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
             Intent intent = getIntent();
             mGame = intent.getParcelableExtra(ARG_GAME);
             mPlayerIndex = 0;
+            lock();
         } else {
             mGame = savedInstanceState.getParcelable(ARG_GAME);
             mPlayerIndex = savedInstanceState.getInt(ARG_PLAYER_INDEX);
         }
+
+        Log.d(TAG, String.format("onCreate mGame %s\tmPlayerIndex %s", mGame, mPlayerIndex));
+        applyState();
+    }
+
+    private void applyState() {
+        Fragment fragment;
+        if (isLocked()) {
+            fragment = getPlayer().getLockSettings().getLockFragment();
+        } else {
+            fragment = new PlayGameFragment();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(getFragmentId(), fragment)
+                .commit();
     }
 
     @Override
@@ -52,18 +69,11 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
     @Override
     public void onSuccessfulUnlock() {
         super.onSuccessfulUnlock();
-        Player player = mGame.getPlayers()[mPlayerIndex];
-        Toast.makeText(getApplicationContext(), "Unlocked " + player.getName(), Toast.LENGTH_SHORT).show();
-
-        PlayGameFragment gameFragment = new PlayGameFragment();
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(getFragmentId(), gameFragment)
-                .commit();
+        applyState();
     }
 
     @Override
     public Player getPlayer() {
-        return null;
+        return mGame.getPlayers()[mPlayerIndex];
     }
 }

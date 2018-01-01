@@ -13,9 +13,10 @@
         tools:context="com.gmail.eski787.fightyboat.fragments.PlayGameFragment">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
 
             <com.gmail.eski787.fightyboat.views.RadarView
                 android:id="@+id/play_radar_view"
@@ -25,10 +26,10 @@
                 android:background="@color/radarBlack" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="0"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:rotation="-90"
                 android:src="@mipmap/ic_launcher" />
 
             <com.gmail.eski787.fightyboat.views.SeaView

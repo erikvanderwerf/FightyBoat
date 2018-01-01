@@ -18,8 +18,6 @@ import com.gmail.eski787.fightyboat.views.SeaView;
  * Activities that contain this fragment must implement the
  * {@link PlayGameInteraction} interface
  * to handle interaction events.
- * Use the {@link PlayGameFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class PlayGameFragment extends PlayerFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,7 +50,7 @@ public class PlayGameFragment extends PlayerFragment {
 
 
         PlayGameSeaPresenter presenter = new PlayGameSeaPresenter();
-        presenter.setSea(mPlayer.getSea());
+        presenter.setSea(getPlayer().getSea());
         mSeaView.setSeaPresenter(presenter);
 
         return view;
@@ -62,11 +60,6 @@ public class PlayGameFragment extends PlayerFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public boolean onButtonClick(View view) {
-        return false;
     }
 
     /**

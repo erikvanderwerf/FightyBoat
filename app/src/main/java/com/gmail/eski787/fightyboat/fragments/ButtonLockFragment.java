@@ -23,7 +23,7 @@ public class ButtonLockFragment extends LockFragment {
         FragmentLockButtonBinding binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_lock_button, container, false);
 
-        binding.setUser(new PlayerModel(mPlayer));
+        binding.setUser(new PlayerModel(getPlayer()));
         binding.unlockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,10 +31,5 @@ public class ButtonLockFragment extends LockFragment {
             }
         });
         return binding.getRoot();
-    }
-
-    @Override
-    public boolean onButtonClick(View view) {
-        return false;
     }
 }

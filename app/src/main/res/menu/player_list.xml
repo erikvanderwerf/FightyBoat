@@ -8,7 +8,7 @@
     <!--android:title="Settings" />-->
     <item
         android:id="@+id/action_play_game"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_arrow_forward_24dp"
         android:title="Play Game"
         app:showAsAction="always" />
 </menu>

@@ -39,20 +39,20 @@ public class PlayerDetailFragment extends PlayerFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         final int layoutId = R.layout.fragment_player_detail;
         FragmentPlayerDetailBinding binding = DataBindingUtil.inflate(inflater, layoutId, container, false);
-        binding.setUser(new PlayerModel(mPlayer));
+        binding.setUser(new PlayerModel(getPlayer()));
 
         // Add onClick callbacks
         binding.playerDetailChangeLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onChangeLock(mPlayer);
+                mListener.onChangeLock(getPlayer());
             }
         });
 
         binding.playerDetailMoveShips.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onMoveShips(mPlayer);
+                mListener.onMoveShips(getPlayer());
             }
         });
 
@@ -69,13 +69,9 @@ public class PlayerDetailFragment extends PlayerFragment {
         return binding.getRoot();
     }
 
-    @Override
-    public boolean onButtonClick(View view) {
-        return false;
-    }
-
     public interface PlayerDetailInteraction extends PlayerFragmentInteraction {
-        void onChangeLock(Player mPlayer);
-        void onMoveShips(Player mPlayer);
+        void onChangeLock(Player player);
+
+        void onMoveShips(Player player);
     }
 }

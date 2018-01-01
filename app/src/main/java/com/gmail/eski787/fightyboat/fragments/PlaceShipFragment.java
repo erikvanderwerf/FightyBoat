@@ -3,6 +3,7 @@ package com.gmail.eski787.fightyboat.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.gmail.eski787.fightyboat.views.PlaceShipSeaView;
  * create an instance of this fragment.
  */
 public class PlaceShipFragment extends PlayerFragment {
+    private static String TAG = PlaceShipFragment.class.getSimpleName();
     private PlaceShipInteraction mListener;
     private PlaceShipSeaView mSeaView;
 
@@ -33,6 +35,7 @@ public class PlaceShipFragment extends PlayerFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.d(TAG, String.format("onAttach context %s\tmPlayer %s", context, getPlayer()));
         if (context instanceof PlaceShipInteraction) {
             mListener = (PlaceShipInteraction) context;
         } else {
@@ -44,13 +47,14 @@ public class PlaceShipFragment extends PlayerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, String.format("onCreateView mPlayer %s", getPlayer()));
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_place_ship, container, false);
         Button button = view.findViewById(R.id.b_place_ship_continue);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onShipPlaceComplete(mPlayer);
+                mListener.onShipPlaceComplete(getPlayer());
             }
         });
 
@@ -66,7 +70,7 @@ public class PlaceShipFragment extends PlayerFragment {
 
         // Instantiate and attach models to presenters to views.
         final PlaceShipSeaPresenter seaPresenter = new PlaceShipSeaPresenter();
-        seaPresenter.setSea(mPlayer.getSea());
+        seaPresenter.setSea(getPlayer().getSea());
         mSeaView.setSeaPresenter(seaPresenter);
         mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
         // TODO: Toast with summary, implement drag-and-drop from shelf to mSeaView.
@@ -86,11 +90,6 @@ public class PlaceShipFragment extends PlayerFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public boolean onButtonClick(View view) {
-        return false;
     }
 
     /**
