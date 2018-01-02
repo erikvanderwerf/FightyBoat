@@ -21,6 +21,7 @@ public abstract class SeaPresenter extends GridPresenter {
     @Nullable
     Sea mSea;
 
+    @NonNull
     public List<ShipPresenter> getShips() {
         if (mSea == null) {
             throw new RuntimeException("Cannot get ships without Sea attached.");
@@ -32,6 +33,7 @@ public abstract class SeaPresenter extends GridPresenter {
         return ships;
     }
 
+    @NonNull
     public Point getSize() {
         if (mSea == null) {
             throw new RuntimeException("Cannot get size with no sea.");
@@ -39,6 +41,7 @@ public abstract class SeaPresenter extends GridPresenter {
         return mSea.getSize();
     }
 
+    @NonNull
     public Sea.SeaStatus getStatus(int x, int y) {
         if (mSea == null) {
             throw new RuntimeException("Cannot get status with no sea.");
@@ -46,7 +49,7 @@ public abstract class SeaPresenter extends GridPresenter {
         return mSea.getStatus(x, y);
     }
 
-    public void setSea(Sea sea) {
+    public void setSea(@Nullable Sea sea) {
         mSea = sea;
     }
 
@@ -62,7 +65,8 @@ public abstract class SeaPresenter extends GridPresenter {
         return null;
     }
 
-    protected final Point intCoordinate(PointF coordinate) {
+    @NonNull
+    final Point intCoordinate(@NonNull PointF coordinate) {
         return new Point(((int) coordinate.x), ((int) coordinate.y));
     }
 

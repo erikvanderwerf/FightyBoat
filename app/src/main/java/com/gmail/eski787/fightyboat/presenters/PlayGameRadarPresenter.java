@@ -10,7 +10,8 @@ import com.gmail.eski787.fightyboat.game.Sea;
 import javax.annotation.Nullable;
 
 /**
- * Created by Erik on 1/1/2018.
+ * Presents a {@link com.gmail.eski787.fightyboat.game.Player Player}'s opponent's {@link Sea} to
+ * be fired upon by the current Player.
  */
 
 public class PlayGameRadarPresenter extends RadarPresenter {
@@ -37,7 +38,6 @@ public class PlayGameRadarPresenter extends RadarPresenter {
 
     @Override
     public boolean onClick(PointF coordinate) {
-        super.onClick(coordinate);
         if (mState == TURN_STATE.AWAITING_SELECTION || mState == TURN_STATE.AWAITING_FIRE) {
             Point tempSelection = intCoordinate(coordinate);
 
@@ -56,6 +56,11 @@ public class PlayGameRadarPresenter extends RadarPresenter {
         return true;
     }
 
+    @Override
+    public boolean onLongClick(PointF coordinate) {
+        return false;
+    }
+
     public void onPlayButtonClick() {
         if (mListener == null) {
             Log.e(TAG, "onPlayButtonClick: Button callback without listener.");
@@ -70,15 +75,11 @@ public class PlayGameRadarPresenter extends RadarPresenter {
                 throw new RuntimeException("Cannot fire if there is no Sea.");
             }
 
-            Sea.SeaStatus status = mSea.getStatus(selected);
-            if (status == Sea.SeaStatus.PEG_NONE) {
-                Sea.SeaStatus newStatus;
-                newStatus = getShipAtCoordinate(selected) != null ?
-                        Sea.SeaStatus.PEG_HIT : Sea.SeaStatus.PEG_MISS;
-                mSea.setStatus(selected.x, selected.y, newStatus);
-                selected = null;
-                changeState(TURN_STATE.AWAITING_CONTINUE);
-            }
+            Sea.SeaStatus newStatus = getShipAtCoordinate(selected) != null ?
+                    Sea.SeaStatus.PEG_HIT : Sea.SeaStatus.PEG_MISS;
+            mSea.setStatus(selected.x, selected.y, newStatus);
+            selected = null;
+            changeState(TURN_STATE.AWAITING_CONTINUE);
         } else if (mState == TURN_STATE.AWAITING_CONTINUE) {
             mListener.advancePlayer();
         }
@@ -87,6 +88,12 @@ public class PlayGameRadarPresenter extends RadarPresenter {
     public void setListener(PlayGameRadarPresenterInteraction listener) {
         mListener = listener;
         changeState(TURN_STATE.AWAITING_SELECTION);
+        selected = null;
+    }
+
+    @Override
+    protected boolean drawShips() {
+        return true;
     }
 
     private enum TURN_STATE {
