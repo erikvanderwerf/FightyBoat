@@ -11,6 +11,7 @@ import static com.gmail.eski787.fightyboat.game.Sea.SeaStatus;
  * A Radar view into another players Sea. Radar tiles are either hidden or
  * revealed, allowing a view into the other player's Sea.
  */
+@Deprecated
 public class Radar implements Parcelable {
     public static final Creator<Radar> CREATOR = new Creator<Radar>() {
         @Override

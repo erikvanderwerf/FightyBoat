@@ -54,7 +54,7 @@ public class Player implements Parcelable {
         mSea = in.readParcelable(Sea.class.getClassLoader());
 //        mRadar = in.readParcelable(Radar.class.getClassLoader());
         String className = in.readString();
-        ClassLoader loader = null;
+        ClassLoader loader;
         try {
             loader = Class.forName(className).getClassLoader();
             mLockSettings = in.readParcelable(loader);

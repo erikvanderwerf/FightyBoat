@@ -18,7 +18,7 @@
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <com.gmail.eski787.fightyboat.views.RadarView
+            <com.gmail.eski787.fightyboat.views.PlayGameRadarView
                 android:id="@+id/play_radar_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

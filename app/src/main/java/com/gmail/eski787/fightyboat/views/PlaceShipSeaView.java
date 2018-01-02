@@ -37,11 +37,11 @@ public class PlaceShipSeaView extends SeaView<PlaceShipSeaPresenter> {
     public class PlaceShipClickListener extends ClickListener {
         @Override
         public boolean onLongClick(View v) {
-            assert mSeaPresenter != null;
+            assert mPresenter != null;
 
             boolean handled = super.onLongClick(v);
             if (handled) {
-                SeaPresenter.ShipPresenter ghostShip = new SeaPresenter.ShipPresenter(mSeaPresenter.getGhostShip());
+                SeaPresenter.ShipPresenter ghostShip = new SeaPresenter.ShipPresenter(mPresenter.getGhostShip());
                 ghostShip.getOrigin().set(0, 0);
 
                 // If handled, begin a drag event.
@@ -60,7 +60,7 @@ public class PlaceShipSeaView extends SeaView<PlaceShipSeaPresenter> {
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
-            assert mSeaPresenter != null;
+            assert mPresenter != null;
             super.onDrag(v, event);
 
             boolean handled = false;
@@ -71,13 +71,13 @@ public class PlaceShipSeaView extends SeaView<PlaceShipSeaPresenter> {
                 case DragEvent.ACTION_DROP:
                     // Case when user releases ship over SeaView.
                     PointF coordinate = getCoordinate(event.getX(), event.getY());
-                    handled = mSeaPresenter.onDropShip(coordinate);
+                    handled = mPresenter.onDropShip(coordinate);
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
                     // Case when user releases ship anywhere. getResult is false if the ACTION_DROP
                     // was not handled elsewhere. Return ship to where it was originally placed.
                     if (!event.getResult())
-                        handled = mSeaPresenter.onDropShip(null);
+                        handled = mPresenter.onDropShip(null);
             }
 
             if (handled) {

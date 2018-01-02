@@ -83,6 +83,14 @@ public abstract class GridView extends View {
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Converts a set of screen-based x and y coordinates into a set of grid-based x any y
+     * coordinates.
+     *
+     * @param x The screen x-coordinate.
+     * @param y The screen y-coordinate.
+     * @return The converted grid-coordinates.
+     */
     protected final PointF getCoordinate(float x, float y) {
         final float tx = x / getTileWidth();
         final float ty = y / getTileHeight();
@@ -181,11 +189,6 @@ public abstract class GridView extends View {
                     || widthMode == MeasureSpec.AT_MOST) {
                 width = widthSize;
             }
-//            if (heightMode == MeasureSpec.UNSPECIFIED
-//                    && widthMode == MeasureSpec.UNSPECIFIED) {
-//                width = getSuggestedMinimumWidth();
-//                height = getSuggestedMinimumHeight();
-//            }
             if (GRID_DEBUG && heightMode == MeasureSpec.EXACTLY && widthMode == MeasureSpec.EXACTLY
                     && width != height) {
                 Log.e(TAG, String.format("GridView is overconstrained. Only one of X or Y may be " +

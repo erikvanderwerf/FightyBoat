@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.gmail.eski787.fightyboat.views.RadarView
+            <com.gmail.eski787.fightyboat.views.PlayGameRadarView
                 android:id="@+id/play_radar_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -56,6 +56,6 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Fire" />
+            tools:text="Fire" />
     </LinearLayout>
 </LinearLayout>

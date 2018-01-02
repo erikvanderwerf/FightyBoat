@@ -20,7 +20,6 @@ public abstract class SeaPresenter extends GridPresenter {
     private static final String TAG = ShipPresenter.class.getSimpleName();
     @Nullable
     Sea mSea;
-    private ShipPresenter ghostShip;
 
     public List<ShipPresenter> getShips() {
         if (mSea == null) {
@@ -52,7 +51,7 @@ public abstract class SeaPresenter extends GridPresenter {
     }
 
     @Nullable
-    Ship getShipAtCoordinate(@NonNull PointF coordinate) {
+    Ship getShipAtCoordinate(@NonNull Point coordinate) {
         if (mSea == null) {
             throw new RuntimeException("Cannot find ships with no sea.");
         }
@@ -61,6 +60,10 @@ public abstract class SeaPresenter extends GridPresenter {
                 return ship;
         }
         return null;
+    }
+
+    protected final Point intCoordinate(PointF coordinate) {
+        return new Point(((int) coordinate.x), ((int) coordinate.y));
     }
 
     /**
@@ -91,7 +94,7 @@ public abstract class SeaPresenter extends GridPresenter {
             return mShip.getOrientation();
         }
 
-        public boolean contains(PointF point) {
+        public boolean contains(Point point) {
             return mShip.contains(point);
         }
 

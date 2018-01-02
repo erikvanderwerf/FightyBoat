@@ -27,6 +27,13 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
     }
 
     @Override
+    public void advancePlayer() {
+        mPlayerIndex = (mPlayerIndex + 1) % mGame.getPlayers().length;
+        lock();
+        applyState();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);

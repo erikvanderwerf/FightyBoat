@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.game;
 
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -106,9 +105,9 @@ public class Ship implements Parcelable {
         return length;
     }
 
-    public boolean contains(PointF point) {
-        int x = (int) point.x;
-        int y = (int) point.y;
+    public boolean contains(Point point) {
+        int x = point.x;
+        int y = point.y;
         switch (orientation) {
             case VERTICAL:
                 return x == origin.x && y >= origin.y && y < origin.y + length;

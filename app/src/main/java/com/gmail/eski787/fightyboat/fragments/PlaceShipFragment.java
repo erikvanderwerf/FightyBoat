@@ -68,7 +68,7 @@ public class PlaceShipFragment extends PlayerFragment {
         // Instantiate and attach models to presenters to views.
         final PlaceShipSeaPresenter seaPresenter = new PlaceShipSeaPresenter();
         seaPresenter.setSea(getPlayer().getSea());
-        mSeaView.setSeaPresenter(seaPresenter);
+        mSeaView.setPresenter(seaPresenter);
         mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
         // TODO: Toast with summary, implement drag-and-drop from shelf to mSeaView.
         for (ImageView imageView : shelves) {

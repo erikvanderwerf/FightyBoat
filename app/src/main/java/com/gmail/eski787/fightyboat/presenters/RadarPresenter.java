@@ -1,19 +1,20 @@
 package com.gmail.eski787.fightyboat.presenters;
 
-import android.graphics.PointF;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Erik on 1/15/2017.
  */
 
-public class RadarPresenter extends GridPresenter {
-    @Override
-    public boolean onClick(PointF coordinate) {
-        return false;
-    }
+public abstract class RadarPresenter extends SeaPresenter {
+    private static final String TAG = RadarPresenter.class.getSimpleName();
+
+    public boolean drawShips = true;
 
     @Override
-    public boolean onLongClick(PointF coordinate) {
-        return false;
+    public List<ShipPresenter> getShips() {
+        if (drawShips) return super.getShips();
+        else return new ArrayList<>();
     }
 }

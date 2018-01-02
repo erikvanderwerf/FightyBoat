@@ -21,7 +21,7 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     @Override
     public boolean onClick(@NonNull PointF coordinate) {
 //        Log.d(TAG, "Click Event: " + coordinate);
-        Ship ship = getShipAtCoordinate(coordinate);
+        Ship ship = getShipAtCoordinate(intCoordinate(coordinate));
         if (ship != null) {
             onShipClick(ship);
             return true;
@@ -33,7 +33,7 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     public boolean onLongClick(@NonNull PointF coordinate) {
         assert mSea != null;
 
-        Ship ship = getShipAtCoordinate(coordinate);
+        Ship ship = getShipAtCoordinate(intCoordinate(coordinate));
         if (ship != null) {
             ghostShip = ship;
             mSea.getShips().remove(ghostShip);
