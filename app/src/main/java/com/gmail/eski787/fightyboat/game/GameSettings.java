@@ -8,18 +8,6 @@ import android.os.Parcelable;
  * Created by Erik on 12/13/2016.
  */
 public class GameSettings implements Parcelable {
-    public Point seaSize = new Point();
-    public int[] ships = {2, 3, 3, 4, 5};
-
-    public GameSettings() {
-
-    }
-
-    protected GameSettings(Parcel in) {
-        seaSize = in.readParcelable(getClass().getClassLoader());
-        ships = in.createIntArray();
-    }
-
     public static final Creator<GameSettings> CREATOR = new Creator<GameSettings>() {
         @Override
         public GameSettings createFromParcel(Parcel in) {
@@ -31,6 +19,18 @@ public class GameSettings implements Parcelable {
             return new GameSettings[size];
         }
     };
+    private final Point seaSize;
+    private final int[] ships;
+
+    public GameSettings(Point seaSize, int[] ships) {
+        this.seaSize = seaSize;
+        this.ships = ships;
+    }
+
+    private GameSettings(Parcel in) {
+        seaSize = in.readParcelable(Point.class.getClassLoader());
+        ships = in.createIntArray();
+    }
 
     @Override
     public int describeContents() {
