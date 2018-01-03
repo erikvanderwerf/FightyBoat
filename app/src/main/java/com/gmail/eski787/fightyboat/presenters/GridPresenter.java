@@ -13,7 +13,7 @@ public abstract class GridPresenter implements Presenter {
      * Called when the user has clicked on a grid coordinate.
      *
      * @param coordinate The grid coordinate that the event was called on.
-     * @return true if the display has changed, false otherwise.
+     * @return true if the View using this presenter must be invalidated.
      */
     public abstract boolean onClick(PointF coordinate);
 
