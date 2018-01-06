@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.activities;
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -25,12 +24,9 @@ import com.gmail.eski787.fightyboat.game.GameSettings;
 import com.gmail.eski787.fightyboat.game.LockSettings;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.game.Sea;
-import com.gmail.eski787.fightyboat.game.Ship;
-import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -113,17 +109,18 @@ public class NewGameActivity extends LockableActivity
     private ArrayList<Player> onCreateNoSavedState() {
         // Initialize players with 2 local players.
         Player player1 = new Player("Player 1", new Sea(10, 10, 5));
-        ShipCap.CapType startCap = ShipCap.CapType.ROUND, endCap = ShipCap.CapType.SQUARE;
-        Set<Ship> p1ship = player1.getSea().getShips();
-        p1ship.add(new Ship(new Point(5, 5), Ship.Orientation.VERTICAL, 5, startCap, endCap));
-        p1ship.add(new Ship(new Point(0, 7), Ship.Orientation.HORIZONTAL, 4, startCap, endCap));
-        p1ship.add(new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, 3, startCap, endCap));
-        p1ship.add(new Ship(new Point(7, 3), Ship.Orientation.HORIZONTAL, 3, startCap, endCap));
-        p1ship.add(new Ship(new Point(2, 2), Ship.Orientation.HORIZONTAL, 2, startCap, endCap));
+        Player player2 = new Player("Player 2", new Sea(10, 10, 5));
+//        ShipCap.CapType startCap = ShipCap.CapType.ROUND, endCap = ShipCap.CapType.SQUARE;
+//        Set<Ship> p1ship = player1.getSea().getShips();
+//        p1ship.add(new Ship(new Point(5, 5), Ship.Orientation.VERTICAL, 5, startCap, endCap));
+//        p1ship.add(new Ship(new Point(0, 7), Ship.Orientation.HORIZONTAL, 4, startCap, endCap));
+//        p1ship.add(new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, 3, startCap, endCap));
+//        p1ship.add(new Ship(new Point(7, 3), Ship.Orientation.HORIZONTAL, 3, startCap, endCap));
+//        p1ship.add(new Ship(new Point(2, 2), Ship.Orientation.HORIZONTAL, 2, startCap, endCap));
 
         ArrayList<Player> players = new ArrayList<>();
         players.add(player1);
-        players.add(new Player("Player 2", new Sea(10, 10, 5)));
+        players.add(player2);
         return players;
     }
 

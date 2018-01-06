@@ -3,6 +3,7 @@ package com.gmail.eski787.fightyboat.presenters;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.errorprone.annotations.DoNotCall;
 
@@ -15,6 +16,8 @@ import static com.gmail.eski787.fightyboat.views.SeaView.SHIP_RADIUS;
  */
 
 public abstract class ShipCap {
+    private static final String TAG = ShipCap.class.getSimpleName();
+
     CapDirection mDirection;
 
     ShipCap(CapDirection direction) {
@@ -119,6 +122,7 @@ public abstract class ShipCap {
         @Override
         @DoNotCall
         public void drawCap(Canvas canvas, Paint paint, int startX, int startY, int endX, int endY) {
+            Log.d(TAG, "PointShipCap not implemented.");
 //            throw new RuntimeException("PointShipCap not implemented. Do Not Use.");
         }
     }

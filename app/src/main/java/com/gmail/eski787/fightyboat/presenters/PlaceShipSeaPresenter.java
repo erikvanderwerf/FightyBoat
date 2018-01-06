@@ -88,7 +88,9 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
             if (coordinate != null) {
                 mGhostShip.getOrigin().set((int) coordinate.x, (int) coordinate.y);
             }
-            return mSea.getShips().add(mGhostShip);
+            boolean added = mSea.getShips().add(mGhostShip);
+            mGhostShip = null;
+            return added;
         }
         return false;
     }

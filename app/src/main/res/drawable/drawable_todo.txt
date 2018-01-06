@@ -1,6 +1,0 @@
-TODO Needed drawables
-2 male and 2 female captain art (full/small)
-Change ship icon
-Change lock icon
-Ship icons (Carrier, Battleship, Submarine, Destroyer, Cruiser)
-Radar/sea spacer decoration
