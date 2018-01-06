@@ -3,8 +3,10 @@ package com.gmail.eski787.fightyboat.game;
 import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 
+import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.presenters.ShipCap;
 
 /**
@@ -49,6 +51,14 @@ public class Ship implements Parcelable {
         this.length = length;
         this.startCap = startCap;
         this.endCap = endCap;
+    }
+
+    public Ship(@NonNull Point origin, @NonNull Orientation orientation, @NonNull ShipType type) {
+        this.origin = origin;
+        this.orientation = orientation;
+        length = type.length;
+        startCap = type.startCap;
+        endCap = type.endCap;
     }
 
     public Ship(Ship ship) {
@@ -134,45 +144,23 @@ public class Ship implements Parcelable {
         }
     }
 
-    public static class ShipFactory {
-        // TODO Make methods for basic types.
+    public enum ShipType {
+        AIRCRAFT_CARRIER(5, ShipCap.CapType.SQUARE, ShipCap.CapType.SQUARE, R.mipmap.ic_launcher),
+        BATTLESHIP(4, ShipCap.CapType.POINT, ShipCap.CapType.SQUARE, R.drawable.ic_add_black_24dp),
+        SUBMARINE(3, ShipCap.CapType.ROUND, ShipCap.CapType.ROUND, R.drawable.ic_add_black_24dp),
+        DESTROYER(3, ShipCap.CapType.POINT, ShipCap.CapType.SQUARE, R.drawable.ic_add_black_24dp),
+        CRUISER(2, ShipCap.CapType.POINT, ShipCap.CapType.SQUARE, R.drawable.ic_add_black_24dp);
 
-        private Point origin;
-        private Orientation orientation;
-        private int length;
-        private ShipCap.CapType startCap;
-        private ShipCap.CapType endCap;
+        public final int length;
+        public final ShipCap.CapType startCap, endCap;
+        @DrawableRes
+        public final int icon;
 
-        public ShipFactory() {
-        }
-
-        public Ship generate() {
-            return new Ship(origin, orientation, length, startCap, endCap);
-        }
-
-        public ShipFactory setOrigin(Point origin) {
-            this.origin = origin;
-            return this;
-        }
-
-        public ShipFactory setOrientation(Orientation orientation) {
-            this.orientation = orientation;
-            return this;
-        }
-
-        public ShipFactory setLength(int length) {
+        ShipType(int length, ShipCap.CapType startCap, ShipCap.CapType endCap, @DrawableRes int icon) {
             this.length = length;
-            return this;
-        }
-
-        public ShipFactory setStartCap(ShipCap.CapType cap) {
-            startCap = cap;
-            return this;
-        }
-
-        public ShipFactory setEndCap(ShipCap.CapType cap) {
-            endCap = cap;
-            return this;
+            this.startCap = startCap;
+            this.endCap = endCap;
+            this.icon = icon;
         }
     }
 }

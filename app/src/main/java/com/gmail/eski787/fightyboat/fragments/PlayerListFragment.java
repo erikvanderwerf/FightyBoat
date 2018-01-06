@@ -141,7 +141,7 @@ public class PlayerListFragment extends Fragment {
     private class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
         @Override
         public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            int layoutId = R.layout.layout_player_short;
+            final int layoutId = R.layout.layout_player_short;
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             LayoutPlayerShortBinding playerShortBinding = DataBindingUtil
                     .inflate(inflater, layoutId, parent, false);

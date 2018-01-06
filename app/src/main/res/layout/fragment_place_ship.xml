@@ -9,34 +9,36 @@
         android:id="@+id/place_ship_sea_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:background="@color/seaBlue"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/b_place_ship_continue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout3"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/place_ship_shelf"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/steelGray"
-        android:orientation="horizontal"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/b_place_ship_continue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/place_ship_sea_view">
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/layout_ship_shelf"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+    </android.support.v7.widget.RecyclerView>
 
-        <Button
-            android:id="@+id/b_place_ship_continue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/finish" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/b_place_ship_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/finish"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

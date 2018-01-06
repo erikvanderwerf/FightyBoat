@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="android.support.v4.content.ContextCompat" />
         <variable
             name="User"

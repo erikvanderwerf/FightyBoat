@@ -1,17 +1,21 @@
 package com.gmail.eski787.fightyboat.fragments;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gmail.eski787.fightyboat.R;
+import com.gmail.eski787.fightyboat.databinding.LayoutShelfShipTypeBinding;
 import com.gmail.eski787.fightyboat.game.Player;
+import com.gmail.eski787.fightyboat.game.Ship;
 import com.gmail.eski787.fightyboat.presenters.PlaceShipSeaPresenter;
 import com.gmail.eski787.fightyboat.views.PlaceShipSeaView;
 
@@ -24,8 +28,10 @@ import com.gmail.eski787.fightyboat.views.PlaceShipSeaView;
  */
 public class PlaceShipFragment extends PlayerFragment {
     private static String TAG = PlaceShipFragment.class.getSimpleName();
+    private static Ship.ShipType[] shipTypes = Ship.ShipType.values();
     private PlaceShipInteraction mListener;
     private PlaceShipSeaView mSeaView;
+    private RecyclerView mShipShelf;
 
     public PlaceShipFragment() {
         // Required empty public constructor
@@ -57,28 +63,19 @@ public class PlaceShipFragment extends PlayerFragment {
 
         // Get references to View elements.
         mSeaView = view.findViewById(R.id.place_ship_sea_view);
-        final ImageView[] shelves = new ImageView[5];
-        shelves[0] = view.findViewById(R.id.ship_shelf_aircraft_carrier);
-        shelves[1] = view.findViewById(R.id.ship_shelf_battleship);
-        shelves[2] = view.findViewById(R.id.ship_shelf_submarine);
-        shelves[3] = view.findViewById(R.id.ship_shelf_destroyer);
-        shelves[4] = view.findViewById(R.id.ship_shelf_cruiser);
+        mShipShelf = view.findViewById(R.id.place_ship_shelf);
 
+        // List of available ahips
+        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mShipShelf.setHasFixedSize(true);
+        mShipShelf.setLayoutManager(manager);
+        mShipShelf.setAdapter(new ShipTypeAdapter());
 
         // Instantiate and attach models to presenters to views.
         final PlaceShipSeaPresenter seaPresenter = new PlaceShipSeaPresenter();
         seaPresenter.setSea(getPlayer().getSea());
         mSeaView.setPresenter(seaPresenter);
         mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
-        // TODO: Toast with summary, implement drag-and-drop from shelf to mSeaView.
-        for (ImageView imageView : shelves) {
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Selected", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
 
         return view;
     }
@@ -101,5 +98,49 @@ public class PlaceShipFragment extends PlayerFragment {
      */
     public interface PlaceShipInteraction extends PlayerFragmentInteraction {
         void onShipPlaceComplete(Player player);
+    }
+
+    private class ShipTypeViewHolder extends RecyclerView.ViewHolder {
+        private LayoutShelfShipTypeBinding binding;
+
+        ShipTypeViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        ShipTypeViewHolder(LayoutShelfShipTypeBinding binding) {
+            this(binding.getRoot());
+            this.binding = binding;
+        }
+    }
+
+    private class ShipTypeAdapter extends RecyclerView.Adapter<ShipTypeViewHolder> {
+
+        @Override
+        public ShipTypeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            final int layoutId = R.layout.layout_shelf_ship_type;
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            LayoutShelfShipTypeBinding shelfShipTypeBinding = DataBindingUtil
+                    .inflate(inflater, layoutId, parent, false);
+            return new ShipTypeViewHolder(shelfShipTypeBinding);
+        }
+
+        @Override
+        public void onBindViewHolder(ShipTypeViewHolder holder, int position) {
+            final Ship.ShipType shipType = shipTypes[position];
+            holder.binding.setType(shipType);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), String.format("Selected %s", shipType.name()),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return shipTypes.length;
+        }
     }
 }

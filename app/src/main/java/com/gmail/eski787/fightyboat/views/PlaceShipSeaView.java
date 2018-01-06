@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 
@@ -78,6 +79,16 @@ public class PlaceShipSeaView extends SeaView<PlaceShipSeaPresenter> {
                     // was not handled elsewhere. Return ship to where it was originally placed.
                     if (!event.getResult())
                         handled = mPresenter.onDropShip(null);
+                    break;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    //TODO Decode Ship type at some point.
+                    ClipData data = event.getClipData();
+                    ClipData.Item lengthItem = data.getItemAt(0);
+                    int length = Integer.decode(lengthItem.getText().toString());
+                    mPresenter.setGhostShip(length);
+                    break;
+                default:
+                    Log.e(TAG, String.format("Unexpected onDrag action: %d.", event.getAction()));
             }
 
             if (handled) {
