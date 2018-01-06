@@ -1,22 +1,27 @@
 package com.gmail.eski787.fightyboat.fragments;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.databinding.LayoutShelfShipTypeBinding;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.game.Ship;
 import com.gmail.eski787.fightyboat.presenters.PlaceShipSeaPresenter;
+import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
 import com.gmail.eski787.fightyboat.views.PlaceShipSeaView;
 
 /**
@@ -32,6 +37,7 @@ public class PlaceShipFragment extends PlayerFragment {
     private PlaceShipInteraction mListener;
     private PlaceShipSeaView mSeaView;
     private RecyclerView mShipShelf;
+    private PlaceShipSeaPresenter mSeaPresenter;
 
     public PlaceShipFragment() {
         // Required empty public constructor
@@ -72,9 +78,9 @@ public class PlaceShipFragment extends PlayerFragment {
         mShipShelf.setAdapter(new ShipTypeAdapter());
 
         // Instantiate and attach models to presenters to views.
-        final PlaceShipSeaPresenter seaPresenter = new PlaceShipSeaPresenter();
-        seaPresenter.setSea(getPlayer().getSea());
-        mSeaView.setPresenter(seaPresenter);
+        mSeaPresenter = new PlaceShipSeaPresenter();
+        mSeaPresenter.setSea(getPlayer().getSea());
+        mSeaView.setPresenter(mSeaPresenter);
         mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
 
         return view;
@@ -107,9 +113,41 @@ public class PlaceShipFragment extends PlayerFragment {
             super(itemView);
         }
 
-        ShipTypeViewHolder(LayoutShelfShipTypeBinding binding) {
+        ShipTypeViewHolder(final LayoutShelfShipTypeBinding binding) {
             this(binding.getRoot());
             this.binding = binding;
+
+            binding.shipTypeIcon.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    int action = motionEvent.getActionMasked();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            Log.d(TAG, "Touch down");
+                            String type = binding.getType().name();
+                            Ship dragShip = new Ship(new Point(),
+                                    Ship.Orientation.HORIZONTAL, binding.getType());
+                            ClipData clipData = ClipData.newPlainText("ship type", type);
+                            PlaceShipSeaView.ShipDragShadow dragShadow =
+                                    mSeaView.new ShipDragShadow(new SeaPresenter.ShipPresenter(dragShip));
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                view.startDragAndDrop(clipData, dragShadow, null, 0);
+                            } else {
+                                view.startDrag(clipData, dragShadow, null, 0);
+                            }
+                            return true;
+                        case MotionEvent.ACTION_UP:
+                            Log.d(TAG, "Touch up");
+                            view.performClick();
+                            return true;
+                        case MotionEvent.ACTION_MOVE:
+                            Log.d(TAG, "Touch move");
+                            return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 
@@ -129,13 +167,13 @@ public class PlaceShipFragment extends PlayerFragment {
             final Ship.ShipType shipType = shipTypes[position];
             holder.binding.setType(shipType);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(view.getContext(), String.format("Selected %s", shipType.name()),
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(view.getContext(), String.format("Selected %s", shipType.name()),
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
 
         @Override

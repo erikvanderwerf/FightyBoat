@@ -5,6 +5,7 @@
 
     <data>
         <import type="android.support.v4.content.ContextCompat" />
+
         <variable
             name="User"
             type="com.gmail.eski787.fightyboat.models.PlayerModel" />

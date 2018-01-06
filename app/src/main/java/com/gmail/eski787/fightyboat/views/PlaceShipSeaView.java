@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 
+import com.gmail.eski787.fightyboat.game.Ship;
 import com.gmail.eski787.fightyboat.presenters.PlaceShipSeaPresenter;
 import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
 
@@ -64,13 +65,24 @@ public class PlaceShipSeaView extends SeaView<PlaceShipSeaPresenter> {
             assert mPresenter != null;
             super.onDrag(v, event);
 
+//            Log.d(TAG, String.format("onDrag: %d", event.getAction()));
+
             boolean handled = false;
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
                     handled = true;
                     break;
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    handled = false;
+                    break;
                 case DragEvent.ACTION_DROP:
                     // Case when user releases ship over SeaView.
+                    ClipData clipData = event.getClipData();
+                    if (clipData != null) {
+                        Ship.ShipType type = Ship.ShipType.valueOf(
+                                clipData.getItemAt(0).getText().toString());
+                        mPresenter.setGhostShip(type);
+                    }
                     PointF coordinate = getCoordinate(event.getX(), event.getY());
                     handled = mPresenter.onDropShip(coordinate);
                     break;
@@ -81,12 +93,10 @@ public class PlaceShipSeaView extends SeaView<PlaceShipSeaPresenter> {
                         handled = mPresenter.onDropShip(null);
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    //TODO Decode Ship type at some point.
-                    ClipData data = event.getClipData();
-                    ClipData.Item lengthItem = data.getItemAt(0);
-                    int length = Integer.decode(lengthItem.getText().toString());
-                    mPresenter.setGhostShip(length);
+                    handled = true;
                     break;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    mPresenter.clearGhostShip();
                 default:
                     Log.e(TAG, String.format("Unexpected onDrag action: %d.", event.getAction()));
             }
@@ -102,10 +112,10 @@ public class PlaceShipSeaView extends SeaView<PlaceShipSeaPresenter> {
     /**
      * Provides the drag shadow for when a user holds and drags a ship around.
      */
-    private final class ShipDragShadow extends DragShadowBuilder {
+    public final class ShipDragShadow extends DragShadowBuilder {
         private final SeaPresenter.ShipPresenter ship;
 
-        ShipDragShadow(SeaPresenter.ShipPresenter ship) {
+        public ShipDragShadow(SeaPresenter.ShipPresenter ship) {
             this.ship = ship;
         }
 

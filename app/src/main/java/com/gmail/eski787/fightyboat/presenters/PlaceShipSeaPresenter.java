@@ -75,14 +75,22 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
         };
     }
 
+    /**
+     * Drop the ghost ship into the sea at the given coordinate.
+     *
+     * @param coordinate Coordinate to place the origin of the ship.
+     * @return true if the ghost ship was dropped, false otherwise.
+     */
     public boolean onDropShip(PointF coordinate) {
         assert mSea != null;
 
-        if (coordinate != null) {
-            mGhostShip.getOrigin().set((int) coordinate.x, (int) coordinate.y);
+        if (mGhostShip != null) {
+            if (coordinate != null) {
+                mGhostShip.getOrigin().set((int) coordinate.x, (int) coordinate.y);
+            }
+            return mSea.getShips().add(mGhostShip);
         }
-        mSea.getShips().add(mGhostShip);
-        return true;
+        return false;
     }
 
     // TODO This should take a ShipType instead of a Ship
@@ -96,9 +104,16 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     }
 
     // TODO Remove this once Ship type decoding happens.
-    public boolean setGhostShip(int length) {
-        Ship ship = new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, length,
-                ShipCap.CapType.ROUND, ShipCap.CapType.ROUND);
-        return setGhostShip(ship);
+    public boolean setGhostShip(Ship.ShipType shipType) {
+        if (mGhostShip == null) {
+            mGhostShip = new Ship(new Point(0, 0), Ship.Orientation.HORIZONTAL, shipType);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void clearGhostShip() {
+        mGhostShip = null;
     }
 }

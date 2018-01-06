@@ -78,7 +78,7 @@ public abstract class SeaPresenter extends GridPresenter {
     public static class ShipPresenter implements Presenter {
         private final Ship mShip;
 
-        ShipPresenter(Ship ship) {
+        public ShipPresenter(Ship ship) {
             this.mShip = ship;
         }
 
