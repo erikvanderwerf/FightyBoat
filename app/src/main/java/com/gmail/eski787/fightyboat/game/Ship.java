@@ -146,7 +146,7 @@ public class Ship implements Parcelable {
 
     public enum ShipType {
         AIRCRAFT_CARRIER(5, ShipCap.CapType.SQUARE, ShipCap.CapType.SQUARE, R.mipmap.ic_launcher),
-        BATTLESHIP(4, ShipCap.CapType.POINT, ShipCap.CapType.SQUARE, R.mipmap.ic_launcher),
+        BATTLESHIP(4, ShipCap.CapType.POINT, ShipCap.CapType.POINT, R.mipmap.ic_launcher),
         SUBMARINE(3, ShipCap.CapType.ROUND, ShipCap.CapType.ROUND, R.mipmap.ic_launcher),
         DESTROYER(3, ShipCap.CapType.POINT, ShipCap.CapType.SQUARE, R.mipmap.ic_launcher),
         CRUISER(2, ShipCap.CapType.POINT, ShipCap.CapType.SQUARE, R.mipmap.ic_launcher);

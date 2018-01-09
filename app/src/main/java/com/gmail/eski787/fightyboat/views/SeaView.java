@@ -76,8 +76,8 @@ public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
         final int midX = startX + (width / 2);
         final int midY = startY + (height / 2);
         // The following declarations should be treated as final after the switch.
-        int endX = 0, endY = 0;
-        float minX = 0, maxX = 0, minY = 0, maxY = 0;
+        int endX, endY;
+        float minX, maxX, minY, maxY;
         switch (orientation) {
             case HORIZONTAL:
                 endX = (x + length) * width;
@@ -95,6 +95,8 @@ public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
                 maxY = endY - height;
                 minY = startY + height;
                 break;
+            default:
+                throw new RuntimeException(String.format("Orientation is an invalid state. %s", orientation));
         }
 
         // Start
