@@ -49,9 +49,7 @@ public class PlayGameRadarPresenter extends RadarPresenter {
                 throw new RuntimeException("Cannot fire if there is no Sea.");
             }
 
-            Sea.SeaStatus newStatus = getShipAtCoordinate(selected) != null ?
-                    Sea.SeaStatus.PEG_HIT : Sea.SeaStatus.PEG_MISS;
-            mSea.setStatus(selected.x, selected.y, newStatus);
+            mSea.hit(selected);
             selected = null;
             changeState(Game.TurnState.AWAITING_CONTINUE);
         } else if (mState == Game.TurnState.AWAITING_CONTINUE) {

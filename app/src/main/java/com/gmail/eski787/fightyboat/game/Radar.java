@@ -30,13 +30,12 @@ public class Radar implements Parcelable {
     public Radar(Player player) {
         mSea = player.getSea();
 
-        final int rows = mSea.getNumberOfRows();
-        final int cols = mSea.getNumberOfColumns();
-        mGrid = new RadarStatus[rows][cols];
+        final Point size = mSea.getSize();
+        mGrid = new RadarStatus[size.x][size.y];
 
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < cols; x++) {
-                mGrid[y][x] = RadarStatus.HIDDEN;
+        for (int x = 0; x < size.x; x++) {
+            for (int y = 0; y < size.y; y++) {
+                mGrid[x][y] = RadarStatus.HIDDEN;
             }
         }
     }
@@ -47,15 +46,15 @@ public class Radar implements Parcelable {
 
     /**
      * Returns the status if revealed, or null if the radar has not revealed
-     * that tile.
+     * that point.
      *
-     * @param tile Coordinate of tile to get
+     * @param point Coordinate of point to get
      * @return SeaStatus or null
      */
     @Nullable
-    public SeaStatus getSeaStatus(Point tile) {
-        if (mGrid[tile.y][tile.x] == RadarStatus.REVEALED) {
-            return mSea.getStatus(tile);
+    public SeaStatus getSeaStatus(Point point) {
+        if (mGrid[point.x][point.y] == RadarStatus.REVEALED) {
+            return mSea.getStatus(point);
         } else {
             return null;
         }

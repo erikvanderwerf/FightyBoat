@@ -1,6 +1,7 @@
 package com.gmail.eski787.fightyboat.activities;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -237,8 +238,7 @@ public class NewGameActivity extends LockableActivity
 
     public void onStartGame() {
         // Create game
-        GameSettings settings = new GameSettings();
-        settings.seaSize.set(10, 10);
+        GameSettings settings = new GameSettings(new Point(10, 10), new int[]{4});
 
         Player[] playersArray = mPlayers.toArray(new Player[mPlayers.size()]);
         Game game = new Game(playersArray, settings);
@@ -291,7 +291,8 @@ public class NewGameActivity extends LockableActivity
     }
 
     private enum DETAIL_FRAGMENTS implements Parcelable {
-        PLAYER_DETAiL(0, PlayerDetailFragment.class), PLACE_SHIPS(1, PlaceShipFragment.class);
+        PLAYER_DETAiL(0, PlayerDetailFragment.class),
+        PLACE_SHIPS(1, PlaceShipFragment.class);
 
         public static final Creator<DETAIL_FRAGMENTS> CREATOR = new Creator<DETAIL_FRAGMENTS>() {
             @Override

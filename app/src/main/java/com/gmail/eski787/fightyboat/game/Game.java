@@ -27,7 +27,6 @@ public class Game implements Parcelable {
     private final GameSettings mSettings;
     private int mCurrentPlayer;
     private TurnState mTurnState;
-
     public Game(Player[] players, GameSettings settings) {
         this.mPlayers = players;
         this.mSettings = settings;
@@ -58,6 +57,10 @@ public class Game implements Parcelable {
 
     public Player[] getPlayers() {
         return mPlayers;
+    }
+
+    @IntDef({AWAITING_SELECTION, AWAITING_FIRE, AWAITING_CONTINUE})
+    public @interface TurnState {
     }
 
     @IntDef({AWAITING_SELECTION, AWAITING_FIRE, AWAITING_CONTINUE})

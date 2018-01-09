@@ -22,6 +22,11 @@ public abstract class SeaPresenter extends GridPresenter {
     Sea mSea;
 
     @NonNull
+    public static Point intCoordinate(@NonNull PointF coordinate) {
+        return new Point(((int) coordinate.x), ((int) coordinate.y));
+    }
+
+    @NonNull
     public List<ShipPresenter> getShips() {
         if (mSea == null) {
             throw new RuntimeException("Cannot get ships without Sea attached.");
@@ -54,20 +59,12 @@ public abstract class SeaPresenter extends GridPresenter {
     }
 
     @Nullable
-    Ship getShipAtCoordinate(@NonNull Point coordinate) {
-        if (mSea == null) {
-            throw new RuntimeException("Cannot find ships with no sea.");
+    public Point getSelected() {
+        if (mSea != null) {
+            return mSea.getLastHit();
+        } else {
+            throw new RuntimeException("Cannot get selected with no sea.");
         }
-        for (Ship ship : mSea.getShips()) {
-            if (ship.contains(coordinate))
-                return ship;
-        }
-        return null;
-    }
-
-    @NonNull
-    final Point intCoordinate(@NonNull PointF coordinate) {
-        return new Point(((int) coordinate.x), ((int) coordinate.y));
     }
 
     /**
