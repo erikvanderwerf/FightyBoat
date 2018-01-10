@@ -1,43 +1,45 @@
 package com.gmail.eski787.fightyboat.game.state;
 
-import com.gmail.eski787.fightyboat.game.Game;
+import android.graphics.PointF;
+import android.support.annotation.IdRes;
+import android.support.annotation.IntDef;
 
 /**
  * Created by Erik on 1/9/2018.
  */
 
 public abstract class GameAction {
-    public abstract @Game.TurnState
-    int[] validStates();
+    public static final int ACTION_UNLOCK = 0;
+    public static final int ACTION_SELECT = 1;
+    public static final int ACTION_FIRE = 2;
+    public static final int ACTION_CONTINUE = 3;
+    private final @ActionId
+    int mActionId;
+    private final PointF mCoordinate;
+    private final @IdRes
+    int mViewId;
 
-    public abstract @Game.TurnState
-    int transition(Game game);
-
-    /**
-     * Created by Erik on 1/9/2018.
-     */
-    public static class UnlockAction extends GameAction {
-        @Override
-        public int[] validStates() {
-            return new int[]{Game.AWAITING_UNLOCK};
-        }
-
-        @Override
-        public int transition(Game game) {
-            return Game.AWAITING_SELECTION;
-        }
+    GameAction(@ActionId int actionId, PointF coordinate, @IdRes int viewId) {
+        mActionId = actionId;
+        mCoordinate = coordinate;
+        mViewId = viewId;
     }
 
-    public static class SelectAction extends GameAction {
+    public @ActionId
+    int getActionId() {
+        return mActionId;
+    }
 
-        @Override
-        public int[] validStates() {
-            return new int[]{Game.AWAITING_SELECTION};
-        }
+    public PointF getCoordinate() {
+        return new PointF(mCoordinate.x, mCoordinate.y);
+    }
 
-        @Override
-        public int transition(Game game) {
-            return Game.AWAITING_FIRE;
-        }
+    public @IdRes
+    int getViewId() {
+        return mViewId;
+    }
+
+    @IntDef({ACTION_UNLOCK, ACTION_SELECT, ACTION_FIRE, ACTION_CONTINUE})
+    public @interface ActionId {
     }
 }
