@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.game.state;
 
 import android.graphics.PointF;
-import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 
 /**
@@ -16,13 +15,13 @@ public abstract class GameAction {
     private final @ActionId
     int mActionId;
     private final PointF mCoordinate;
-    private final @IdRes
-    int mViewId;
+//    private final @IdRes
+//    int mViewId;
 
-    GameAction(@ActionId int actionId, PointF coordinate, @IdRes int viewId) {
+    GameAction(@ActionId int actionId, PointF coordinate) {
         mActionId = actionId;
         mCoordinate = coordinate;
-        mViewId = viewId;
+//        mViewId = viewId;
     }
 
     public @ActionId
@@ -34,10 +33,10 @@ public abstract class GameAction {
         return new PointF(mCoordinate.x, mCoordinate.y);
     }
 
-    public @IdRes
-    int getViewId() {
-        return mViewId;
-    }
+//    public @IdRes
+//    int getViewId() {
+//        return mViewId;
+//    }
 
     @IntDef({ACTION_UNLOCK, ACTION_SELECT, ACTION_FIRE, ACTION_CONTINUE})
     public @interface ActionId {

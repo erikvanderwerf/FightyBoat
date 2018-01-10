@@ -2,9 +2,12 @@ package com.gmail.eski787.fightyboat.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.ArraySet;
 
 import com.gmail.eski787.fightyboat.game.state.GameAction;
 import com.gmail.eski787.fightyboat.game.state.TurnState;
+
+import java.util.Set;
 
 /**
  * Created by Erik on 12/13/2016.
@@ -25,9 +28,9 @@ public class Game implements Parcelable {
 
     private final Player[] mPlayers;
     private final GameSettings mSettings;
+    private final Set<GameChangeListener> mListener = new ArraySet<>();
     private int mCurrentPlayer;
     private TurnState mTurnState;
-    private GameChangeListener mListener;
 
     public Game(Player[] players, GameSettings settings) {
         this.mPlayers = players;
@@ -61,16 +64,18 @@ public class Game implements Parcelable {
         return mPlayers[mCurrentPlayer];
     }
 
-    public void setGameChangeListener(GameChangeListener gameChangeListener) {
-        this.mListener = gameChangeListener;
+    public void addGameChangeListener(GameChangeListener gameChangeListener) {
+        this.mListener.add(gameChangeListener);
     }
 
     public void sendAction(GameAction gameAction) {
         TurnState newState = mTurnState.handleAction(gameAction);
         if (newState != null) {
+//            mTurnState.onExit();
             mTurnState = newState;
+//            mTurnState.onEnter();
         }
-        mListener.onGameChange();
+        mListener.forEach(GameChangeListener::onGameChange);
     }
 
     public interface GameChangeListener {

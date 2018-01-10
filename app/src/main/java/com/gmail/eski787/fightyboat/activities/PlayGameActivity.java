@@ -34,7 +34,7 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
             mGame = savedInstanceState.getParcelable(ARG_GAME);
         }
         assert mGame != null;
-        mGame.setGameChangeListener(this);
+        mGame.addGameChangeListener(this);
         onGameChange();
     }
 

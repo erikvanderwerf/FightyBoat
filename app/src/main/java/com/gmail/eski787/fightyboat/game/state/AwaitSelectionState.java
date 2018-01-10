@@ -7,6 +7,9 @@ package com.gmail.eski787.fightyboat.game.state;
 class AwaitSelectionState extends TurnState {
     @Override
     public TurnState handleAction(GameAction action) {
-        return null;
+        if (action.getActionId() == GameAction.ACTION_SELECT) {
+            return new AwaitFireState();
+        }
+        return super.handleAction(action);
     }
 }
