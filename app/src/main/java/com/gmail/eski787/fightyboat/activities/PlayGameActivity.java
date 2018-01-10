@@ -8,29 +8,17 @@ import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlayGameFragment;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
+import com.gmail.eski787.fightyboat.game.state.GameAction;
 
-public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction {
+public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction, Game.GameChangeListener {
     public static final String ARG_GAME = "ARG_GAME";
     private static final String TAG = PlayGameActivity.class.getSimpleName();
-    private static final String ARG_PLAYER_INDEX = "ARG_PLAYER_INDEX";
     private Game mGame;
-    private int mPlayerIndex;
+    private Fragment mFragment;
 
     @Override
     protected int getFragmentId() {
         return R.id.fragment_play_game;
-    }
-
-    @Override
-    public Player[] getPlayers() {
-        return mGame.getPlayers();
-    }
-
-    @Override
-    public void advancePlayer() {
-        mPlayerIndex = (mPlayerIndex + 1) % mGame.getPlayers().length;
-        lock();
-        applyState();
     }
 
     @Override
@@ -42,42 +30,57 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
             // Get extras
             Intent intent = getIntent();
             mGame = intent.getParcelableExtra(ARG_GAME);
-            mPlayerIndex = 0;
-            lock();
         } else {
             mGame = savedInstanceState.getParcelable(ARG_GAME);
-            mPlayerIndex = savedInstanceState.getInt(ARG_PLAYER_INDEX);
         }
-        applyState();
-    }
-
-    private void applyState() {
-        Fragment fragment;
-        if (isLocked()) {
-            fragment = getPlayer().getLockSettings().getLockFragment();
-        } else {
-            fragment = new PlayGameFragment();
-        }
-        getSupportFragmentManager().beginTransaction()
-                .replace(getFragmentId(), fragment)
-                .commit();
+        assert mGame != null;
+        mGame.setGameChangeListener(this);
+        onGameChange();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(ARG_GAME, mGame);
-        outState.putInt(ARG_PLAYER_INDEX, mPlayerIndex);
     }
 
     @Override
     public void onSuccessfulUnlock() {
         super.onSuccessfulUnlock();
-        applyState();
+        mGame.sendAction(new GameAction.UnlockAction());
     }
 
     @Override
     public Player getPlayer() {
-        return mGame.getPlayers()[mPlayerIndex];
+        return mGame.getCurrentPlayer()
+    }
+
+    @Override
+    public void onGameChange() {
+        @Game.TurnState int state = mGame.getTurnState();
+
+        Fragment fragment = null;
+
+        switch (state) {
+            case Game.AWAITING_UNLOCK:
+                fragment = getPlayer().getLockSettings().getLockFragment();
+                break;
+            case Game.AWAITING_CONTINUE:
+                fragment = new PlayGameFragment();
+                break;
+            case Game.AWAITING_FIRE:
+            case Game.AWAITING_SELECTION:
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(getFragmentId(), fragment)
+                    .commit();
+            mFragment = fragment;
+        } else {
+//            mFragment.getView().invalidate();
+        }
     }
 }

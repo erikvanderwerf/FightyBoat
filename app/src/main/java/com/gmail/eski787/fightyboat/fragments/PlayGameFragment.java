@@ -97,8 +97,5 @@ public class PlayGameFragment extends PlayerFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface PlayGameInteraction extends PlayerFragmentInteraction {
-        Player[] getPlayers();
-
-        void advancePlayer();
     }
 }

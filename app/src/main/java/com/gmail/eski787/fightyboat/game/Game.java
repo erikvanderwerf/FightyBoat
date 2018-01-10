@@ -2,7 +2,12 @@ package com.gmail.eski787.fightyboat.game;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.IntDef;
+
+import com.gmail.eski787.fightyboat.game.state.GameAction;
+import com.gmail.eski787.fightyboat.game.state.TurnState;
+
+import java.util.Locale;
+import java.util.stream.IntStream;
 
 /**
  * Created by Erik on 12/13/2016.
@@ -20,13 +25,20 @@ public class Game implements Parcelable {
             return new Game[size];
         }
     };
-    private static final int AWAITING_SELECTION = 0;
-    private static final int AWAITING_FIRE = 1;
-    private static final int AWAITING_CONTINUE = 2;
+//    public static final int AWAITING_UNLOCK = 0;
+//    public static final int AWAITING_SELECTION = 1;
+//    public static final int AWAITING_CONTINUE = 3;
+//    public static final int AWAITING_FIRE = 2;
+//    @IntDef({AWAITING_UNLOCK, AWAITING_SELECTION, AWAITING_FIRE, AWAITING_CONTINUE})
+//    public @interface TurnState {}
+
     private final Player[] mPlayers;
+
     private final GameSettings mSettings;
     private int mCurrentPlayer;
     private TurnState mTurnState;
+    private GameChangeListener mListener;
+
     public Game(Player[] players, GameSettings settings) {
         this.mPlayers = players;
         this.mSettings = settings;
@@ -43,6 +55,11 @@ public class Game implements Parcelable {
         return mPlayers.length;
     }
 
+    @TurnState
+    public int getTurnState() {
+        return mTurnState;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -55,15 +72,25 @@ public class Game implements Parcelable {
         dest.writeInt(mCurrentPlayer);
     }
 
-    public Player[] getPlayers() {
-        return mPlayers;
+    public Player getCurrentPlayer() {
+        return mPlayers[mCurrentPlayer];
     }
 
-    @IntDef({AWAITING_SELECTION, AWAITING_FIRE, AWAITING_CONTINUE})
-    public @interface TurnState {
+    public void setGameChangeListener(GameChangeListener gameChangeListener) {
+        this.mListener = gameChangeListener;
     }
 
-    @IntDef({AWAITING_SELECTION, AWAITING_FIRE, AWAITING_CONTINUE})
-    public @interface TurnState {
+    public void sendAction(GameAction gameAction) {
+        boolean validTransition = IntStream.of(gameAction.validStates()).anyMatch(x -> x == mTurnState);
+        if (!validTransition) {
+            throw new RuntimeException(String.format(Locale.getDefault(), "Invalid State Change: State %d, Action %s", mTurnState, gameAction.getClass().getName()));
+        }
+
+        mTurnState = gameAction.transition();
+        mListener.onGameChange();
+    }
+
+    public interface GameChangeListener {
+        void onGameChange();
     }
 }
