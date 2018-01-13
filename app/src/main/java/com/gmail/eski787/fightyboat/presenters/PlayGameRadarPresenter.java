@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Sea;
+import com.gmail.eski787.fightyboat.util.Util;
 
 /**
  * Presents a {@link com.gmail.eski787.fightyboat.game.Player Player}'s opponent's {@link Sea} to
@@ -15,10 +16,14 @@ import com.gmail.eski787.fightyboat.game.Sea;
 public class PlayGameRadarPresenter extends RadarPresenter {
     private static final String TAG = PlayGameRadarPresenter.class.getSimpleName();
 
+    public PlayGameRadarPresenter(Sea sea) {
+        super(sea);
+    }
+
     @Override
     public boolean onClick(PointF coordinate) {
         if (mState == Game.TurnState.AWAITING_SELECTION || mState == Game.TurnState.AWAITING_FIRE) {
-            Point tempSelection = intCoordinate(coordinate);
+            Point tempSelection = Util.intCoordinate(coordinate);
 
             Sea.SeaStatus status = mSea.getStatus(tempSelection);
             if (status == Sea.SeaStatus.PEG_NONE) {

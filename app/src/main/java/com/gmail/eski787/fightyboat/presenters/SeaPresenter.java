@@ -1,7 +1,6 @@
 package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.support.annotation.NonNull;
 
 import com.gmail.eski787.fightyboat.game.Sea;
@@ -21,9 +20,8 @@ public abstract class SeaPresenter extends GridPresenter {
     @Nullable
     Sea mSea;
 
-    @NonNull
-    public static Point intCoordinate(@NonNull PointF coordinate) {
-        return new Point(((int) coordinate.x), ((int) coordinate.y));
+    public SeaPresenter(Sea sea) {
+        setSea(sea);
     }
 
     @NonNull

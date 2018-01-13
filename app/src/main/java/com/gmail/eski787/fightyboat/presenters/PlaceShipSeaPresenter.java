@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.support.annotation.NonNull;
 
 import com.gmail.eski787.fightyboat.game.Ship;
+import com.gmail.eski787.fightyboat.util.Util;
 
 /**
  * This Presenter contains all of the interactions that the user will need to perform to place ships
@@ -21,7 +22,7 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     @Override
     public boolean onClick(@NonNull PointF coordinate) {
 //        Log.d(TAG, "Click Event: " + coordinate);
-        Ship ship = mSea.getShipAtCoordinate(intCoordinate(coordinate));
+        Ship ship = mSea.getShipAtCoordinate(Util.intCoordinate(coordinate));
         if (ship != null) {
             onShipClick(ship);
             return true;
@@ -33,7 +34,7 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     public boolean onLongClick(@NonNull PointF coordinate) {
         assert mSea != null;
 
-        Ship ship = mSea.getShipAtCoordinate(intCoordinate(coordinate));
+        Ship ship = mSea.getShipAtCoordinate(Util.intCoordinate(coordinate));
         if (ship != null) {
             mGhostShip = ship;
             mSea.getShips().remove(mGhostShip);

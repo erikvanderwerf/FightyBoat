@@ -12,33 +12,57 @@ public abstract class GameAction {
     public static final int ACTION_SELECT = 1;
     public static final int ACTION_FIRE = 2;
     public static final int ACTION_CONTINUE = 3;
-    private final @ActionId
-    int mActionId;
-    private final PointF mCoordinate;
-//    private final @IdRes
-//    int mViewId;
 
-    GameAction(@ActionId int actionId, PointF coordinate) {
+    @ActionId
+    private final int mActionId;
+
+    GameAction(@ActionId int actionId) {
         mActionId = actionId;
-        mCoordinate = coordinate;
-//        mViewId = viewId;
     }
 
-    public @ActionId
-    int getActionId() {
+    @ActionId
+    public int getActionId() {
         return mActionId;
     }
 
-    public PointF getCoordinate() {
-        return new PointF(mCoordinate.x, mCoordinate.y);
-    }
-
-//    public @IdRes
-//    int getViewId() {
-//        return mViewId;
-//    }
-
     @IntDef({ACTION_UNLOCK, ACTION_SELECT, ACTION_FIRE, ACTION_CONTINUE})
     public @interface ActionId {
+    }
+
+    public abstract static class CoordinateGameAction extends GameAction {
+        private final PointF mCoordinate;
+
+        CoordinateGameAction(@ActionId int actionId, PointF coordinate) {
+            super(actionId);
+            mCoordinate = coordinate;
+        }
+
+        public PointF getCoordinate() {
+            return new PointF(mCoordinate.x, mCoordinate.y);
+        }
+    }
+
+    public static class UnlockAction extends GameAction {
+        public UnlockAction() {
+            super(ACTION_UNLOCK);
+        }
+    }
+
+    public static class SelectAction extends CoordinateGameAction {
+        SelectAction(PointF coordinate) {
+            super(ACTION_SELECT, coordinate);
+        }
+    }
+
+    public static class FireAction extends GameAction {
+        FireAction() {
+            super(ACTION_FIRE);
+        }
+    }
+
+    public static class ContinueAction extends GameAction {
+        ContinueAction() {
+            super(ACTION_CONTINUE);
+        }
     }
 }

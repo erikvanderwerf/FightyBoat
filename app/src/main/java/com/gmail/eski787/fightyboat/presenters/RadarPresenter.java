@@ -3,6 +3,8 @@ package com.gmail.eski787.fightyboat.presenters;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 
+import com.gmail.eski787.fightyboat.game.Sea;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,10 @@ import java.util.List;
 
 public abstract class RadarPresenter extends SeaPresenter {
     private static final String TAG = RadarPresenter.class.getSimpleName();
+
+    public RadarPresenter(Sea sea) {
+        super(sea);
+    }
 
     /**
      * Called during the draw phase of a View to determine if ships should be drawn. Typically will

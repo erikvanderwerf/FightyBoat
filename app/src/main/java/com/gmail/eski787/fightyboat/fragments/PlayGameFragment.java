@@ -10,13 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.gmail.eski787.fightyboat.R;
-import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.presenters.PlayGameRadarPresenter;
 import com.gmail.eski787.fightyboat.presenters.PlayGameSeaPresenter;
 import com.gmail.eski787.fightyboat.views.PlayGameRadarView;
 import com.gmail.eski787.fightyboat.views.SeaView;
 
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,23 +58,12 @@ public class PlayGameFragment extends PlayerFragment {
         seaPresenter.setSea(getPlayer().getSea());
         mSeaView.setPresenter(seaPresenter);
 
-        LinkedList<Player> opponents = new LinkedList<>();
-        for (Player player : mListener.getPlayers())
-            if (player != getPlayer()) opponents.add(player);
-        Player opponent = opponents.get(0);
+        List<PlayGameRadarPresenter> radarPresenters = mListener.getOpponentRadars();
 
-        final PlayGameRadarPresenter radarPresenter = new PlayGameRadarPresenter();
-        radarPresenter.setSea(opponent.getSea());
-        mRadarView.setPresenter(radarPresenter);
+        mRadarView.setPresenter(radarPresenters.get(0));
         mRadarView.setClickListener(mRadarView.new ClickListener());
 
-        play_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                radarPresenter.onPlayButtonClick();
-                mRadarView.invalidate();
-            }
-        });
+        play_button.setOnClickListener(v -> mListener.onPlayButtonClick());
 
         return view;
     }
@@ -97,5 +85,8 @@ public class PlayGameFragment extends PlayerFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface PlayGameInteraction extends PlayerFragmentInteraction {
+        List<PlayGameRadarPresenter> getOpponentRadars();
+
+        void onPlayButtonClick();
     }
 }
