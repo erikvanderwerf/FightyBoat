@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.ArraySet;
 
 import com.gmail.eski787.fightyboat.game.state.GameAction;
+import com.gmail.eski787.fightyboat.game.state.LockedState;
 import com.gmail.eski787.fightyboat.game.state.TurnState;
 
 import java.util.LinkedList;
@@ -31,23 +32,28 @@ public class Game implements Parcelable {
         }
     };
 
+    @NonNull
     private final Player[] mPlayers;
+    @NonNull
     private final GameSettings mSettings;
+    @NonNull
     private final Set<GameChangeListener> mListeners = new ArraySet<>();
     @NonNull
     private TurnState mTurnState;
-    private int mCurrentPlayer;
+    private int mCurrentPlayerIndex;
 
-    public Game(Player[] players, GameSettings settings) {
+    public Game(@NonNull Player[] players, @NonNull GameSettings settings) {
         this.mPlayers = players;
         this.mSettings = settings;
-        mTurnState = new TurnState.LockedState();
+        mTurnState = new LockedState();
+        mCurrentPlayerIndex = 0;
     }
 
     private Game(Parcel in) {
         mPlayers = in.createTypedArray(Player.CREATOR);
         mSettings = in.readParcelable(GameSettings.class.getClassLoader());
         mTurnState = in.readParcelable(TurnState.class.getClassLoader());
+        mCurrentPlayerIndex = in.readInt();
     }
 
     public final int getNumberOfPlayers() {
@@ -64,6 +70,7 @@ public class Game implements Parcelable {
         dest.writeTypedArray(mPlayers, flags);
         dest.writeParcelable(mSettings, flags);
         dest.writeParcelable(mTurnState, flags);
+        dest.writeInt(mCurrentPlayerIndex);
     }
 
     public boolean addGameChangeListener(GameChangeListener gameChangeListener) {
@@ -83,7 +90,7 @@ public class Game implements Parcelable {
     }
 
     public Player getCurrentPlayer() {
-        return mPlayers[mCurrentPlayer];
+        return mPlayers[mCurrentPlayerIndex];
     }
 
     public boolean removeGameChangeListener(GameChangeListener gameChangeListener) {
@@ -92,6 +99,10 @@ public class Game implements Parcelable {
 
     public TurnState getTurnState() {
         return mTurnState;
+    }
+
+    public final void advancePlayer() {
+        mCurrentPlayerIndex = (mCurrentPlayerIndex + 1) % getNumberOfPlayers();
     }
 
     public interface GameChangeListener {

@@ -78,8 +78,7 @@ public class PlaceShipFragment extends PlayerFragment {
         mShipShelf.setAdapter(new ShipTypeAdapter());
 
         // Instantiate and attach models to presenters to views.
-        mSeaPresenter = new PlaceShipSeaPresenter();
-        mSeaPresenter.setSea(getPlayer().getSea());
+        mSeaPresenter = new PlaceShipSeaPresenter(getPlayer().getSea());
         mSeaView.setPresenter(mSeaPresenter);
         mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
 

@@ -8,7 +8,7 @@ import com.gmail.eski787.fightyboat.game.Player;
 /**
  * Any Fragment which uses a Player instance should extend this.
  */
-
+@Deprecated
 public abstract class PlayerFragment extends Fragment {
     private static final String TAG = PlayerFragment.class.getSimpleName();
     private PlayerFragmentInteraction mListener;
@@ -33,6 +33,7 @@ public abstract class PlayerFragment extends Fragment {
         mListener = null;
     }
 
+    @Deprecated
     public interface PlayerFragmentInteraction {
         Player getPlayer();
     }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.gmail.eski787.fightyboat.R;
+import com.gmail.eski787.fightyboat.presenters.GamePresenter;
 import com.gmail.eski787.fightyboat.presenters.PlayGameRadarPresenter;
 import com.gmail.eski787.fightyboat.presenters.PlayGameSeaPresenter;
 import com.gmail.eski787.fightyboat.views.PlayGameRadarView;
@@ -23,15 +24,13 @@ import java.util.List;
  * {@link PlayGameInteraction} interface
  * to handle interaction events.
  */
-public class PlayGameFragment extends PlayerFragment {
+public class PlayGameFragment extends Fragment {
     private PlayGameInteraction mListener;
     private SeaView<PlayGameSeaPresenter> mSeaView;
     private PlayGameRadarView mRadarView;
     private Button play_button;
 
-    public PlayGameFragment() {
-        // Required empty public constructor
-    }
+    public PlayGameFragment() { /* Required empty public constructor */ }
 
     @Override
     public void onAttach(Context context) {
@@ -54,11 +53,11 @@ public class PlayGameFragment extends PlayerFragment {
         play_button = view.findViewById(R.id.play_button);
 
 
-        PlayGameSeaPresenter seaPresenter = new PlayGameSeaPresenter();
-        seaPresenter.setSea(getPlayer().getSea());
+        GamePresenter presenter = mListener.getGame();
+        PlayGameSeaPresenter seaPresenter = new PlayGameSeaPresenter(presenter.getCurrentPlayer().getSea());
         mSeaView.setPresenter(seaPresenter);
 
-        List<PlayGameRadarPresenter> radarPresenters = mListener.getOpponentRadars();
+        List<PlayGameRadarPresenter> radarPresenters = presenter.getOpponentRadars();
 
         mRadarView.setPresenter(radarPresenters.get(0));
         mRadarView.setClickListener(mRadarView.new ClickListener());
@@ -84,9 +83,7 @@ public class PlayGameFragment extends PlayerFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface PlayGameInteraction extends PlayerFragmentInteraction {
-        List<PlayGameRadarPresenter> getOpponentRadars();
-
-        void onPlayButtonClick();
+    public interface PlayGameInteraction {
+        GamePresenter getGame();
     }
 }

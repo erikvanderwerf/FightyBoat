@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
 
+import com.gmail.eski787.fightyboat.game.Sea;
 import com.gmail.eski787.fightyboat.game.Ship;
 import com.gmail.eski787.fightyboat.util.Util;
 
@@ -19,6 +20,10 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
      */
     private Ship mGhostShip;
 
+    public PlaceShipSeaPresenter(Sea sea) {
+        super(sea);
+    }
+
     @Override
     public boolean onClick(@NonNull PointF coordinate) {
 //        Log.d(TAG, "Click Event: " + coordinate);
@@ -32,8 +37,6 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
 
     @Override
     public boolean onLongClick(@NonNull PointF coordinate) {
-        assert mSea != null;
-
         Ship ship = mSea.getShipAtCoordinate(Util.intCoordinate(coordinate));
         if (ship != null) {
             mGhostShip = ship;
@@ -44,8 +47,6 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
     }
 
     private void onShipClick(@NonNull Ship ship) {
-        assert mSea != null;
-
         // Switch ship orientation
         Ship.Orientation toggle = ship.getOrientation().toggle();
         ship.setOrientation(toggle);
@@ -83,8 +84,6 @@ public class PlaceShipSeaPresenter extends SeaPresenter {
      * @return true if the ghost ship was dropped, false otherwise.
      */
     public boolean onDropShip(PointF coordinate) {
-        assert mSea != null;
-
         if (mGhostShip != null) {
             if (coordinate != null) {
                 mGhostShip.getOrigin().set((int) coordinate.x, (int) coordinate.y);

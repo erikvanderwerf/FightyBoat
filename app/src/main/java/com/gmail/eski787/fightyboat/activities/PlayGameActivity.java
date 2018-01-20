@@ -10,9 +10,6 @@ import com.gmail.eski787.fightyboat.fragments.PlayGameFragment;
 import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.presenters.GamePresenter;
-import com.gmail.eski787.fightyboat.presenters.PlayGameRadarPresenter;
-
-import java.util.List;
 
 public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction, GamePresenter.GamePresenterInteraction {
     public static final String ARG_GAME = "ARG_GAME";
@@ -23,6 +20,16 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
     @Override
     protected int getFragmentId() {
         return R.id.fragment_play_game;
+    }
+
+    @Override
+    public GamePresenter getGame() {
+        return mGamePresenter;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return mGamePresenter.getCurrentPlayer();
     }
 
     @Override
@@ -54,25 +61,10 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
     }
 
     @Override
-    public Player getPlayer() {
-        return mGamePresenter.getCurrentPlayer();
-    }
-
-    @Override
     public void transitionToFragment(@NonNull Fragment fragment) {
         mFragment = fragment;
         getSupportFragmentManager().beginTransaction()
                 .replace(getFragmentId(), fragment)
                 .commit();
-    }
-
-    @Override
-    public List<PlayGameRadarPresenter> getOpponentRadars() {
-        return mGamePresenter.getOpponentRadars();
-    }
-
-    @Override
-    public void onPlayButtonClick() {
-        mGamePresenter.onPlayButtonClick();
     }
 }

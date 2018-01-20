@@ -1,12 +1,9 @@
 package com.gmail.eski787.fightyboat.presenters;
 
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.util.Log;
 
-import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Sea;
-import com.gmail.eski787.fightyboat.util.Util;
+import com.gmail.eski787.fightyboat.game.state.GameAction;
 
 /**
  * Presents a {@link com.gmail.eski787.fightyboat.game.Player Player}'s opponent's {@link Sea} to
@@ -22,21 +19,8 @@ public class PlayGameRadarPresenter extends RadarPresenter {
 
     @Override
     public boolean onClick(PointF coordinate) {
-        if (mState == Game.TurnState.AWAITING_SELECTION || mState == Game.TurnState.AWAITING_FIRE) {
-            Point tempSelection = Util.intCoordinate(coordinate);
+        GameAction action = new GameAction.SelectAction(coordinate);
 
-            Sea.SeaStatus status = mSea.getStatus(tempSelection);
-            if (status == Sea.SeaStatus.PEG_NONE) {
-                selected = tempSelection;
-                changeState(Game.TurnState.AWAITING_FIRE);
-            } else {
-                selected = null;
-                mListener.notifyInvalidSelection();
-                changeState(Game.TurnState.AWAITING_SELECTION);
-            }
-        } else if (mState == Game.TurnState.AWAITING_CONTINUE) {
-            return false;
-        }
         return true;
     }
 
@@ -46,20 +30,8 @@ public class PlayGameRadarPresenter extends RadarPresenter {
     }
 
     public void onPlayButtonClick() {
-        if (mState == Game.TurnState.AWAITING_SELECTION) {
-            Log.d(TAG, "onPlayButtonClick: User pressed disabled button. How?");
-        } else if (mState == Game.TurnState.AWAITING_FIRE) {
-            // Pressed FIRE
-            if (mSea == null) {
-                throw new RuntimeException("Cannot fire if there is no Sea.");
-            }
+        GameAction action = new GameAction.PlayButtonAction();
 
-            mSea.hit(selected);
-            selected = null;
-            changeState(Game.TurnState.AWAITING_CONTINUE);
-        } else if (mState == Game.TurnState.AWAITING_CONTINUE) {
-            mListener.advancePlayer();
-        }
     }
 
     @Override

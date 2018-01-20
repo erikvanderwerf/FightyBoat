@@ -211,6 +211,8 @@ public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
             assert mPresenter != null;
             final boolean handled = mPresenter.onLongClick(
                     getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
+            if (handled)
+                invalidate();
             return handled;
         }
 

@@ -17,18 +17,15 @@ import javax.annotation.Nullable;
 
 public abstract class SeaPresenter extends GridPresenter {
     private static final String TAG = ShipPresenter.class.getSimpleName();
-    @Nullable
-    Sea mSea;
+    @NonNull
+    final Sea mSea;
 
-    public SeaPresenter(Sea sea) {
-        setSea(sea);
+    public SeaPresenter(@NonNull Sea sea) {
+        mSea = sea;
     }
 
     @NonNull
     public List<ShipPresenter> getShips() {
-        if (mSea == null) {
-            throw new RuntimeException("Cannot get ships without Sea attached.");
-        }
         List<ShipPresenter> ships = new LinkedList<>();
         for (Ship ship : mSea.getShips()) {
             ships.add(new ShipPresenter(ship));
@@ -38,31 +35,17 @@ public abstract class SeaPresenter extends GridPresenter {
 
     @NonNull
     public Point getSize() {
-        if (mSea == null) {
-            throw new RuntimeException("Cannot get size with no sea.");
-        }
         return mSea.getSize();
     }
 
     @NonNull
     public Sea.SeaStatus getStatus(int x, int y) {
-        if (mSea == null) {
-            throw new RuntimeException("Cannot get status with no sea.");
-        }
         return mSea.getStatus(x, y);
-    }
-
-    public void setSea(@Nullable Sea sea) {
-        mSea = sea;
     }
 
     @Nullable
     public Point getSelected() {
-        if (mSea != null) {
-            return mSea.getLastHit();
-        } else {
-            throw new RuntimeException("Cannot get selected with no sea.");
-        }
+        return mSea.getLastHit();
     }
 
     /**
