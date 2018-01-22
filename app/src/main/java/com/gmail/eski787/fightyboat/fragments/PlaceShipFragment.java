@@ -71,16 +71,16 @@ public class PlaceShipFragment extends PlayerFragment {
         mSeaView = view.findViewById(R.id.place_ship_sea_view);
         mShipShelf = view.findViewById(R.id.place_ship_shelf);
 
-        // List of available ahips
+        // List of available ships
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mShipShelf.setHasFixedSize(true);
         mShipShelf.setLayoutManager(manager);
         mShipShelf.setAdapter(new ShipTypeAdapter());
 
         // Instantiate and attach models to presenters to views.
+        mSeaView.setDefaultListeners();
         mSeaPresenter = new PlaceShipSeaPresenter(getPlayer().getSea());
         mSeaView.setPresenter(mSeaPresenter);
-        mSeaView.setClickListener(mSeaView.new PlaceShipClickListener());
 
         return view;
     }

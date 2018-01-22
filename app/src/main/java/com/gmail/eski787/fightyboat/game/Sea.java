@@ -35,6 +35,7 @@ public class Sea implements Parcelable {
     @NonNull
     private Set<Ship> mShips;
     private Point mLastHit;
+    private Point mSelected;
 
     public Sea(int columns, int rows, int numShips) {
         mOcean = new SeaStatus[columns][rows];
@@ -84,6 +85,7 @@ public class Sea implements Parcelable {
     }
 
     public void hit(Point point) {
+        mSelected = null;
         Sea.SeaStatus newStatus = getShipAtCoordinate(point) != null ?
                 Sea.SeaStatus.PEG_HIT : Sea.SeaStatus.PEG_MISS;
         mOcean[point.x][point.y] = newStatus;
@@ -125,6 +127,14 @@ public class Sea implements Parcelable {
 
     public Point getLastHit() {
         return mLastHit;
+    }
+
+    public Point getSelected() {
+        return mSelected;
+    }
+
+    public void setSelected(Point selected) {
+        this.mSelected = selected;
     }
 
     public enum SeaStatus {

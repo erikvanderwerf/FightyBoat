@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.ArraySet;
+import android.util.Log;
 
 import com.gmail.eski787.fightyboat.game.state.GameAction;
 import com.gmail.eski787.fightyboat.game.state.LockedState;
@@ -31,6 +32,7 @@ public class Game implements Parcelable {
             return new Game[size];
         }
     };
+    private static final String TAG = Game.class.getSimpleName();
 
     @NonNull
     private final Player[] mPlayers;
@@ -77,12 +79,13 @@ public class Game implements Parcelable {
         return mListeners.add(gameChangeListener);
     }
 
-    public void sendAction(GameAction gameAction) {
+    public void postAction(GameAction gameAction) {
         TurnState newState = mTurnState.handleAction(this, gameAction);
+        Log.d(TAG, String.format("postAction %s %s %s", gameAction, mTurnState, newState));
         if (newState != null) {
+            mListeners.forEach(l -> l.onStateTransition(mTurnState, newState));
             mTurnState = newState;
         }
-        mListeners.forEach(GameChangeListener::onGameInvalidate);
     }
 
     public List<Player> getOpponents() {
@@ -105,7 +108,15 @@ public class Game implements Parcelable {
         mCurrentPlayerIndex = (mCurrentPlayerIndex + 1) % getNumberOfPlayers();
     }
 
+    public Player[] getPlayers() {
+        return mPlayers;
+    }
+
+    public int getOpponentIndex() {
+        return 1 - mCurrentPlayerIndex;
+    }
+
     public interface GameChangeListener {
-        void onGameInvalidate();
+        void onStateTransition(TurnState from, TurnState to);
     }
 }

@@ -38,6 +38,7 @@ public class PlayGameRadarView extends RadarView<PlayGameRadarPresenter> {
 
         // Draw selected coordinate under everything else
         final Point selected = mPresenter.getSelected();
+        Log.d(TAG, String.format("Selected at: %s", selected));
         if (selected != null) {
             final int SELECTED_TILE = ContextCompat.getColor(getContext(), R.color.selected_tile);
             mPaint.setColor(SELECTED_TILE);

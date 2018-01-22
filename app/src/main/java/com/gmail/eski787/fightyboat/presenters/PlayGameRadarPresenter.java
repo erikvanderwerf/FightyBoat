@@ -3,7 +3,6 @@ package com.gmail.eski787.fightyboat.presenters;
 import android.graphics.PointF;
 
 import com.gmail.eski787.fightyboat.game.Sea;
-import com.gmail.eski787.fightyboat.game.state.GameAction;
 
 /**
  * Presents a {@link com.gmail.eski787.fightyboat.game.Player Player}'s opponent's {@link Sea} to
@@ -19,7 +18,7 @@ public class PlayGameRadarPresenter extends RadarPresenter {
 
     @Override
     public boolean onClick(PointF coordinate) {
-        GameAction action = new GameAction.SelectAction(coordinate);
+
 
         return true;
     }
@@ -27,11 +26,6 @@ public class PlayGameRadarPresenter extends RadarPresenter {
     @Override
     public boolean onLongClick(PointF coordinate) {
         return false;
-    }
-
-    public void onPlayButtonClick() {
-        GameAction action = new GameAction.PlayButtonAction();
-
     }
 
     @Override

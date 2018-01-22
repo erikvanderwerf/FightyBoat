@@ -1,9 +1,11 @@
 package com.gmail.eski787.fightyboat.fragments;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,7 @@ import android.widget.Button;
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.presenters.GamePresenter;
 import com.gmail.eski787.fightyboat.presenters.PlayGameRadarPresenter;
-import com.gmail.eski787.fightyboat.presenters.PlayGameSeaPresenter;
+import com.gmail.eski787.fightyboat.presenters.SeaPresenter;
 import com.gmail.eski787.fightyboat.views.PlayGameRadarView;
 import com.gmail.eski787.fightyboat.views.SeaView;
 
@@ -25,10 +27,11 @@ import java.util.List;
  * to handle interaction events.
  */
 public class PlayGameFragment extends Fragment {
+    public static final String TAG = PlayGameFragment.class.getSimpleName();
     private PlayGameInteraction mListener;
-    private SeaView<PlayGameSeaPresenter> mSeaView;
+    private SeaView<SeaPresenter> mSeaView;
     private PlayGameRadarView mRadarView;
-    private Button play_button;
+    private Button mPlayButton;
 
     public PlayGameFragment() { /* Required empty public constructor */ }
 
@@ -50,19 +53,34 @@ public class PlayGameFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_play_game, container, false);
         mRadarView = view.findViewById(R.id.play_radar_view);
         mSeaView = view.findViewById(R.id.play_sea_view);
-        play_button = view.findViewById(R.id.play_button);
-
+        mPlayButton = view.findViewById(R.id.play_button);
 
         GamePresenter presenter = mListener.getGame();
-        PlayGameSeaPresenter seaPresenter = new PlayGameSeaPresenter(presenter.getCurrentPlayer().getSea());
-        mSeaView.setPresenter(seaPresenter);
 
-        List<PlayGameRadarPresenter> radarPresenters = presenter.getOpponentRadars();
+        mSeaView.setPresenter(presenter.getPlayerSeaPresenter());
 
+        List<PlayGameRadarPresenter> radarPresenters = presenter.getOpponentRadarPresenters();
         mRadarView.setPresenter(radarPresenters.get(0));
-        mRadarView.setClickListener(mRadarView.new ClickListener());
+        mRadarView.setDefaultListeners();
+        mRadarView.setCoordinateClickListener(new SeaView.CoordinateClickListener() {
+            @Override
+            public boolean onCoordinateClick(PointF coordinate) {
+                Log.d(TAG, String.format("User Click: %s", coordinate));
+                presenter.onUserClick(coordinate);
+                return true;
+            }
 
-        play_button.setOnClickListener(v -> mListener.onPlayButtonClick());
+            @Override
+            public boolean onCoordinateLongClick(PointF coordinate) {
+                return false;
+            }
+        });
+
+        mPlayButton.setOnClickListener(v -> presenter.onPlayButtonClick());
+        presenter.registerPlayButtonListener((text, enabled) -> {
+            mPlayButton.setText(text);
+            mPlayButton.setEnabled(enabled);
+        });
 
         return view;
     }

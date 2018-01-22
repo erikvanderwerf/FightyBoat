@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.View;
 
 import com.gmail.eski787.fightyboat.R;
 import com.gmail.eski787.fightyboat.fragments.PlayGameFragment;
@@ -11,7 +13,7 @@ import com.gmail.eski787.fightyboat.game.Game;
 import com.gmail.eski787.fightyboat.game.Player;
 import com.gmail.eski787.fightyboat.presenters.GamePresenter;
 
-public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction, GamePresenter.GamePresenterInteraction {
+public class PlayGameActivity extends LockableActivity implements PlayGameFragment.PlayGameInteraction, GamePresenter.StateTransitionListener {
     public static final String ARG_GAME = "ARG_GAME";
     private static final String TAG = PlayGameActivity.class.getSimpleName();
     private GamePresenter mGamePresenter;
@@ -46,6 +48,7 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
             game = savedInstanceState.getParcelable(ARG_GAME);
         }
         mGamePresenter = new GamePresenter(game);
+        mGamePresenter.registerStateTransitionListener(this);
     }
 
     @Override
@@ -62,9 +65,18 @@ public class PlayGameActivity extends LockableActivity implements PlayGameFragme
 
     @Override
     public void transitionToFragment(@NonNull Fragment fragment) {
+        Log.d(TAG, String.format("Transitioning Fragment from: %s to: %s",
+                mFragment != null ? mFragment : "null", fragment));
         mFragment = fragment;
         getSupportFragmentManager().beginTransaction()
                 .replace(getFragmentId(), fragment)
                 .commit();
+    }
+
+    public void invalidateFragment() {
+        View view = mFragment.getView();
+        if (view != null) {
+            view.invalidate();
+        }
     }
 }

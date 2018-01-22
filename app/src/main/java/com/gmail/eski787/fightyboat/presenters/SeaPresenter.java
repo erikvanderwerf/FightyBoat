@@ -1,6 +1,7 @@
 package com.gmail.eski787.fightyboat.presenters;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.support.annotation.NonNull;
 
 import com.gmail.eski787.fightyboat.game.Sea;
@@ -15,7 +16,7 @@ import javax.annotation.Nullable;
  * Presents the game logic model for {@link Sea} to be used by a {@link com.gmail.eski787.fightyboat.views.GridView}.
  */
 
-public abstract class SeaPresenter extends GridPresenter {
+public class SeaPresenter extends GridPresenter {
     private static final String TAG = ShipPresenter.class.getSimpleName();
     @NonNull
     final Sea mSea;
@@ -45,7 +46,17 @@ public abstract class SeaPresenter extends GridPresenter {
 
     @Nullable
     public Point getSelected() {
-        return mSea.getLastHit();
+        return mSea.getSelected();
+    }
+
+    @Override
+    public boolean onClick(PointF coordinate) {
+        return false;
+    }
+
+    @Override
+    public boolean onLongClick(PointF coordinate) {
+        return false;
     }
 
     /**

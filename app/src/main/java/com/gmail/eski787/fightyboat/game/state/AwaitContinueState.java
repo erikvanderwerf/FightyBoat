@@ -31,10 +31,20 @@ class AwaitContinueState extends TurnState {
 
     @Override
     public TurnState handleAction(Game game, GameAction action) {
-        if (action.getActionId() == GameAction.ACTION_CONTINUE) {
+        if (action.getActionId() == GameAction.ACTION_PLAY_BUTTON) {
             game.advancePlayer();
             return new LockedState();
         }
         return super.handleAction(game, action);
+    }
+
+    @Override
+    public boolean getPlayButtonState() {
+        return true;
+    }
+
+    @Override
+    public String getPlayButtonText() {
+        return "Next Player";
     }
 }

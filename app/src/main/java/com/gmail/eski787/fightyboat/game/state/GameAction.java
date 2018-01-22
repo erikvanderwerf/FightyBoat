@@ -14,9 +14,11 @@ public abstract class GameAction {
 
     @ActionId
     private final int mActionId;
+    private final int mTargetPlayer;
 
-    GameAction(@ActionId int actionId) {
+    GameAction(@ActionId int actionId, int targetPlayer) {
         mActionId = actionId;
+        mTargetPlayer = targetPlayer;
     }
 
     @ActionId
@@ -24,10 +26,8 @@ public abstract class GameAction {
         return mActionId;
     }
 
-    public int getPlayer() {
-        // TODO This is hardcoded and will work with only one opponent. If other opponents
-        // are added this needs to be changed.
-        return 0;
+    public int getTargetPlayer() {
+        return mTargetPlayer;
     }
 
     @IntDef({ACTION_UNLOCK, ACTION_SELECT, ACTION_PLAY_BUTTON})
@@ -37,8 +37,8 @@ public abstract class GameAction {
     public abstract static class CoordinateGameAction extends GameAction {
         private final PointF mCoordinate;
 
-        CoordinateGameAction(@ActionId int actionId, PointF coordinate) {
-            super(actionId);
+        CoordinateGameAction(@ActionId int actionId, int targetPlayer, PointF coordinate) {
+            super(actionId, targetPlayer);
             mCoordinate = coordinate;
         }
 
@@ -48,20 +48,20 @@ public abstract class GameAction {
     }
 
     public static class UnlockAction extends GameAction {
-        public UnlockAction() {
-            super(ACTION_UNLOCK);
+        public UnlockAction(int targetPlayer) {
+            super(ACTION_UNLOCK, targetPlayer);
         }
     }
 
     public static class SelectAction extends CoordinateGameAction {
-        public SelectAction(PointF coordinate) {
-            super(ACTION_SELECT, coordinate);
+        public SelectAction(int targetPlayer, PointF coordinate) {
+            super(ACTION_SELECT, targetPlayer, coordinate);
         }
     }
 
     public static class PlayButtonAction extends GameAction {
-        public PlayButtonAction() {
-            super(ACTION_PLAY_BUTTON);
+        public PlayButtonAction(int targetPlayer) {
+            super(ACTION_PLAY_BUTTON, targetPlayer);
         }
     }
 }

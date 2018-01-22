@@ -13,10 +13,10 @@ import com.gmail.eski787.fightyboat.game.Game;
 
 public abstract class TurnState implements Parcelable {
     public static final int STATE_LOCKED = 0;
-    public static final int STATE_SELECTION = 1;
-    public static final int STATE_FIRE = 2;
+    public static final int STATE_NO_SELECTION = 1;
+    public static final int STATE_SELECTION = 2;
     public static final int STATE_CONTINUE = 3;
-    private static String TAG = TurnState.class.getName();
+    private static String TAG = TurnState.class.getSimpleName();
     private final int mState;
 
     TurnState(@StateId int state) {
@@ -50,8 +50,12 @@ public abstract class TurnState implements Parcelable {
         dest.writeInt(mState);
     }
 
+    public abstract boolean getPlayButtonState();
 
-    @IntDef({STATE_LOCKED, STATE_SELECTION, STATE_FIRE, STATE_CONTINUE})
+    public abstract String getPlayButtonText();
+
+
+    @IntDef({STATE_LOCKED, STATE_NO_SELECTION, STATE_SELECTION, STATE_CONTINUE})
     @interface StateId {
     }
 }

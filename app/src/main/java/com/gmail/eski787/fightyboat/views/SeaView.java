@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -30,14 +31,15 @@ public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
     static final float PEG_RADIUS = 0.3f;
     private static final String TAG = SeaView.class.getSimpleName();
     private final EnumMap<AppColors, Integer> mPaintMap = new EnumMap<>(AppColors.class);
-    @Nullable
-    protected T mPresenter;
     /**
      * Preallocate instance to be modified during drawing.
      */
     protected Paint mPaint = new Paint();
-    private ClickListener mClickListener;
 
+    @Nullable
+    protected T mPresenter;
+    @Nullable
+    private CoordinateClickListener mCoordinateClickListener;
 
     public SeaView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -175,44 +177,49 @@ public class SeaView<T extends SeaPresenter> extends GridView.SquareView {
         }
     }
 
+    public void setCoordinateClickListener(CoordinateClickListener listener) {
+        this.mCoordinateClickListener = listener;
+    }
+
     public void setPresenter(@Nullable T presenter) {
-        // Unset previous presenter, and set new one.
-//        if (mPresenter != null) {
-//            mPresenter.setGridView(null);
-//        }
         mPresenter = presenter;
-//        if (mPresenter != null) {
-//            mPresenter.setGridView(this);
-//        }
         invalidate();
     }
 
-    public void setClickListener(ClickListener clickListener) {
-        mClickListener = clickListener;
+    public void setDefaultListeners() {
+        ClickListener mClickListener = new ClickListener();
 
-        setOnClickListener(mClickListener);
+        setOnClickListener(v -> {
+            final boolean handled;
+            if (mCoordinateClickListener != null) {
+                handled = mCoordinateClickListener.onCoordinateClick(
+                        getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
+                if (handled) {
+                    Log.d(TAG, String.format("%s invalidated from click!", this));
+                    invalidate();
+                }
+            }
+        });
         setOnLongClickListener(mClickListener);
         setOnDragListener(mClickListener);
     }
 
-    public class ClickListener implements OnClickListener, OnLongClickListener, OnDragListener {
-        @Override
-        public void onClick(View v) {
-            assert mPresenter != null;
-            final boolean handled = mPresenter.onClick(
-                    getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
-            if (handled) {
-                invalidate();
-            }
-        }
+    public interface CoordinateClickListener {
+        boolean onCoordinateClick(PointF coordinate);
 
+        boolean onCoordinateLongClick(PointF coordinate);
+    }
+
+    protected class ClickListener implements OnLongClickListener, OnDragListener {
         @Override
         public boolean onLongClick(View v) {
-            assert mPresenter != null;
-            final boolean handled = mPresenter.onLongClick(
-                    getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
-            if (handled)
-                invalidate();
+            boolean handled = false;
+            if (mCoordinateClickListener != null) {
+                handled = mCoordinateClickListener.onCoordinateLongClick(
+                        getCoordinate(mTouchEvent.getX(), mTouchEvent.getY()));
+                if (handled)
+                    invalidate();
+            }
             return handled;
         }
 
